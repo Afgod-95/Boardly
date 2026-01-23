@@ -7,7 +7,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { setPins, setSelectedPin, setLoading } from "@/redux/pinSlice";
 import { PinItem } from "@/types/pin";
 
-const PinsClient = () => {
+const PinsFeed = () => {
     const router = useRouter();
     const dispatch = useDispatch<AppDispatch>();
     const { pins, isLoading } = useSelector((state: RootState) => state.pins);
@@ -57,4 +57,4 @@ const PinsClient = () => {
     );
 };
 
-export default PinsClient;
+export default PinsFeed;

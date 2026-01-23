@@ -1,12 +1,13 @@
 "use client"
 
 import React from "react"
-import ProfileHeader from "../headers/profile/ProfileHeader"
-import TabNavigation from "../boards/tabs/TabNavigation"
-import { ActionButtons, CreateButton } from "../buttons"
-import { PinsDropdownFilter, BoardsPopoverFilter } from "../boards/tabFilters"
+import ProfileHeader from "@/components/headers/profile/ProfileHeader"
+import TabNavigation from "@/components/boards/tabs/TabNavigation"
+import { ActionButtons, CreateButton } from "@/components/buttons"
+import { PinsDropdownFilter, BoardsPopoverFilter } from "@/components/boards/tabFilters"
 import { Settings2, Star, FolderOpen } from "lucide-react"
 import { usePathname, useSearchParams, useRouter } from "next/navigation"
+
 
 interface BoardsLayoutProps {
   children: React.ReactNode

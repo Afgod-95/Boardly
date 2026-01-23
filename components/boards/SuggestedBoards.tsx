@@ -39,7 +39,6 @@ const SuggestedBoards = ({ suggested = [], unorganizedPins, allPins }: BoardSugg
 
       <PinsGrid items={unorganizedPins} variant='board'
         actions={{
-          onItemClick: (pin: PinItem) => { router.push(`/dashboard/pins/${pin.id}`) }
         }}
       />
 

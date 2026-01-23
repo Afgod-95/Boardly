@@ -1,13 +1,16 @@
 import { PinItem } from "@/types/pin";
 import Image from "next/image";
-import { Pencil, Ellipsis, ChevronDown, ArrowUpRight, Upload } from "lucide-react";
+import { Pencil, Ellipsis, ChevronDown, ArrowUpRight, Upload, Star } from "lucide-react";
 import PinOverlay from "./PinOverlay";
+import { PinsLayout } from "@/components/boards/MoreActions";
 
 
 interface PinCardProps {
   item: PinItem;
+  showStarIcon?: boolean,
+ 
   profileValue?: string,
-  layout?: 'standard' | 'compact';
+  layout?: PinsLayout;
   index: number;
   isHovered: boolean;
   onMouseEnter: () => void;
@@ -15,18 +18,21 @@ interface PinCardProps {
   onClick: () => void;
   showSaveButton: boolean;
   showEditButton: boolean;
-  showProfileButton: boolean;
-  showMetadata: boolean;
+  showProfileButton: boolean | string;
+  showMetadata: string | boolean;
   onProfileClick: (e: React.MouseEvent) => void;
   onSave: (e: React.MouseEvent) => void;
   onVisitSite: (e: React.MouseEvent) => void;
   onShare: (e: React.MouseEvent) => void;
   onEdit: (e: React.MouseEvent) => void;
   onMoreOptions: (e: React.MouseEvent) => void;
+  onAddToFavorites?:(e: React.MouseEvent) => void;
 }
 
 export default function PinCard({
   item,
+  showStarIcon = false,
+  onAddToFavorites,
   profileValue = 'Profile',
   layout,
   isHovered,
@@ -63,9 +69,9 @@ export default function PinCard({
 
         {isHovered && (
           <PinOverlay
-            profileValue = {profileValue}
+            profileValue={profileValue}
             layout={layout}
-            showProfileButton={showProfileButton}
+            showProfileButton={Boolean(showProfileButton)}
             showSaveButton={showSaveButton}
             showEditButton={showEditButton}
             onProfileClick={onProfileClick}
@@ -80,13 +86,25 @@ export default function PinCard({
       {showMetadata && (
         <div className="flex justify-between items-center mt-2 px-1">
           <span className="text-sm font-medium text-gray-900">{item.title}</span>
-          <button
-            className="p-1 hover:bg-gray-100 rounded-sm transition-colors"
-            onClick={onMoreOptions}
-            aria-label="More options"
-          >
-            <Ellipsis size={20} color="black" />
-          </button>
+
+          {showStarIcon === true ? (
+            <button
+              className="p-1 hover:bg-gray-100 rounded-sm transition-colors"
+              onClick={onAddToFavorites}
+              aria-label="More options"
+            >
+              <Star size={20} />
+            </button>
+          ) : (
+            <button
+              className="p-1 hover:bg-gray-100 rounded-sm transition-colors"
+              onClick={onMoreOptions}
+              aria-label="More options"
+            >
+              <Ellipsis size={20} color="black" />
+            </button>
+          )}
+
         </div>
       )}
     </div>

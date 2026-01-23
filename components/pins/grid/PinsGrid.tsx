@@ -2,15 +2,22 @@ import PinCard from '../card/PinCard';
 import { PinItem } from '@/types/pin';
 import clsx from 'clsx';
 import usePinsHook from '@/hooks/usePinsHook';
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/redux/store';
+import { setSelectedPin } from '@/redux/pinSlice';
 
-type PinCardVariant = 'feed' | 'board' | 'pin';
+export type PinCardVariant = 'feed' | 'board' | 'pin';
 
 interface PinsGridProps {
   items?: PinItem[];
   layout?: 'standard' | 'compact';
   variant: PinCardVariant;
-
+  showMetadata?: string | boolean;
+  showStarIcon?: boolean;
+  profileValue?: string;
   actions?: {
+    onItemAddToFavourites?: (item: PinItem, index: number) => void;
     onItemClick?: (item: PinItem, index: number) => void;
     onProfileClick?: (item: PinItem, index: number) => void;
     onSave?: (item: PinItem, index: number) => void;
@@ -24,11 +31,15 @@ interface PinsGridProps {
 export default function PinsGrid({
   items = [],
   variant = 'feed',
-  layout,
+  layout = 'standard', // Default to standard
+  showStarIcon,
+  profileValue,
+  showMetadata,
   actions
 }: PinsGridProps) {
 
   const { hoveredItem, hoveredIndex, handleClick } = usePinsHook();
+  const router = useRouter();
 
   const {
     onItemClick,
@@ -37,56 +48,77 @@ export default function PinsGrid({
     onVisitSite,
     onShare,
     onEdit,
-    onMoreOptions
+    onMoreOptions,
+    onItemAddToFavourites
   } = actions || {};
 
-  // Derived states
-  const showSaveButton = variant === 'feed' || variant === 'board' || variant === 'pin';
-  const showEditButton = variant === 'pin' || variant === 'board';
-  const showProfileButton = variant === 'feed';
-  const showMetadata = variant === 'feed';
+  // Derived UI states based on variant
+  const showSaveButton = ['feed', 'board', 'pin'].includes(variant);
+  const showEditButton = ['pin', 'board'].includes(variant);
+  const showProfileButton = variant === 'feed' || 'board';
 
-  // Grid column configuration
+  const dispatch = useDispatch<AppDispatch>()
+
+  /**
+   * Universal Grid Logic
+   * Maps (Variant + Layout) to specific column densities
+   */
   const gridColumns = clsx(
-    "gap-2",
+    "gap-4 w-full", // Increased gap for better "natural" spacing
 
-    // default feed layout
-    variant === "feed" && "columns-2 md:columns-3 lg:columns-4",
+    // Feed Layouts
+    variant === "feed" && (
+        layout === "standard" 
+        ? "columns-2 md:columns-3 lg:columns-4 2xl:columns-5" 
+        : "columns-2 md:columns-4 lg:columns-5 2xl:columns-6"
+    ),
 
-    // board layout
-    variant === "board" && "columns-2 md:columns-4 lg:columns-5",
+    // Board Layouts
+    variant === "board" && (
+        layout === "standard" 
+        ? "columns-2 md:columns-3 lg:columns-4 2xl:columns-5" 
+        : "columns-3 md:columns-5 lg:columns-6"
+    ),
 
-    // pin layout (controlled by dropdown)
-    variant === "pin" &&
-      (layout === "standard"
+    // Pin Layouts (Related content)
+    variant === "pin" && (
+        layout === "standard"
         ? "columns-1 md:columns-2 lg:columns-3"
-        : "columns-2 md:columns-4 lg:columns-5")
+        : "columns-2 md:columns-4 lg:columns-5"
+    )
   );
 
   return (
     <div className="w-full pb-14">
       <div className={gridColumns}>
         {items.map((item, index) => (
-          <PinCard
-            key={`${item.img}-${index}`}
-            layout={layout}
-            item={item}
-            index={index}
-            isHovered={hoveredIndex === index}
-            onMouseEnter={() => hoveredItem(index)}
-            onMouseLeave={() => hoveredItem(null)}
-            onClick={() => onItemClick?.(item, index)}
-            showSaveButton={showSaveButton}
-            showEditButton={showEditButton}
-            showProfileButton={showProfileButton}
-            showMetadata={showMetadata}
-            onProfileClick={(e) => handleClick(e, onProfileClick, item, index)}
-            onSave={(e) => handleClick(e, onSave, item, index)}
-            onVisitSite={(e) => handleClick(e, onVisitSite, item, index)}
-            onShare={(e) => handleClick(e, onShare, item, index)}
-            onEdit={(e) => handleClick(e, onEdit, item, index)}
-            onMoreOptions={(e) => handleClick(e, onMoreOptions, item, index)}
-          />
+          <div key={`${item.img}-${index}`} className="break-inside-avoid mb-4">
+            <PinCard
+              profileValue= {profileValue}
+              layout={layout}
+              item={item}
+              index={index}
+              showStarIcon = {showStarIcon}
+              showMetadata={variant === 'feed' ? true : showMetadata ?? false}
+              isHovered={hoveredIndex === index}
+              onMouseEnter={() => hoveredItem(index)}
+              onMouseLeave={() => hoveredItem(null)}
+              onClick={() => { 
+                dispatch(setSelectedPin(item))
+                router.push(`/dashboard/pins/${item?.id}`)
+             }}
+              showSaveButton={showSaveButton}
+              showEditButton={showEditButton}
+              showProfileButton={showProfileButton}
+              onProfileClick={(e) => handleClick(e, onProfileClick, item, index)}
+              onSave={(e) => handleClick(e, onSave, item, index)}
+              onVisitSite={(e) => handleClick(e, onVisitSite, item, index)}
+              onShare={(e) => handleClick(e, onShare, item, index)}
+              onEdit={(e) => handleClick(e, onEdit, item, index)}
+              onMoreOptions={(e) => handleClick(e, onMoreOptions, item, index)}
+              onAddToFavorites={(e) => handleClick(e, onItemAddToFavourites, item, index) }
+           />
+          </div>
         ))}
       </div>
     </div>

@@ -1,4 +1,5 @@
-import { Pencil, Ellipsis, ChevronDown, ArrowUpRight, Upload } from "lucide-react";
+import { PinsLayout } from "@/components/boards/MoreActions";
+import { Pencil, ChevronDown, ArrowUpRight, Upload } from "lucide-react";
 
 //pin overlay
 interface PinOverlayProps {
@@ -6,7 +7,7 @@ interface PinOverlayProps {
   showSaveButton: boolean;
   showEditButton: boolean;
   profileValue?: string;
-  layout?: 'compact' | 'standard',
+  layout?: PinsLayout,
   onProfileClick: (e: React.MouseEvent) => void;
   onSave: (e: React.MouseEvent) => void;
   onVisitSite: (e: React.MouseEvent) => void;
@@ -62,12 +63,30 @@ export default function PinOverlay({
           aria-label="Visit site"
         >
           <ArrowUpRight size={20} color="black" />
-          {!showEditButton && <span className="text-sm font-medium">Visit Site</span>}
-          {layout === 'standard' && <span className="text-sm font-medium">Visit Site</span>}
+          {layout === 'standard' && (
+            <>
+              {!showEditButton ?
+                (<span className="text-sm font-medium">Visit Site</span>) :
+                (<span className="text-sm font-medium">Visit Site</span>)
+              }
+            </>
+
+          )}
+
         </button>
       </div>
 
-      <div className="absolute bottom-3 right-3">
+      <div className="absolute flex items-center gap-2 bottom-3 right-3">
+
+        {showEditButton && (
+          <button
+            className="bg-white/90 hover:bg-white p-2.5 rounded-xl transition-colors"
+            onClick={onShare}
+            aria-label="Share pin"
+          >
+            <Pencil size={20} color="black" />
+          </button>
+        )}
         <button
           className="bg-white/90 hover:bg-white p-2.5 rounded-xl transition-colors"
           onClick={onEdit}
@@ -76,18 +95,6 @@ export default function PinOverlay({
           <Upload size={20} color="black" />
         </button>
       </div>
-
-      {showEditButton && (
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2">
-          <button
-            className="bg-white/90 hover:bg-white p-2.5 rounded-xl transition-colors"
-            onClick={onShare}
-            aria-label="Share pin"
-          >
-            <Pencil size={20} color="black" />
-          </button>
-        </div>
-      )}
 
       {/* Semi-transparent overlay */}
       <div className="absolute inset-0 bg-black/25 rounded-2xl -z-10" />

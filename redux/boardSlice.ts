@@ -17,8 +17,6 @@ const boardsSlice = createSlice({
       state.boards = action.payload
     },
 
-    
-
     createBoard: (state, action: PayloadAction<BoardItem>) => {
       state.boards.push(action.payload)
     },
@@ -40,26 +38,26 @@ const boardsSlice = createSlice({
     },
 
     addPinToBoard: (
-  state,
-  action: PayloadAction<{ boardId: string; pinId: string }>
-) => {
-  const board = state.boards.find(b => b.id === action.payload.boardId)
+      state,
+      action: PayloadAction<{ boardId: string; pinId: string }>
+    ) => {
+      const board = state.boards.find(b => b.id === action.payload.boardId)
 
-  if (board && !board.pinIds.includes(action.payload.pinId)) {
-    board.pinIds.push(action.payload.pinId)
-  }
-},
+      if (board && !board.pinIds.includes(action.payload.pinId)) {
+        board.pinIds.push(action.payload.pinId)
+      }
+    },
 
-removePinFromBoard: (
-  state,
-  action: PayloadAction<{ boardId: string; pinId: string }>
-) => {
-  const board = state.boards.find(b => b.id === action.payload.boardId)
+    removePinFromBoard: (
+      state,
+      action: PayloadAction<{ boardId: string; pinId: string }>
+    ) => {
+      const board = state.boards.find(b => b.id === action.payload.boardId)
 
-  if (board) {
-    board.pinIds = board.pinIds.filter(id => id !== action.payload.pinId)
-  }
-},
+      if (board) {
+        board.pinIds = board.pinIds.filter(id => id !== action.payload.pinId)
+      }
+    },
 
   },
 })

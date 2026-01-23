@@ -1,5 +1,5 @@
 import React from 'react'
-import Sidebar from '@/components/layouts/Sidebar'
+import Sidebar from '@/components/layouts/dashboard/Sidebar'
 import BottomNavigator from '@/components/layouts/Mobile'
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {

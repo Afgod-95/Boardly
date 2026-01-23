@@ -1,7 +1,7 @@
 "use client"
 
 import React from "react"
-import BoardsLayout from "@/components/layouts/BoardsLayout"
+import BoardsLayout from "@/components/layouts/dashboard/BoardsLayout"
 import PageWrapper from "@/components/wrapper/PageWrapper"
 
 interface BoardsLayoutWrapperProps {

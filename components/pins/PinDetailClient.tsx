@@ -13,6 +13,7 @@ import usePinsHook from "@/hooks/usePinsHook"
 import SuggestionIdeasCard from "./card/SuggestedIdeasCard"
 import PageWrapper from "../wrapper/PageWrapper"
 import Header from "../headers/Header"
+import BackButton from "../buttons/BackButton"
 
 interface Props {
   initialPin: PinItem
@@ -39,11 +40,12 @@ export default function PinDetailClient({ initialPin }: Props) {
         onMouseEnter={() => hoveredItem(index)}
         onMouseLeave={() => hoveredItem(null)}
         showProfileButton={true}
+        layout="standard"
         showSaveButton={true}
         showMetadata={true}
         onClick={() => {
           dispatch(setSelectedPin(pin))
-          router.push(`/dashboard/pins/${pin.id}`)
+          router.replace(`/dashboard/pins/${pin.id}`)
         }}
       />
     </div>
@@ -53,19 +55,16 @@ export default function PinDetailClient({ initialPin }: Props) {
     <PageWrapper>
       <Header />
       {/* Mobile Back Button */}
-      <button className="bg-accent sm:flex md:hidden hover:bg-muted p-3 rounded-xl sticky z-10 top-4 mb-4"
-        onClick={() => router.back()}
-      >
-        <ArrowLeft size={24} />
-      </button>
+      <div className="sm:flex md:hidden sticky z-10 top-4 mb-4">
+        <BackButton />
+      </div>
 
-      <div className="flex items-start gap-5">
+      <div className="flex items-start flex-wrap gap-5 ">
         {/* Desktop Back Button */}
-        <button className="bg-accent md:block hidden hover:bg-muted p-3 rounded-xl sticky z-10 top-24"
-          onClick={() => router.back()}
+        <div className="md:block hidden p-3 rounded-xl sticky z-10 top-24"
         >
-          <ArrowLeft size={24} />
-        </button>
+         <BackButton />
+        </div>
 
         <div className="flex-1">
           <div className="grid md:grid-cols-2 gap-6">
@@ -82,12 +81,13 @@ export default function PinDetailClient({ initialPin }: Props) {
 
             {/* --- RIGHT COLUMN  --- */}
             <div className="flex flex-col gap-4">
-              {/* Bigger Suggestion Card */}
-              <SuggestionIdeasCard />
+             
               {/* This column receives majority of pins (2/3rds of total) */}
               <div className="columns-2 2xl:columns-3 gap-4">
                 {rightColumnPins.map((pin) => renderPin(pin, pins.indexOf(pin)))}
               </div>
+               {/* Bigger Suggestion Card */}
+              <SuggestionIdeasCard />
             </div>
 
           </div>

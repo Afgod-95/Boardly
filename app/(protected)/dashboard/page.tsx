@@ -1,5 +1,5 @@
 import Header from '@/components/headers/Header'
-import PinsClient from '@/components/pins/PinsClient'
+import PinsClient from '@/components/pins/PinsFeed'
 import PageWrapper from '@/components/wrapper/PageWrapper'
 
 const HomePage = () => {
