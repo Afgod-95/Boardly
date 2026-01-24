@@ -39,23 +39,23 @@ const pinsSlice = createSlice({
             state.pins = action.payload
         },
 
-        //add and push pins to existed ones
+        //add and push pins to existing ones
         addPin: (state, action: PayloadAction<PinItem> ) => {
             state.pins.push(action.payload)
         },
 
-        //change pin in the state
+        //update pin
         updatePin: (state, action: PayloadAction<PinItem>) => {
             const index = state.pins.findIndex(pin => pin.id === action.payload.id)
             if (index !== -1) state.pins[index] = action.payload
         },
 
-        //delete saved pin from pins 
+        //remove saved pin from pins 
         removePin: (state, action: PayloadAction<number | string>) => {
             state.pins = state.pins.filter(pin => pin.id !== action.payload)
         },
 
-        //change pin save status
+        //change pin status eg: ---when pin is saved and not saved
         updatePinSaveStatus: (state, action: PayloadAction<{ id: string | number; saved: boolean }>) => {
             const pin = state.pins.find(pin => pin.id === action.payload.id);
             if (pin) {

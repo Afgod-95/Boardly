@@ -3,6 +3,8 @@ import { BoardItem } from '@/types/board'
 import { PinItem } from '@/types/pin'
 import { SuggestedBoardCard } from './cards'
 import PinsGrid from '../pins/grid/PinsGrid'
+import { motion } from 'framer-motion'
+import { itemVariants } from '@/utils/animationsVariants'
 
 interface BoardSuggestionsProps {
   suggested: BoardItem[],
@@ -18,11 +20,16 @@ const SuggestedBoards = ({ suggested = [], unorganizedPins, allPins }: BoardSugg
       <div className="grid grid-cols-2  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
         {suggested?.map((board, index) => {
           return (
-            <SuggestedBoardCard key={index}
-              board={board}
-              allPins={allPins}
-              onBoardClick={() => router.push(`/dashboard/boards/${board.id}`)}
-            />
+            <motion.div key={index}
+                variants={itemVariants}
+            >
+              <SuggestedBoardCard
+                board={board}
+                allPins={allPins}
+                onBoardClick={() => router.push(`/dashboard/boards/${board.id}`)}
+              />
+            </motion.div>
+
           )
         })}
       </div>

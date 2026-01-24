@@ -151,9 +151,9 @@ const Sidebar = () => {
               <h2 className="text-xl font-semibold pb-4">Create</h2>
               <div className="flex flex-col gap-1">
                 {createItems.map((item) => (
-                  <>
+                  <div key = {item.id}>
                     {item.id === 2 ? (
-                      <Dialog key={item.id}>
+                      <Dialog>
                         <DialogTrigger
                           className={clsx(
                             "flex gap-4 items-center justify-start text-start rounded-xl",
@@ -174,7 +174,6 @@ const Sidebar = () => {
                     ) : (
 
                       <Link
-                        key={item.id}
                         href={item.href as string}
                         // When a sub-item is clicked, we close the popover.
                         // The activeId will automatically revert to the new route ID, 
@@ -190,9 +189,8 @@ const Sidebar = () => {
                           <p className="text-sm text-muted-foreground">{item.description}</p>
                         </div>
                       </Link>
-
                     )}
-                  </>
+                  </div>
 
                 ))}
               </div>

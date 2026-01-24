@@ -1,15 +1,17 @@
+"use client"
+
 import { PinItem } from "@/types/pin";
 import Image from "next/image";
-import { Pencil, Ellipsis, ChevronDown, ArrowUpRight, Upload, Star } from "lucide-react";
+import { Ellipsis, Star } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import PinOverlay from "./PinOverlay";
 import { PinsLayout } from "@/components/boards/MoreActions";
-
+import { cn } from "@/lib/utils";
 
 interface PinCardProps {
   item: PinItem;
-  showStarIcon?: boolean,
- 
-  profileValue?: string,
+  showStarIcon?: boolean;
+  profileValue?: string;
   layout?: PinsLayout;
   index: number;
   isHovered: boolean;
@@ -26,7 +28,7 @@ interface PinCardProps {
   onShare: (e: React.MouseEvent) => void;
   onEdit: (e: React.MouseEvent) => void;
   onMoreOptions: (e: React.MouseEvent) => void;
-  onAddToFavorites?:(e: React.MouseEvent) => void;
+  onAddToFavorites?: (e: React.MouseEvent) => void;
 }
 
 export default function PinCard({
@@ -50,65 +52,71 @@ export default function PinCard({
   onEdit,
   onMoreOptions
 }: PinCardProps) {
+
+  // CRITICAL: Stops the parent onClick from firing when a button is clicked
+  const handleAction = (e: React.MouseEvent, action?: (e: React.MouseEvent) => void) => {
+    e.stopPropagation();
+    if (action) action(e);
+  };
+
   return (
     <div
-      className="break-inside-avoid mb-2 cursor-pointer"
+      className="break-inside-avoid mb-5 group"
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      onClick={onClick}
     >
-      <div className="relative rounded-2xl overflow-hidden">
+      <div 
+        className="relative rounded-3xl overflow-hidden cursor-zoom-in bg-gray-100 shadow-sm transition-shadow hover:shadow-md"
+        onClick={onClick}
+      >
         <Image
-          src={`${item.img}?w=248&fit=crop&auto=format`}
-          alt={item.title}
-          width={248}
-          height={300}
+          src={`${item.img}?w=500&auto=format`}
+          alt={item.title || "Pin Image"}
+          width={500}
+          height={700}
           loading="lazy"
-          className="w-full h-auto object-cover rounded-2xl"
+          className="w-full h-auto object-cover transition-transform duration-700 ease-out group-hover:scale-105"
         />
 
-        {isHovered && (
-          <PinOverlay
-            profileValue={profileValue}
-            layout={layout}
-            showProfileButton={Boolean(showProfileButton)}
-            showSaveButton={showSaveButton}
-            showEditButton={showEditButton}
-            onProfileClick={onProfileClick}
-            onSave={onSave}
-            onVisitSite={onVisitSite}
-            onShare={onShare}
-            onEdit={onEdit}
-          />
-        )}
+        {/* Animation Wrapper for the Overlay */}
+        <AnimatePresence>
+          {isHovered && (
+            <PinOverlay
+              profileValue={profileValue}
+              layout={layout}
+              showProfileButton={Boolean(showProfileButton)}
+              showSaveButton={showSaveButton}
+              showEditButton={showEditButton}
+              onProfileClick={(e) => handleAction(e, onProfileClick)}
+              onSave={(e) => handleAction(e, onSave)}
+              onVisitSite={(e) => handleAction(e, onVisitSite)}
+              onShare={(e) => handleAction(e, onShare)}
+              onEdit={(e) => handleAction(e, onEdit)}
+            />
+          )}
+        </AnimatePresence>
       </div>
 
       {showMetadata && (
-        <div className="flex justify-between items-center mt-2 px-1">
-          <span className="text-sm font-medium text-gray-900">{item.title}</span>
+        <div className="flex justify-between items-center mt-3 px-2">
+          <span className="text-sm font-bold text-gray-800 truncate tracking-tight">
+            {item.title}
+          </span>
 
-          {showStarIcon === true ? (
-            <button
-              className="p-1 hover:bg-gray-100 rounded-sm transition-colors"
-              onClick={onAddToFavorites}
-              aria-label="More options"
-            >
-              <Star size={20} />
-            </button>
-          ) : (
-            <button
-              className="p-1 hover:bg-gray-100 rounded-sm transition-colors"
-              onClick={onMoreOptions}
-              aria-label="More options"
-            >
-              <Ellipsis size={20} color="black" />
-            </button>
-          )}
-
+          <motion.button
+            whileHover={{ scale: 1.1, backgroundColor: "#f3f4f6" }}
+            whileTap={{ scale: 0.9 }}
+            onClick={(e) => handleAction(e, showStarIcon ? onAddToFavorites : onMoreOptions)}
+            className="p-2 rounded-full transition-colors"
+          >
+            {showStarIcon ? (
+              <Star size={18} />
+            ) : (
+              <Ellipsis size={20} className="text-gray-600" />
+            )}
+          </motion.button>
         </div>
       )}
     </div>
   );
 }
-
-

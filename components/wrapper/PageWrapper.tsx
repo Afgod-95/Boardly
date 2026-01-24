@@ -1,6 +1,6 @@
 const PageWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="px-3 sm:px-5">
+    <div className="px-2 sm:px-5">
       {children}
     </div>
   )

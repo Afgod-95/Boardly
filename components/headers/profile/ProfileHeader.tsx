@@ -2,51 +2,95 @@
 
 import { useState } from 'react'
 import { Card } from '@/components/ui/card'
-import { Search, ChevronDown } from 'lucide-react'
+import { Search, ChevronDown, Settings, LogOut, User, Repeat } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { motion } from 'framer-motion'
-
+import { motion, AnimatePresence } from 'framer-motion'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import Searchbar from '@/components/searchbar/Searchbar'
 
 const ProfileHeader = () => {
-    const [isUserOpen, setIsUserOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <>
-        <div className="max-w-screen-2xl mx-auto md:flex py-5">
-          <div className="z-30 flex items-center justify-between w-full gap-4">
-            {/* Search bar (clickable, opens search page/modal) */}
-            <Card
-              className="flex-row items-center gap-2 h-10 bg-muted/45 rounded-xl border-none px-3 shadow-none max-w-3xl flex-1 cursor-text hover:bg-muted/60 transition"
-              onClick={() => console.log("Open search page or modal")}
+    <div className="max-w-screen-2xl mx-auto py-5">
+      <div className="flex items-center justify-between w-full gap-4">
+        
+        {/* 1. SEARCH BAR - Motion enabled */}
+        <Searchbar />
+
+        {/* 2. PROFILE POPOVER */}
+        <Popover onOpenChange={setIsOpen}>
+          <PopoverTrigger asChild>
+            <motion.div
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
             >
-              <Search className="text-muted-foreground" size={20} />
-              <span className="text-muted-foreground select-none">Search</span>
-            </Card>
+              <Card className="flex flex-row items-center gap-2 h-12 bg-muted/45 rounded-full border-none pl-1 pr-4 shadow-none cursor-pointer hover:bg-muted/70 transition-colors">
+                <Avatar className="h-10 w-10 border-2 border-background">
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>GD</AvatarFallback>
+                </Avatar>
+                
+                <span className="text-sm font-bold hidden sm:inline-block">Godwin</span>
 
-            {/* User avatar */}
-            <Card
-              className="flex-row items-center gap-2 h-10 bg-muted/45 rounded-full border-none pl-1 pr-3 shadow-none cursor-pointer"
-              onClick={() => setIsUserOpen(!isUserOpen)}
-            >
-              <Avatar className="h-10 w-10">
-                <AvatarImage src="" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-              <p className="text-sm font-medium">Godwin</p>
+                <motion.div
+                  animate={{ rotate: isOpen ? 180 : 0 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className="text-muted-foreground"
+                >
+                  <ChevronDown size={18} strokeWidth={3} />
+                </motion.div>
+              </Card>
+            </motion.div>
+          </PopoverTrigger>
 
-              {/* Animated Chevron */}
-              <motion.div
-                animate={{ rotate: isUserOpen ? 180 : 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <ChevronDown />
-              </motion.div>
-            </Card>
-          </div>
-        </div>
-    </>
+          <PopoverContent 
+            align="end" 
+            className="w-72 p-2 rounded-3xl shadow-2xl border-gray-100 mt-2"
+          >
+            <div className="p-4">
+              <p className="text-xs font-semibold text-gray-500 mb-3">Currently in</p>
+              <div className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-2xl transition-colors cursor-pointer">
+                <Avatar className="h-14 w-14">
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>GD</AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="font-bold text-sm">Godwin</p>
+                  <p className="text-xs text-gray-500">Personal</p>
+                  <p className="text-xs text-gray-500">godwin@example.com</p>
+                </div>
+              </div>
+            </div>
 
+            <div className="h-[1px] bg-gray-100 my-2 mx-2" />
+
+            <div className="flex flex-col gap-1 p-1">
+              <ProfileMenuItem icon={<Settings size={18}/>} label="Settings" />
+              <ProfileMenuItem icon={<Repeat size={18}/>} label="Switch account" />
+              <ProfileMenuItem icon={<LogOut size={18} className="text-red-500"/>} label="Log out" isRed />
+            </div>
+          </PopoverContent>
+        </Popover>
+      </div>
+    </div>
   )
 }
+
+// Sub-component for Menu Items to keep things clean
+const ProfileMenuItem = ({ icon, label, isRed = false }: { icon: React.ReactNode, label: string, isRed?: boolean }) => (
+  <button className="flex items-center gap-3 w-full p-3 hover:bg-gray-50 rounded-xl transition-colors text-left group">
+    <div className="text-gray-500 group-hover:text-gray-900 transition-colors">
+      {icon}
+    </div>
+    <span className={`text-sm font-bold ${isRed ? 'text-red-600' : 'text-gray-800'}`}>
+      {label}
+    </span>
+  </button>
+)
 
 export default ProfileHeader
