@@ -14,7 +14,7 @@ import SuggestionIdeasCard from "./card/SuggestedIdeasCard"
 import PageWrapper from "../wrapper/PageWrapper"
 import Header from "../headers/Header"
 import BackButton from "../buttons/BackButton"
-import { containerVariants, itemVariants } from '@/utils/animationsVariants';
+import { containerVariants, itemVariants } from '@/utils/animations';
 
 interface Props {
   initialPin: PinItem

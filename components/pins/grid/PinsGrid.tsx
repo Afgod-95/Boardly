@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/redux/store';
 import { setSelectedPin } from '@/redux/pinSlice';
-import { containerVariants, itemVariants } from '@/utils/animationsVariants';
+import { containerVariants, itemVariants } from '@/utils/animations';
 
 export type PinCardVariant = 'feed' | 'board' | 'pin';
 

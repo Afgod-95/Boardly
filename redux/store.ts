@@ -12,6 +12,7 @@ import {
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 import pinsReducer from './pinSlice';
 import boardsReducer from './boardSlice'
+import searchReducer from './searchSlice'
 
 // Create a noop storage for server-side rendering
 const createNoopStorage = () => {
@@ -37,7 +38,8 @@ const storage =
 // Combine all reducers
 const rootReducer = combineReducers({
   pins: pinsReducer,
-  boards: boardsReducer
+  boards: boardsReducer,
+  search: searchReducer
 });
 
 // Configuration for persistence

@@ -35,7 +35,7 @@ const Searchbar = () => {
   return (
     <div ref={containerRef} className="relative flex-1 max-w-3xl z-50">
       
-      {/* 1. THE TRIGGER (Looks like a search bar, acts like a button) */}
+      {/* 1. THE TRIGGER  */}
       <motion.button 
         onClick={() => setIsOpen(!isOpen)}
         whileTap={{ scale: 0.99 }} 

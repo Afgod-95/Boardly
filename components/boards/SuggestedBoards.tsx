@@ -4,7 +4,7 @@ import { PinItem } from '@/types/pin'
 import { SuggestedBoardCard } from './cards'
 import PinsGrid from '../pins/grid/PinsGrid'
 import { motion } from 'framer-motion'
-import { itemVariants } from '@/utils/animationsVariants'
+import { itemVariants } from '@/utils/animations'
 
 interface BoardSuggestionsProps {
   suggested: BoardItem[],

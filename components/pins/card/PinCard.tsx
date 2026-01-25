@@ -66,7 +66,7 @@ export default function PinCard({
       onMouseLeave={onMouseLeave}
     >
       <div 
-        className="relative rounded-3xl overflow-hidden cursor-zoom-in bg-gray-100 shadow-sm transition-shadow hover:shadow-md"
+        className="relative rounded-3xl overflow-hidden cursor-zoom-in bg-gray-100 transition-shadow hover:shadow-md"
         onClick={onClick}
       >
         <Image

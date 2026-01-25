@@ -50,14 +50,14 @@ export function InviteCollaborators() {
             <DialogTrigger>
               <div className="flex items-center gap-2 cursor-pointer group outline-none">
                 <AvatarGroup className="grayscale group-hover:grayscale-0 transition-all">
-                  <Avatar className="border-2 border-white">
+                  <Avatar className="border-2 border-background w-12 h-12">
                     <AvatarImage
                       src="https://github.com/evilrabbit.png"
                       alt="@evilrabbit"
                     />
                     <AvatarFallback>ER</AvatarFallback>
                   </Avatar>
-                  <AvatarGroupCount className="bg-gray-100 text-gray-600 border-2 border-white">
+                  <AvatarGroupCount className="bg-gray-100 text-gray-600 border-2 border-background w-12 h-12">
                     <PlusIcon size={16} />
                   </AvatarGroupCount>
                 </AvatarGroup>

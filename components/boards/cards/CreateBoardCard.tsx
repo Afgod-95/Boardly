@@ -4,7 +4,7 @@ import Image from "next/image"
 import { Plus } from "lucide-react"
 import { PinItem } from "@/types/pin"
 import { motion } from "framer-motion"
-import { itemVariants } from '@/utils/animationsVariants'
+import { itemVariants } from '@/utils/animations'
 
 interface CreateBoardCardProps {
   pin?: PinItem[]
