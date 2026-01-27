@@ -55,10 +55,12 @@ const bottomLinks: DashboardLink[] = [
     id: 3, icon: Settings, activeIcon: RiSettings3Fill,
     tooltip: "Settings", href: "/dashboard/settings"
   },
-  {
-    id: 4, icon: UserCircle, activeIcon: RiUser3Fill,
-    tooltip: "Profile", href: "/dashboard/profile"
-  },
+   /* 
+    {
+      id: 4, icon: UserCircle, activeIcon: RiUser3Fill,
+      tooltip: "Profile", href: "/dashboard/profile"
+    },
+  */
 ]
 
 /* ----------------------------- CREATE POPOVER ------------------------------ */
@@ -86,7 +88,6 @@ const Sidebar = () => {
     if (pathname.startsWith("/dashboard/boards")) return 1
     if (pathname.startsWith("/dashboard/create")) return 2
     if (pathname.startsWith("/dashboard/settings")) return 3
-    if (pathname.startsWith("/dashboard/profile")) return 4
     return null
   })()
 

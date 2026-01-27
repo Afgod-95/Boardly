@@ -10,12 +10,12 @@ interface BoardsLayoutWrapperProps {
 
 const BoardsPageLayout = ({ children }: BoardsLayoutWrapperProps) => {
     return (
-        <PageWrapper>
             <BoardsLayout>
-                {children}
+                <PageWrapper>
+                    {children}
+                </PageWrapper>
+                
             </BoardsLayout>
-        </PageWrapper>
-
     )
 }
 

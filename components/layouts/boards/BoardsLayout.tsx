@@ -5,8 +5,10 @@ import ProfileHeader from "@/components/headers/profile/ProfileHeader"
 import TabNavigation from "@/components/boards/tabs/TabNavigation"
 import { ActionButtons, CreateButton } from "@/components/buttons"
 import { PinsDropdownFilter, BoardsPopoverFilter } from "@/components/boards/tabFilters"
-import { Settings2, Star, FolderOpen } from "lucide-react"
+import { Settings2, Star, FolderOpen, Settings } from "lucide-react"
 import { usePathname, useSearchParams, useRouter } from "next/navigation"
+import Searchbar from "@/components/searchbar/Searchbar"
+import PageWrapper from "@/components/wrapper/PageWrapper"
 
 
 interface BoardsLayoutProps {
@@ -73,10 +75,25 @@ const BoardsLayout = ({ children, onFilterChange }: BoardsLayoutProps) => {
 
   return (
     <div className="space-y-4">
+
+      {/** mobile header */}
+      <header className="sticky top-0 z-50 w-full  bg-background pt-4 pb-2 block md:hidden">
+        <div className="flex items-center gap-4 px-4">
+          <Searchbar />
+          <div className="flex items-center justify-content-center">
+            <Settings />
+          </div>
+        </div>
+
+      </header>
+
+
       <header className="sticky top-0 z-50 bg-background hidden md:block">
-        <ProfileHeader />
+        <div className="px-5">
+          <ProfileHeader />
+        </div>
         {!isDetailView && (
-          <>
+          <PageWrapper>
             <TabNavigation tabs={tabs} />
 
             {/* Action Bar */}
@@ -101,7 +118,7 @@ const BoardsLayout = ({ children, onFilterChange }: BoardsLayoutProps) => {
 
               <CreateButton />
             </div>
-          </>
+          </PageWrapper>
 
         )}
       </header>

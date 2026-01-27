@@ -49,10 +49,13 @@ const BoardsPage = () => {
     return (
         <>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 border-b pb-8">
-                <CreateBoardCard
-                    variant="create"
-                    onClick={() => console.log('Create board')}
-                />
+                <div className="hidden md:block">
+                    <CreateBoardCard
+                        variant="create"
+                        onClick={() => console.log('Create board')}
+                    />
+                </div>
+
                 {mockBoards.map(board => (
                     <BoardsCard
                         key={board.id}
@@ -62,12 +65,13 @@ const BoardsPage = () => {
                     />
                 ))}
             </div>
-
-            <SuggestedBoards
+            <div className="hidden md:block">
+                <SuggestedBoards
                 suggested={mockBoards.slice(2)}
                 unorganizedPins={pins}
                 allPins={pins}
             />
+            </div>
         </>
     )
 }
