@@ -1,10 +1,11 @@
 import { LucideIcon } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu'
+import { motion } from 'framer-motion'
 
 interface ActionButton<T extends string> {
   id: number | string
@@ -16,9 +17,9 @@ interface ActionButton<T extends string> {
 
 
 interface ActionButtonsProps {
-  buttons: ActionButton<T>[]
+  buttons: ActionButton<string>[]
   onFilterChange?: (filterKey: string | null) => void
-  activeFilterKey?: string | null // NEW: receive active filter from parent
+  activeFilterKey?: string | null 
   className?: string
   children: React.ReactNode
 }
@@ -30,7 +31,7 @@ const ActionButtons = ({
   children,
   className = '',
 }: ActionButtonsProps) => {
-  const handleButtonClick = (button: ActionButton<T>) => {
+  const handleButtonClick = (button: ActionButton<string>) => {
     if (!button.filterKey) {
       button.onClick?.()
       return
@@ -48,7 +49,8 @@ const ActionButtons = ({
         const Icon = button.icon
         const isActive = button.filterKey === activeFilterKey
 
-        const buttonClasses = ` p-3 md:py-3 md:px-5 rounded-xl flex items-center gap-2 transition-all ${
+
+        const buttonClasses = `cursor-pointer p-3 md:py-3 md:px-5 rounded-xl flex items-center gap-2 transition-all ${
           isActive
             ? 'bg-foreground text-background shadow-md scale-95'
             : 'bg-muted text-foreground hover:bg-secondary'
@@ -66,7 +68,7 @@ const ActionButtons = ({
           return (
             <DropdownMenu key={button.id}>
               <DropdownMenuTrigger asChild>
-                <button className={buttonClasses}>{ButtonInner}</button>
+                <motion.button  whileTap={{ scale: 1.1}} className={buttonClasses}>{ButtonInner}</motion.button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-48 p-4 rounded-2xl">
                 {children}
@@ -77,13 +79,14 @@ const ActionButtons = ({
 
         // Filter button
         return (
-          <button
+          <motion.button
+            whileTap={{ scale: 1.1}}
             key={button.id}
             onClick={() => handleButtonClick(button)}
             className={buttonClasses}
           >
             {ButtonInner}
-          </button>
+          </motion.button>
         )
       })}
     </div>

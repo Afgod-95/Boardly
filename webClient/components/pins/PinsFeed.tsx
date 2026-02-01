@@ -43,7 +43,6 @@ const PinsFeed = () => {
                 </div>
             ) : (
                 <>
-                    <div className="md:hidden py-3" />
                     <PinsGrid
                         variant="feed"
                         items={pins}

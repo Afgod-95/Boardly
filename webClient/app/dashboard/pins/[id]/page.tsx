@@ -5,7 +5,7 @@ import PinDetailClient from '@/components/pins/PinDetailClient';
 const page = async ({ params }: { params: Promise<{ id: string | number} >}) => {
     const { id } = await params;
     const pinId = isNaN(Number(id)) ? id : Number(id);
-    const pin = itemData.find((p) => p.id === pinId || p.id.toString() === id);
+    const pin = itemData.find((p) => p.id === pinId || p.id?.toLocaleString() === id);
   
     if (!pin) notFound();
     

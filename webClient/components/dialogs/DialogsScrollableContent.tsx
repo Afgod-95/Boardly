@@ -60,9 +60,9 @@ export function DialogScrollableContent({
       {isActionButton === true && (
         <DialogFooter>
           <DialogClose>
-            <Button variant="outline">Close</Button>
+            <Button variant="outline" className="w-full">Close</Button>
           </DialogClose>
-          <Button onClick={onSubmit}>{buttonTitle}</Button>
+          <Button className="bg-violet-600" onClick={onSubmit}>{buttonTitle}</Button>
         </DialogFooter>
 
       )}

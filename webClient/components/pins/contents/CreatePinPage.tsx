@@ -4,8 +4,10 @@ import { useState } from 'react'
 import Header from '@/components/headers/Header'
 import PageWrapper from '@/components/wrapper/PageWrapper'
 import { PinMediaUpload, PinFormFields, PinDraftsSidebar } from '@/components/pins/create'
-import { PinForm } from '@/webClient/types/pin'
+import { PinForm } from '@/types/pin'
 import clsx from 'clsx'
+import Image from 'next/image'
+import BackButton from '@/components/buttons/BackButton'
 
 interface PinDraft extends PinForm {
   id: number | string
@@ -90,7 +92,6 @@ const CreatePinPage = () => {
   return (
     <PageWrapper>
       <Header />
-
       <motion.div
         className="flex flex-col lg:grid gap-8"
         // Animate only on Large screens where grid is active
@@ -105,8 +106,14 @@ const CreatePinPage = () => {
         <div className="space-y-6 lg:space-y-8 px-4 sm:px-6 lg:px-0">
           
           {/* Sticky Header with improved padding for mobile */}
-          <div className="flex items-center justify-between sticky top-[72px] lg:top-22 bg-white/90 backdrop-blur-md z-10 py-4 border-b lg:border-none">
-            <h2 className="text-lg lg:text-xl font-bold">Create Pin</h2>
+          <div className="flex items-center justify-between sticky top-18 lg:top-22 bg-white/90 backdrop-blur-md z-10 py-4 border-b lg:border-none">
+            <div className='flex items-center gap-4'>
+                <div className='md:hidden block'>
+                     <BackButton />
+                </div>
+                <h2 className="text-lg lg:text-xl font-bold">Create Pin</h2>
+            </div>
+            
             <button className="px-6 lg:px-8 py-2.5 lg:py-3 shadow-sm text-white bg-violet-700 hover:bg-violet-600 rounded-full font-semibold transition text-sm lg:text-base">
               Publish
             </button>
@@ -162,7 +169,7 @@ const CreatePinPage = () => {
                             className="flex-shrink-0 w-32 aspect-square bg-gray-100 rounded-xl overflow-hidden border"
                         >
                             {draft.img ? (
-                                <img src={draft.img} className="w-full h-full object-cover" alt="" />
+                                <Image src={draft.img} className="w-full h-full object-cover" alt="" />
                             ) : (
                                 <div className="p-2 text-xs text-left truncate">{draft.title}</div>
                             )}

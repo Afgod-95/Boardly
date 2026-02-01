@@ -71,7 +71,7 @@ export default function PinsGrid({
       : "columns-2 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-7 2xl:columns-8 3xl:columns-10"),
     variant === "board" &&
     (layout === "standard"
-      ? "columns-1 sm:columns-2 md:columns-3 lg:columns-5  2xl:columns-7 3xl:columns-9"
+      ? "columns-2 sm:columns-2 md:columns-3 lg:columns-5  2xl:columns-7 3xl:columns-9"
       : "columns-2 sm:columns-3 md:columns-5 lg:columns-7 xl:columns-9 2xl:columns-10 3xl:columns-12"),
     variant === "pin" &&
     (layout === "standard"

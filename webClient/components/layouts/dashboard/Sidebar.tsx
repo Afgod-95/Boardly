@@ -5,7 +5,6 @@ import {
   LayoutPanelLeft,
   SquarePlus,
   Settings,
-  UserCircle,
   LucideIcon,
   Pin,
   Layers,
@@ -15,7 +14,6 @@ import {
   RiHome5Fill,
   RiDashboardFill,
   RiSettings3Fill,
-  RiUser3Fill,
 } from "react-icons/ri"
 
 import { motion } from "framer-motion"
@@ -26,7 +24,6 @@ import { usePathname } from "next/navigation"
 import { useState } from "react"
 import clsx from "clsx"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
-import { CreateBoardCard } from "@/components/boards/cards"
 import CreateBoardModal from "@/components/modals/CreateBoardModal"
 
 /* ---------------------------------- TYPES --------------------------------- */
@@ -55,12 +52,6 @@ const bottomLinks: DashboardLink[] = [
     id: 3, icon: Settings, activeIcon: RiSettings3Fill,
     tooltip: "Settings", href: "/dashboard/settings"
   },
-   /* 
-    {
-      id: 4, icon: UserCircle, activeIcon: RiUser3Fill,
-      tooltip: "Profile", href: "/dashboard/profile"
-    },
-  */
 ]
 
 /* ----------------------------- CREATE POPOVER ------------------------------ */
@@ -157,7 +148,7 @@ const Sidebar = () => {
                       <Dialog>
                         <DialogTrigger
                           className={clsx(
-                            "flex gap-4 items-center justify-start text-start rounded-xl",
+                            "flex gap-4 items-center justify-start text-start rounded-xl w-full",
                             "p-3 hover:bg-muted transition-colors")}
                         >
 

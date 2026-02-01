@@ -109,13 +109,13 @@ const BoardsPageContent = () => {
 
             {/* Suggested Boards - Only on Desktop when no filter */}
             {!activeFilter && (
-                <div className="hidden md:block">
-                    <SuggestedBoards
-                        suggested={mockBoards.slice(2)}
-                        unorganizedPins={pins}
-                        allPins={pins}
-                    />
-                </div>
+             
+                <SuggestedBoards
+                    suggested={mockBoards.slice(2)}
+                    unorganizedPins={pins}
+                    allPins={pins}
+                />
+                
             )}
         </>
     )

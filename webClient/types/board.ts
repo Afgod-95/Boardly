@@ -7,6 +7,7 @@ export interface BoardItem {
   updatedAt?: string
   // relationships
   pinIds: (string | number)[]
+  collaboratorId?: (string | number)[]
   createdByUser?: boolean
 }
 

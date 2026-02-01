@@ -1,5 +1,5 @@
 import React from 'react'
-import CreatePinPage from './CreatePinPage'
+import CreatePinPage from '@/components/pins/contents/CreatePinPage'
 
 const page = () => {
   return (

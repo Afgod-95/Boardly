@@ -1,5 +1,5 @@
 import React from 'react'
-import SearchPageClient from './SearchPageClient'
+import SearchPageClient from '@/components/search/SearchPageclient'
 
 const SearchPage = () => {
   return (

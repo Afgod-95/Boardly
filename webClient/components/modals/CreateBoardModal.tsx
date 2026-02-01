@@ -110,7 +110,7 @@ const CreateBoardModal = () => {
                         <p className="text-xs text-muted-foreground">{user.email}</p>
                       </div>
                     </div>
-                    <div className={`p-1 rounded-full ${isSelected ? 'bg-accent text-white' : 'bg-muted-foreground/20 text-muted-foreground'}`}>
+                    <div className={`p-1 rounded-full ${isSelected ? 'bg-violet-600 text-white' : 'bg-muted-foreground/20 text-muted-foreground'}`}>
                       {isSelected ? <Check size={14} /> : <Plus size={14} />}
                     </div>
                   </button>

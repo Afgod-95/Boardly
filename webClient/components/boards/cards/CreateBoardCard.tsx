@@ -65,7 +65,7 @@ const CreateBoardCard = ({
           {/* ACTION BUTTON (ALWAYS SHOWN) */}
           <div className="absolute inset-0 flex items-center justify-center bg-black/5 group-hover:bg-black/20 transition-colors duration-300">
             <motion.div
-              initial={{ scale: 0.9, opacity: 0.8 }}
+              initial={{ scale: 1, opacity: 0.8 }}
               whileHover={{ scale: 1.1, opacity: 1 }}
               className="
                 bg-white flex items-center gap-2
@@ -76,7 +76,7 @@ const CreateBoardCard = ({
             >
               <Plus size={20} strokeWidth={3} className="text-black" />
               <span className="font-bold text-black text-sm">
-                {variant === "create" ? "Create Board" : "Save to Board"}
+                {variant === "create" ? "Create" : "Save to Board"}
               </span>
             </motion.div>
           </div>

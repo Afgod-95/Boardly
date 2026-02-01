@@ -13,21 +13,21 @@ interface PinCardProps {
   showStarIcon?: boolean;
   profileValue?: string;
   layout?: PinsLayout;
-  index: number;
-  isHovered: boolean;
+  index?: number;
+  isHovered?: boolean;
   onMouseEnter: () => void;
-  onMouseLeave: () => void;
-  onClick: () => void;
-  showSaveButton: boolean;
-  showEditButton: boolean;
-  showProfileButton: boolean | string;
-  showMetadata: string | boolean;
-  onProfileClick: (e: React.MouseEvent) => void;
-  onSave: (e: React.MouseEvent) => void;
-  onVisitSite: (e: React.MouseEvent) => void;
-  onShare: (e: React.MouseEvent) => void;
-  onEdit: (e: React.MouseEvent) => void;
-  onMoreOptions: (e: React.MouseEvent) => void;
+  onMouseLeave?: () => void;
+  onClick?: () => void;
+  showSaveButton?: boolean;
+  showEditButton?: boolean;
+  showProfileButton?: boolean | string;
+  showMetadata?: string | boolean;
+  onProfileClick?: (e: React.MouseEvent) => void;
+  onSave?: (e: React.MouseEvent) => void;
+  onVisitSite?: (e: React.MouseEvent) => void;
+  onShare?: (e: React.MouseEvent) => void;
+  onEdit?: (e: React.MouseEvent) => void;
+  onMoreOptions?: (e: React.MouseEvent) => void;
   onAddToFavorites?: (e: React.MouseEvent) => void;
 }
 
