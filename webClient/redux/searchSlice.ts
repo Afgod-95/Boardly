@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { SearchItem, SearchState } from "@/webClient/types/search"
+import { SearchItem, SearchState } from "@/types/search"
 import { nanoid } from "nanoid"
 
 const initialState: SearchState = {

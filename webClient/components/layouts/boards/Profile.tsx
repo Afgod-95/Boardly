@@ -26,13 +26,13 @@ const Profile = () => {
                 animate={{ opacity: 1, y: 0 }}
             >
                {profileIcon}
-                <div className='text-center text-sm text-gray-500'>
+                <div className='text-center text-sm text-gray-500 sm:hidden'>
                     {/** name */}
                     <h2 className='text-center font-bold text-2xl'>Godwin</h2>
                     <span>afgod98</span>
                 </div>
                 <div className='flex flex-row items-center justify-center gap-4'>
-                    <Button className='px-4 bg-accent text-foreground hover:bg-muted cursor-pointer'>Share</Button>
+                    <Button className='px-4 bg-accent text-foreground hover:bg-muted  cursor-pointer'>Share</Button>
                     <Button className='px-4 bg-accent text-foreground hover:bg-muted cursor-pointer'>Edit Profile</Button>
                 </div>
             </motion.div>

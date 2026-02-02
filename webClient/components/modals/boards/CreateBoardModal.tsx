@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { DialogScrollableContent } from '../dialogs/DialogsScrollableContent'
-import { Input } from '../ui/input'
-import { Textarea } from '../ui/textarea'
-import { Label } from '../ui/label'
+import { DialogScrollableContent } from '../../dialogs/DialogsScrollableContent'
+import { Input } from '../../ui/input'
+import { Textarea } from '../../ui/textarea'
+import { Label } from '../../ui/label'
 import { Users, Pencil, AlignLeft, Plus, Check } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar' 
+import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar' 
 
 const SUGGESTIONS = [
   { id: 1, name: 'Alex Rivera', email: 'alex@example.com', initials: 'AR' },

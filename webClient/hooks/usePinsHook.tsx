@@ -1,5 +1,5 @@
 "use client"
-import { PinItem } from "@/webClient/types/pin";
+import { PinItem } from "@/types/pin";
 import { useState } from "react";
 
 

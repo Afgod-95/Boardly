@@ -9,7 +9,7 @@ import clsx from 'clsx';
 import { useState } from 'react';
 import { Pin, LayoutPanelLeft, Layers } from 'lucide-react';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
-import CreateBoardModal from '@/components/modals/CreateBoardModal';
+import CreateBoardModal from '@/components/modals/boards/CreateBoardModal';
 import BottomSheet from '@/components/ui/BottomSheet';
 
 interface DashboardLink {
@@ -77,7 +77,7 @@ const BottomNavigator = () => {
       {showBottomBar && (
         <>
           {/* Bottom Navigator */}
-          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-sm md:hidden">
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-sm">
             <div className="bg-background/90 backdrop-blur-2xl border shadow-[0_20px_50px_rgba(0,0,0,0.1)] rounded-[2.5rem] p-2 flex items-center justify-between relative">
 
               {/* Left Links */}

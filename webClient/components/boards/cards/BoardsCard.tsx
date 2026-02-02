@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { ReactEventHandler, useState } from 'react'
 import Image from 'next/image'
 import { BoardsCardProps } from '../types/boardItem'
+import { motion } from 'framer-motion'
+import { Pencil } from 'lucide-react'
 
 
-const BoardsCard = ({ board, previewPins, onBoardClick }: BoardsCardProps) => {
-   const pinCount = board.pinIds.length // Use total pins from board, not just preview
-   const displayPins = previewPins.slice(0, 5)
+
+const BoardsCard = ({ board, previewPins, onBoardClick, onEdit }: BoardsCardProps) => {
+    const pinCount = board.pinIds.length // Use total pins from board, not just preview
+    const displayPins = previewPins.slice(0, 5)
 
 
     const [isHovered, setIsHovered] = useState<boolean>(false);
@@ -68,7 +71,7 @@ const BoardsCard = ({ board, previewPins, onBoardClick }: BoardsCardProps) => {
                     </div>
                 )}
 
-                
+
                 {/* 3 IMAGES */}
                 {displayPins.length === 3 && (
                     <div className="flex gap-0.5 h-full">
@@ -156,13 +159,6 @@ const BoardsCard = ({ board, previewPins, onBoardClick }: BoardsCardProps) => {
                                         fill
                                         className="object-cover"
                                     />
-
-                                    {/* +X overlay on last image if there are more pins */}
-                                    {index === 3 && pinCount > 5 && (
-                                        <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-white font-semibold text-lg">
-                                            +{pinCount - 5}
-                                        </div>
-                                    )}
                                 </div>
                             ))}
                         </div>
@@ -170,7 +166,20 @@ const BoardsCard = ({ board, previewPins, onBoardClick }: BoardsCardProps) => {
                 )}
 
                 {isHovered && (
-                    <div className='absolute bg-black/40 inset-0 transition-opacity duration-300 rounded-2xl ' />
+                    <div className='absolute bg-black/40 inset-0 transition-opacity duration-300 rounded-2xl ' >
+                        <motion.button
+                            whileHover={{ scale: 1.05, backgroundColor: "rgba(255, 255, 255, 1)" }}
+                            whileTap={{ scale: 0.95 }}
+                            className="bg-white/90 p-2.5 rounded-xl transition-colors absolute right-2 bottom-2"
+                            onClick={(e: React.MouseEvent) => { 
+                                e.stopPropagation()
+                                onEdit?.(board)
+                            }}
+                            aria-label="Share pin"
+                        >
+                            <Pencil size={20} color="black" />
+                        </motion.button>
+                    </div>
                 )}
             </div>
 

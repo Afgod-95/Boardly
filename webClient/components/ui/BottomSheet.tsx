@@ -3,18 +3,8 @@
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import { useEffect, ReactNode } from 'react';
 import clsx from 'clsx';
+import { BottomSheetProps } from '@/types/bottomSheet';
 
-interface BottomSheetProps {
-  isOpen: boolean;
-  onClose: () => void;
-  children: ReactNode;
-  maxHeight?: string;
-  showHandle?: boolean;
-  closeOnBackdropClick?: boolean;
-  dragToClose?: boolean;
-  dragThreshold?: number;
-  velocityThreshold?: number;
-}
 
 const BottomSheet = ({
   isOpen,
@@ -60,7 +50,7 @@ const BottomSheet = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={closeOnBackdropClick ? onClose : undefined}
-            className="block md:hidden fixed inset-0 bg-black/50 z-[60]"
+            className="block md:hidden fixed inset-0 bg-black/50 z-60"
           />
 
           {/* Bottom Sheet */}

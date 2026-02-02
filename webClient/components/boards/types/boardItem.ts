@@ -1,8 +1,9 @@
-import { PinItem } from "@/webClient/types/pin";
-import { BoardItem } from "@/webClient/types/board";
+import { PinItem } from "@/types/pin";
+import { BoardItem } from "@/types/board";
 
 export interface BoardsCardProps {
     board: BoardItem
     previewPins: PinItem[]
+    onEdit?: (item: BoardItem) => void
     onBoardClick: () => void
 }

@@ -107,14 +107,14 @@ const BoardsLayout = ({ children }: BoardsLayoutProps) => {
 
   return (
     <div className="space-y-4">
-      <header className="sticky top-0 z-50 bg-background max-h-120 md:max-h-96">
+      <header className="sticky top-0 z-50 bg-background max-h-120 sm:max-h-105 md:max-h-96 ">
         <div className="px-5">
           <ProfileHeader />
         </div>
         {!isDetailView && (
           <PageWrapper>
-            <div className='space-y-4 flex justify-center md:justify-between  items-center'>
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold pb-4 hidden md:block">Your saved ideas</h2>
+            <div className='space-y-4 flex justify-center sm:justify-between md:justify-between  items-center'>
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold pb-4 hidden sm:block md:block">Your saved ideas</h2>
               <Profile />
             </div>
 

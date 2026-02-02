@@ -19,7 +19,7 @@ interface Props {
   onSubmit?: () => void;
   isLoading?: boolean
   children: React.ReactNode;
-  className?: string // Added to allow specific overrides if needed
+  className?: string 
 }
 
 export function DialogScrollableContent({

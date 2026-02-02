@@ -24,7 +24,7 @@ import { usePathname } from "next/navigation"
 import { useState } from "react"
 import clsx from "clsx"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
-import CreateBoardModal from "@/components/modals/CreateBoardModal"
+import CreateBoardModal from "@/components/modals/boards/CreateBoardModal"
 
 /* ---------------------------------- TYPES --------------------------------- */
 
@@ -82,7 +82,7 @@ const Sidebar = () => {
     return null
   })()
 
-  // 2. The Master Active ID
+
   // If Create is open, IT gets the background. Otherwise, the current route gets it.
   const activeId = isCreateOpen ? 2 : routeActiveId
 
@@ -219,8 +219,8 @@ const Sidebar = () => {
   return (
     <aside className="flex h-screen w-24 flex-col items-center justify-between border-r bg-background z-20">
       <div className="flex flex-col items-center gap-6 pt-8">
-        <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-black text-white font-bold text-lg">
-          P
+        <div className="mb-4 flex h-10 w-10 p-3 items-center justify-center rounded-xl bg-black text-white font-bold text-lg">
+          B
         </div>
         {topLinks.map(renderLink)}
       </div>

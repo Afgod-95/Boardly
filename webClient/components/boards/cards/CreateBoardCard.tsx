@@ -28,11 +28,11 @@ const CreateBoardCard = ({
       whileTap={{ scale: 0.98 }} 
       className="group cursor-pointer w-full"
     >
-      <div className="relative rounded-3xl overflow-hidden bg-gray-200 aspect-[4/3] shadow-sm group-hover:shadow-md transition-shadow duration-300">
+      <div className="relative rounded-3xl overflow-hidden bg-gray-200 aspect-4/3 shadow-sm group-hover:shadow-md transition-shadow duration-300">
         <div className="relative w-full h-full flex gap-0.5">
           
           {/* LEFT BIG */}
-          <div className="relative flex-[2] overflow-hidden bg-gray-300">
+          <div className="relative flex-2 overflow-hidden bg-gray-300">
             {variant === "suggestion" && displayPins[0] && (
               <Image
                 src={displayPins[0].img}

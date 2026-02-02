@@ -6,12 +6,12 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex h-screen w-full">
       {/* Sidebar: show on tablet and desktop */}
-      <aside className="hidden md:flex">
+      <aside className="hidden sm:flex">
         <Sidebar />
       </aside>
 
       {/* Bottom Navigator: show only on mobile */}
-      <div className="flex md:hidden">
+      <div className="flex sm:hidden">
         <BottomNavigator />
       </div>
 
