@@ -9,7 +9,7 @@ import { BoardsCard } from "@/components/boards/cards"
 import SuggestedBoards from "@/components/boards/SuggestedBoards"
 import { BoardItem } from "@/types/board"
 import { setBoards } from "@/redux/boardSlice"
-import EditBoardModal from "@/components/modals/boards/EditBoardModal"
+import EditBoardModal from "@/components/boards/modals/EditBoardModal"
 
 
 const BoardsPageContent = () => {

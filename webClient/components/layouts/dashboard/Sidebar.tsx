@@ -24,7 +24,7 @@ import { usePathname } from "next/navigation"
 import { useState } from "react"
 import clsx from "clsx"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
-import CreateBoardModal from "@/components/modals/boards/CreateBoardModal"
+import CreateBoardModal from "@/components/boards/modals/CreateBoardModal"
 
 /* ---------------------------------- TYPES --------------------------------- */
 

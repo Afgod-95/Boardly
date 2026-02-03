@@ -9,7 +9,7 @@ import clsx from 'clsx';
 import { useState } from 'react';
 import { Pin, LayoutPanelLeft, Layers } from 'lucide-react';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
-import CreateBoardModal from '@/components/modals/boards/CreateBoardModal';
+import CreateBoardModal from '@/components/boards/modals/CreateBoardModal';
 import BottomSheet from '@/components/ui/BottomSheet';
 
 interface DashboardLink {

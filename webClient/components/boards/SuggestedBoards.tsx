@@ -45,8 +45,7 @@ const SuggestedBoards = ({ suggested = [], unorganizedPins, allPins }: BoardSugg
 
 
       <PinsGrid items={unorganizedPins} variant='board'
-        actions={{
-        }}
+        
       />
 
     </div>

@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import ModalRoot from "../ModalRoot"
+import ModalRoot from "./ModalRoot"
 import { DialogScrollableContent } from "../../dialogs/DialogsScrollableContent"
 import { Input } from "../../ui/input"
 import { Textarea } from "../../ui/textarea"
@@ -76,9 +76,9 @@ const EditBoardModal = ({
           </Label>
 
           <button className="relative w-full h-35 rounded-2xl border bg-muted/30 overflow-hidden group">
-            {board.coverImage ? (
+            {board.coverPinId ? (
               <Image
-                src={board.coverImage}
+                src={board.coverPinId}
                 alt="Board cover"
                 className="h-full w-full object-cover"
               />

@@ -16,6 +16,8 @@ export interface PinItem {
   isFavourite?: boolean
   createdByUser?: boolean
   saveCount?: number;
+
+  boardId?: string | number //relationship to board item
 }
 
 

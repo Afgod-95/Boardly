@@ -39,12 +39,12 @@ const boardsSlice = createSlice({
 
     addPinToBoard: (
       state,
-      action: PayloadAction<{ boardId: string; pinId: string }>
+      action: PayloadAction<{ boardId: string | number; pinId: string | number }>
     ) => {
       const board = state.boards.find(b => b.id === action.payload.boardId)
 
-      if (board && !board.pinIds.includes(action.payload.pinId)) {
-        board.pinIds.push(action.payload.pinId)
+      if (board && !board.pinIds.includes(action.payload.pinId as string)) {
+        board.pinIds.push(action.payload.pinId as string)
       }
     },
 
@@ -67,6 +67,8 @@ export const {
   createBoard,
   deleteBoard,
   updateBoard,
+  addPinToBoard,
+  removePinFromBoard
 } = boardsSlice.actions
 
 export default boardsSlice.reducer

@@ -2,10 +2,10 @@
 
 import React from "react"
 import { useMediaQuery } from "react-responsive"
-import { Dialog } from "../ui/dialog"
-import BottomSheet from "../ui/BottomSheet"
-import { DialogScrollableContent } from "../dialogs/DialogsScrollableContent"
-import { Button } from "../ui/button"
+import { Dialog } from "../../ui/dialog"
+import BottomSheet from "../../ui/BottomSheet"
+import { DialogScrollableContent } from "../../dialogs/DialogsScrollableContent"
+import { Button } from "../../ui/button"
 import { BottomSheetProps } from "@/types/bottomSheet"
 
 
@@ -41,6 +41,7 @@ const ModalRoot = ({
   velocityThreshold = 500,
 }: ModalRootProps) => {
   const isDesktop = useMediaQuery({ minWidth: 1024 })
+  const isMobileOrTablet = useMediaQuery({ maxWidth: 1023 })
 
   if (!isOpen) return null
 
@@ -61,7 +62,8 @@ const ModalRoot = ({
   }
 
   /* ---------------- MOBILE / TABLET ---------------- */
-  return (
+  if (isMobileOrTablet){
+    return (
     <BottomSheet
       isOpen={isOpen}
       onClose={onClose}
@@ -89,6 +91,7 @@ const ModalRoot = ({
       </div>
     </BottomSheet>
   )
+  }
 }
 
 export default ModalRoot

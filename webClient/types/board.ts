@@ -1,6 +1,5 @@
 export interface BoardItem {
   id: string            // uuid / hex / slug
-  coverImage?: string
   title: string
   description?: string
   coverPinId?: string   // for preview image

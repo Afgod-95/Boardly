@@ -1,62 +1,77 @@
 "use client"
 
 import PinsGrid from "@/components/pins/grid/PinsGrid"
-import { useDispatch, useSelector } from "react-redux"
-import { RootState } from "@/redux/store"
-import { useRouter, useSearchParams } from "next/navigation"
 import { setSelectedPin } from "@/redux/pinSlice"
-import { useMemo } from "react"
+import usePinHook from "../../pins/hooks/usePinHook"
+import { SaveToBoard, SharePin, EditPin } from "@/components/pins/popovers"
+import { PinItem } from "@/types/pin"
 
 const PinsPageContent = () => {
-  const { pins } = useSelector((state: RootState) => state.pins)
-  const activeFilter = useSelector((state: RootState) => state?.boardFilter?.pins?.activeFilter)
-  const dispatch = useDispatch()
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const layoutParam = searchParams.get("layout") as "compact" | "standard" | null
-  const pinsLayout = layoutParam ?? "compact"
+  const {
+    editPopover,
+    sharePopover,
+    savePopover,
 
-  // Filter pins based on active filter
-  const filteredPins = useMemo(() => {
-    if (!activeFilter) return pins // Show all pins if no filter
+    router,
+    pinsLayout,
+    activeFilter,
 
-    if (activeFilter === 'favorites') {
-      return pins.filter(pin => pin.isFavourite === true)
-    }
+    filteredPins,
+    selectedPin,
+    boards,
+    dispatch,
 
-    if (activeFilter === 'created') {
-      return pins.filter(pin => pin.createdByUser === true)
-    }
+    handleOpenEditPopover,
+    handleCloseEditPopover,
+    handleOpenSharePopover,
+    handleCloseSharePopover,
+    handleOpenSavePopover,
+    handleCloseSavePopover,
 
-    return pins
-  }, [pins, activeFilter])
+    handleSharePin,
+    handleSavePinToBoard,
+    handleVisitSite,
+    handleDeletePin,
+    handlePinUpdate,
+    handleSaveChanges,
+    handleToggleFavorite,
+  } = usePinHook()
 
   return (
     <div className="pb-20">
-      {filteredPins.length > 0 ? (
-        <PinsGrid
-          items={filteredPins}
-          variant="pin"
-          layout={pinsLayout}
-          actions={{
-            onItemClick: (item) => {
-              dispatch(setSelectedPin(item))
-              router.push(`/dashboard/pins/${item.id}`)
-            },
-          }}
-        />
-      ) : (
-        <div className="flex flex-col items-center justify-center py-20 text-center">
-          <p className="text-lg text-muted-foreground mb-2">
-            {activeFilter === 'favorites' && "No favourite pins yet"}
-            {activeFilter === 'created' && "No pins created yet"}
-          </p>
-          <p className="text-sm text-muted-foreground">
-            {activeFilter === 'favorites' && "Start favouriting pins to see them here"}
-            {activeFilter === 'created' && "Start creating your own pins!"}
-          </p>
-        </div>
-      )}
+      <PinsGrid
+        items={filteredPins}
+        layout={pinsLayout}
+        variant="board"
+       dialogComponents={{
+          EditDialogContent: ({ item }) => (
+            <EditPin
+              pin={item}
+              onChange={handlePinUpdate}
+              onSave={handleSaveChanges}
+              onDelete={() => handleDeletePin(item)}
+              onClose={handleCloseEditPopover}
+            />
+          ),
+
+          ShareDialogContent: ({ item }) => (
+            <SharePin
+              pin={item}
+              onShare={(method) => handleSharePin(item, method)}
+              onClose={handleCloseSharePopover}
+            />
+          ),
+
+          SaveDialogContent: ({ item }) => (
+            <SaveToBoard
+              pin={item}
+              boards={boards}
+              onSave={(boardId) => handleSavePinToBoard(item, boardId)}
+              onClose={handleCloseSavePopover}
+            />
+          ),
+        }}
+      />
     </div>
   )
 }

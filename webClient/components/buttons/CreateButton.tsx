@@ -6,7 +6,7 @@ import { Dialog, DialogTrigger } from '../ui/dialog'
 
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import CreateBoardModal from '../modals/boards/CreateBoardModal'
+import CreateBoardModal from '../boards/modals/CreateBoardModal'
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import BottomSheet from '../ui/BottomSheet'

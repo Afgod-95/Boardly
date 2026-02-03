@@ -58,7 +58,7 @@ const pinsSlice = createSlice({
             }
         },
 
-        setSelectedPin: (state, action: PayloadAction<PinItem>) => {
+        setSelectedPin: (state, action: PayloadAction<PinItem | null>) => {
             state.selectedPin = action.payload;
         },
 
