@@ -4,12 +4,12 @@ import { motion } from "framer-motion";
 import PinCard from "../card/PinCard";
 import { PinItem } from "@/types/pin";
 import clsx from "clsx";
-import usePinsHook from "@/hooks/usePinsHook";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { setSelectedPin } from "@/redux/pinSlice";
 import { containerVariants, itemVariants } from "@/utils/animations";
+import usePinHook from "@/components/pins/hooks/usePinHook";
 
 export type PinCardVariant = "feed" | "board" | "pin";
 
@@ -23,11 +23,26 @@ interface PinsGridProps {
 
   /** Dialog content components */
   dialogComponents?: {
-    ProfileDialogContent?: React.ComponentType<{ item: PinItem; onClose: () => void }>;
-    SaveDialogContent?: React.ComponentType<{ item: PinItem; onClose: () => void }>;
-    VisitDialogContent?: React.ComponentType<{ item: PinItem; onClose: () => void }>;
-    ShareDialogContent?: React.ComponentType<{ item: PinItem; onClose: () => void }>;
-    EditDialogContent?: React.ComponentType<{ item: PinItem; onClose: () => void }>;
+    ProfileDialogContent?: React.ComponentType<{
+      item: PinItem;
+      onClose: () => void;
+    }>;
+    SaveDialogContent?: React.ComponentType<{
+      item: PinItem;
+      onClose: () => void;
+    }>;
+    VisitDialogContent?: React.ComponentType<{
+      item: PinItem;
+      onClose: () => void;
+    }>;
+    ShareDialogContent?: React.ComponentType<{
+      item: PinItem;
+      onClose: () => void;
+    }>;
+    EditDialogContent?: React.ComponentType<{
+      item: PinItem;
+      onClose: () => void;
+    }>;
   };
 
   /** Metadata popovers */
@@ -39,7 +54,7 @@ interface PinsGridProps {
 
 export default function PinsGrid({
   items = [],
-  variant = "feed",
+  variant,
   layout = "standard",
   showStarIcon,
   profileValue,
@@ -47,7 +62,7 @@ export default function PinsGrid({
   dialogComponents,
   popoverComponents,
 }: PinsGridProps) {
-  const { hoveredItem, hoveredIndex } = usePinsHook();
+  const { hoveredItem, hoveredIndex } = usePinHook();
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -59,27 +74,31 @@ export default function PinsGrid({
     EditDialogContent,
   } = dialogComponents || {};
 
-  const { MoreOptionsPopoverContent, FavoritesPopoverContent } =
-    popoverComponents || {};
+  const {
+    MoreOptionsPopoverContent,
+    FavoritesPopoverContent,
+  } = popoverComponents || {};
 
   const showSaveButton = ["feed", "board", "pin"].includes(variant);
   const showEditButton = ["pin", "board"].includes(variant);
   const showProfileButton = variant === "feed" || variant === "board";
+  
+  // Determine save mode based on variant
+  const saveMode = variant === "board" ? "dialog" : "instant";
 
   const gridColumns = clsx(
-    "gap-2 md:gap-4 w-full",
-    variant === "feed" &&
-      (layout === "standard"
-        ? "columns-2 sm:columns-3 md:columns-4 lg:columns-4 xl:columns-6 2xl:columns-7"
-        : "columns-2 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-6"),
+    "gap-2 sm:gap-4 w-full",
+    variant === "feed" && (
+      "columns-2 sm:columns-3 md:columns-3 lg:columns-4 2xl:columns-7"
+    ),
     variant === "board" &&
-      (layout === "standard"
-        ? "columns-2 sm:columns-3 md:columns-3 lg:columns-4 2xl:columns-7"
-        : "columns-2 sm:columns-3 md:columns-4 lg:columns-6 2xl:columns-8"),
+    (layout === "standard"
+      ? "columns-2 sm:columns-3 md:columns-3 lg:columns-4 2xl:columns-7"
+      : "columns-2 sm:columns-4 md:columns-4 2xl:columns-8"),
     variant === "pin" &&
-      (layout === "standard"
-        ? "columns-1 sm:columns-3 md:columns-4 lg:columns-5"
-        : "columns-2 md:columns-3 lg:columns-5")
+    (layout === "standard"
+      ? "columns-1 md:columns-3 lg:columns-5 xl:columns-4"
+      : "columns-2 md:columns-4 lg:columns- 2xl:columns-8")
   );
 
   return (
@@ -92,7 +111,7 @@ export default function PinsGrid({
       >
         {items.map((item, index) => (
           <motion.div
-            key={`${item.id}-${index}`}
+            key={item.id}
             className="break-inside-avoid mb-2"
             variants={itemVariants}
           >
@@ -100,6 +119,7 @@ export default function PinsGrid({
               item={item}
               profileValue={profileValue}
               layout={layout}
+              saveMode={saveMode} // Add this
               showStarIcon={showStarIcon}
               showMetadata={variant === "feed" ? true : showMetadata}
               isHovered={hoveredIndex === index}
@@ -112,41 +132,35 @@ export default function PinsGrid({
               showSaveButton={showSaveButton}
               showEditButton={showEditButton}
               showProfileButton={showProfileButton}
+
+              /* ================= DIALOGS ================= */
               ProfileDialogContent={
                 ProfileDialogContent
-                  ? ({ onClose }) => (
-                      <ProfileDialogContent item={item} onClose={onClose} />
-                    )
+                  ? (props) => <ProfileDialogContent item={item} {...props} />
                   : undefined
               }
               SaveDialogContent={
                 SaveDialogContent
-                  ? ({ onClose }) => (
-                      <SaveDialogContent item={item} onClose={onClose} />
-                    )
+                  ? (props) => <SaveDialogContent item={item} {...props} />
                   : undefined
               }
               VisitDialogContent={
                 VisitDialogContent
-                  ? ({ onClose }) => (
-                      <VisitDialogContent item={item} onClose={onClose} />
-                    )
+                  ? (props) => <VisitDialogContent item={item} {...props} />
                   : undefined
               }
               ShareDialogContent={
                 ShareDialogContent
-                  ? ({ onClose }) => (
-                      <ShareDialogContent item={item} onClose={onClose} />
-                    )
+                  ? (props) => <ShareDialogContent item={item} {...props} />
                   : undefined
               }
               EditDialogContent={
                 EditDialogContent
-                  ? ({ onClose }) => (
-                      <EditDialogContent item={item} onClose={onClose} />
-                    )
+                  ? (props) => <EditDialogContent item={item} {...props} />
                   : undefined
               }
+
+              /* ================= POPOVERS ================= */
               MoreOptionsPopoverContent={
                 MoreOptionsPopoverContent
                   ? () => <MoreOptionsPopoverContent item={item} />

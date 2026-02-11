@@ -12,7 +12,7 @@ export interface PinItem {
     avatar?: string;
     profileUrl?: string;
   };
-  saved?: boolean;
+  isSaved?: boolean;
   isFavourite?: boolean
   createdByUser?: boolean
   saveCount?: number;

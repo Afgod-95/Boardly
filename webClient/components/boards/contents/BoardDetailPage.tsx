@@ -18,7 +18,7 @@ import BackButton from "@/components/buttons/BackButton"
 import PinsGrid from "@/components/pins/grid/PinsGrid"
 import { useState } from "react"
 import MobileHeaderStyle from "@/components/headers/MobileHeaderStyle"
-import BoardActions from "../boardDetail/BoardActions"
+import BoardActions from "../boardDetailAction/DeleteAndEditBoard"
 import ShareOptions from "@/components/share/ShareOptions"
 
 export default function BoardDetailPage() {
@@ -128,9 +128,6 @@ export default function BoardDetailPage() {
         showMetadata = {true}
         showStarIcon = {true}
         profileValue={board.title.length > 10 ? board.title.slice(0, 8) + '...' : board.title}
-        actions={{
-          
-        }}
       />
       
     </>

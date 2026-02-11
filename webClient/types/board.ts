@@ -12,6 +12,7 @@ export interface BoardItem {
 }
 
 
+export type BoardsSortBy = "A-Z" | "CUSTOM" | "LAST_ADDED";
 
 export type PinsFilterView = 'favorites' | 'created' | null
 export type BoardsFilterView = 'group' | 'all' | null

@@ -15,24 +15,27 @@ interface BoardSuggestionsProps {
 const SuggestedBoards = ({ suggested = [], unorganizedPins, allPins }: BoardSuggestionsProps) => {
   const router = useRouter()
   return (
-    <div className='space-y-6 pb-14'>
-      <h2 className='font-bold text-xl pt-4'>Suggested Boards</h2>
-      <div className="grid grid-cols-2  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-        {suggested?.map((board, index) => {
-          return (
-            <motion.div key={index}
-                variants={itemVariants}
-            >
-              <SuggestedBoardCard
-                board={board}
-                allPins={allPins}
-                onBoardClick={() => router.push(`/dashboard/boards/${board.id}`)}
-              />
-            </motion.div>
+    <div className='space-y-6 pb-14 pt-5'>
+      {/** 
+        <h2 className='font-bold text-xl pt-4'>Suggested Boards</h2>
+        <div className="grid grid-cols-2  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          {suggested?.map((board, index) => {
+            return (
+              <motion.div key={index}
+                  variants={itemVariants}
+              >
+                <SuggestedBoardCard
+                  board={board}
+                  allPins={allPins}
+                  onBoardClick={() => router.push(`/dashboard/boards/${board.id}`)}
+                />
+              </motion.div>
 
-          )
-        })}
-      </div>
+            )
+          })}
+        </div>
+       */}
+      
 
 
       {/* unorganized pins */}

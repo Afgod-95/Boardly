@@ -4,15 +4,16 @@ import React, { useEffect } from "react"
 import ProfileHeader from "@/components/headers/profile/ProfileHeader"
 import TabNavigation from "@/components/boards/tabs/TabNavigation"
 import { ActionButtons, CreateButton } from "@/components/buttons"
-import { PinsDropdownFilter, BoardsPopoverFilter } from "@/components/boards/tabFilters"
+import { PinsPopoverFilter, BoardsPopoverFilter } from "@/components/boards/tabs/tabFilters"
 import { Settings2, Star, FolderOpen } from "lucide-react"
 import { usePathname, useSearchParams, useRouter } from "next/navigation"
 import PageWrapper from "@/components/wrapper/PageWrapper"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
-import { setPinsFilter, setBoardsFilter, setCollagesFilter } from "@/redux/boardFilterSlice"
-import { BoardsFilterView, PinsFilterView, CollagesFilterView } from "@/types/board"
+import { setPinsFilter, setBoardsFilter, setCollagesFilter, setBoardsSortBy } from "@/redux/boardFilterSlice"
+import { BoardsFilterView, PinsFilterView, CollagesFilterView, BoardsSortBy } from "@/types/board"
 import Profile from "./Profile"
+
 
 
 interface BoardsLayoutProps {
@@ -46,7 +47,7 @@ const BoardsLayout = ({ children }: BoardsLayoutProps) => {
   // Redux state
   const dispatch = useDispatch()
   const pinsFilter = useSelector((state: RootState) => state.boardFilter?.pins?.activeFilter)
-  const boardsFilter = useSelector((state: RootState) => state.boardFilter?.boards?.activeFilter)
+  const { activeFilter: boardsFilter, sortBy: boardsSortBy } = useSelector((state: RootState) => state.boardFilter?.boards || { activeFilter: null, sortBy: "A-Z" })
   const collagesFilter = useSelector((state: RootState) => state.boardFilter?.collages?.activeFilter)
 
   // Clear filters when switching tabs 
@@ -75,6 +76,10 @@ const BoardsLayout = ({ children }: BoardsLayoutProps) => {
 
   const handleBoardsFilterChange = (filterKey: string | null) => {
     dispatch(setBoardsFilter(filterKey as BoardsFilterView))
+  }
+
+  const handleBoardsSortFilterChange = (value: BoardsSortBy) => {
+    dispatch(setBoardsSortBy(value))
   }
 
 
@@ -107,7 +112,7 @@ const BoardsLayout = ({ children }: BoardsLayoutProps) => {
 
   return (
     <div className="space-y-4">
-      <header className="sticky top-0 z-50 bg-background max-h-120 sm:max-h-105 md:max-h-96 ">
+      <header className="sticky top-0 z-50 bg-background">
         <div className="px-5">
           <ProfileHeader />
         </div>
@@ -128,7 +133,7 @@ const BoardsLayout = ({ children }: BoardsLayoutProps) => {
                   onFilterChange={handlePinsFilterChange}
                   activeFilterKey={pinsFilter ?? null}
                 >
-                  <PinsDropdownFilter value={pinsLayout} onChange={handleLayoutChange} />
+                  <PinsPopoverFilter value={pinsLayout} onChange={handleLayoutChange} />
                 </ActionButtons>
               )}
 
@@ -138,7 +143,10 @@ const BoardsLayout = ({ children }: BoardsLayoutProps) => {
                   onFilterChange={handleBoardsFilterChange}
                   activeFilterKey={boardsFilter ?? null}
                 >
-                  <BoardsPopoverFilter />
+                  <BoardsPopoverFilter
+                    value={boardsSortBy}
+                    onChange={handleBoardsSortFilterChange}
+                  />
                 </ActionButtons>
               )}
 

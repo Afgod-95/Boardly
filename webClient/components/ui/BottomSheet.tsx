@@ -67,7 +67,7 @@ const BottomSheet = ({
             dragConstraints={{ top: 0, bottom: 0 }}
             dragElastic={{ top: 0, bottom: 0.5 }}
             onDragEnd={handleDragEnd}
-            className="block md:hidden fixed bottom-0 left-0 right-0 bg-background rounded-t-3xl shadow-2xl z-[70]"
+            className="block md:hidden fixed bottom-0 left-0 right-0 bg-background rounded-t-3xl shadow-2xl z-70"
             style={{ maxHeight }}
           >
             {/* Drag Handle */}

@@ -10,15 +10,10 @@ import CreateBoardModal from '../boards/modals/CreateBoardModal'
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import BottomSheet from '../ui/BottomSheet'
+import Link from 'next/link'
 
 
 const CreateButton = () => {
-  const router = useRouter()
-  const createButtonAction = [
-    { id: 1, label: 'Pin', onclick: () => router.push('/dashboard/create/pin') },
-    { id: 2, label: 'Board', onclick: () => console.log('Board action to be implemented') }
-  ]
-
   const [openSheet, setOpenSheet] = useState(false);
   const [openBoardDialog, setOpenBoardDialog] = useState(false);
   const handleBoardClick = () => {
@@ -45,24 +40,38 @@ const CreateButton = () => {
           className="w-48 p-4 rounded-2xl shadow-xl border-0 hidden md:block"
         >
           <div className="flex flex-col gap-1">
-            <motion.button
+         
+            {/** Link to pin */}
+            <motion.div
               whileTap={{ scale: 0.9 }}
-              onClick={createButtonAction[0].onclick}
               className="w-full flex items-center gap-4 rounded-md px-3 py-2 text-left cursor-pointer text-sm hover:bg-muted"
             >
-              <span className='text-xl font-medium'>{createButtonAction[0].label}</span>
-            </motion.button>
+              <Link href={"/dashboard/create/pin"}>
+                <span className='text-xl font-medium'>Pin</span>
+              </Link>
+            </motion.div>
 
             <Dialog open={openBoardDialog} onOpenChange={setOpenBoardDialog}>
               <DialogTrigger>
                 <div
                   className="w-full flex items-center gap-4 rounded-md px-3 py-2 text-left cursor-pointer text-sm hover:bg-muted"
                 >
-                  <span className='text-xl font-medium'>{createButtonAction[1].label}</span>
+                  <span className='text-xl font-medium'>Board</span>
                 </div>
               </DialogTrigger>
               <CreateBoardModal />
             </Dialog>
+
+            {/** Link to pin */}
+            <motion.div
+              whileTap={{ scale: 0.9 }}
+              className="w-full flex items-center gap-4 rounded-md px-3 py-2 text-left cursor-pointer text-sm hover:bg-muted"
+            >
+              <Link href={"/dashboard/create/pin"}>
+                <span className='text-xl font-medium'>Collage</span>
+              </Link>
+            </motion.div>
+
           </div>
         </PopoverContent>
 
@@ -75,22 +84,36 @@ const CreateButton = () => {
         >
           <h1 className='text-center text-2xl font-bold py-4'>Create</h1>
           <div className="flex flex-col gap-1 px-10 pb-10">
-            <motion.button
+             {/** Link to pin */}
+            <motion.div
               whileTap={{ scale: 0.9 }}
-              onClick={createButtonAction[0].onclick}
               className="w-full flex items-center gap-4 rounded-md px-3 py-2 text-left cursor-pointer text-sm hover:bg-muted"
             >
-              <span className='text-xl font-medium'>{createButtonAction[0].label}</span>
-            </motion.button>
+              <Link href={"/dashboard/create/pin"}>
+                <span className='text-xl font-medium'>Pin</span>
+              </Link>
+            </motion.div>
 
 
-            <button onClick={handleBoardClick}>
+            <motion.button onClick={handleBoardClick}
+              whileTap={{ scale: 0.9 }}
+            >
               <div
                 className="w-full flex items-center gap-4 rounded-md px-3 py-2 text-left cursor-pointer text-sm hover:bg-muted"
               >
-                <span className='text-xl font-medium'>{createButtonAction[1].label}</span>
+                <span className='text-xl font-medium'>Board</span>
               </div>
-            </button>
+            </motion.button>
+
+           {/** Link to pin */}
+            <motion.div
+              whileTap={{ scale: 0.9 }}
+              className="w-full flex items-center gap-4 rounded-md px-3 py-2 text-left cursor-pointer text-sm hover:bg-muted"
+            >
+              <Link href={"/dashboard/create/pin"}>
+                <span className='text-xl font-medium'>Pin</span>
+              </Link>
+            </motion.div>
           </div>
         </BottomSheet>
       </Popover>

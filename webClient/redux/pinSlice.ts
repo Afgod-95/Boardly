@@ -48,13 +48,13 @@ const pinsSlice = createSlice({
             state.pins = state.pins.filter(pin => pin.id !== action.payload)
         },
 
-        updatePinSaveStatus: (state, action: PayloadAction<{ id: string | number; saved: boolean }>) => {
+        updatePinSaveStatus: (state, action: PayloadAction<{ id: string | number; isSaved: boolean }>) => {
             const pin = state.pins.find(pin => pin.id === action.payload.id);
             if (pin) {
-                pin.saved = action.payload.saved;
+                pin.isSaved = action.payload.isSaved;
             }
             if (state.selectedPin?.id === action.payload.id) {
-                state.selectedPin.saved = action.payload.saved;
+                state.selectedPin.isSaved = action.payload.isSaved;
             }
         },
 

@@ -10,9 +10,9 @@ interface PinsDropdownFilterProps {
   onChange: (layout: PinsLayout) => void
 }
 
-const PinsDropdownFilter: React.FC<PinsDropdownFilterProps> = ({ value, onChange }) => {
+const PinsPopoverFilter: React.FC<PinsDropdownFilterProps> = ({ value, onChange }) => {
   return (
-    <>
+    <div className="space-y-2">
       <DropdownMenuCheckboxItem
         checked={value === "compact"}
         onCheckedChange={() => onChange("compact")}
@@ -38,8 +38,8 @@ const PinsDropdownFilter: React.FC<PinsDropdownFilterProps> = ({ value, onChange
         Standard
         {value === "standard" && <Check className="w-4 h-4" />}
       </DropdownMenuCheckboxItem>
-    </>
+    </div>
   )
 }
 
-export default PinsDropdownFilter
+export default PinsPopoverFilter

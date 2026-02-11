@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { itemData } from '@/data/ItemsData';
-import PinDetailClient from '@/components/pins/PinDetailClient';
+import PinDetailClient from '@/components/pins/contents/PinDetailPage';
 
 const page = async ({ params }: { params: Promise<{ id: string | number} >}) => {
     const { id } = await params;

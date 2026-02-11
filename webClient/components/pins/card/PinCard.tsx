@@ -12,11 +12,15 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface PinCardProps {
   item: PinItem;
   profileValue?: string;
   layout?: PinsLayout;
+  
+  // Add this prop
+  saveMode?: "dialog" | "instant";
 
   isHovered?: boolean;
   onMouseEnter: () => void;
@@ -45,14 +49,15 @@ export default function PinCard({
   item,
   profileValue = "Profile",
   layout,
+  saveMode = "instant", // Default to instant for feed
   isHovered,
   onMouseEnter,
   onMouseLeave,
   onClick,
 
-  showSaveButton,
-  showEditButton,
-  showProfileButton,
+  showSaveButton = true,
+  showEditButton = false,
+  showProfileButton = true,
   showMetadata,
   showStarIcon,
 
@@ -68,15 +73,16 @@ export default function PinCard({
   const [metadataOpen, setMetadataOpen] = useState(false);
 
   return (
-    <div
-      className="break-inside-avoid mb-5 group"
-    >
+    <div className="break-inside-avoid mb-5 group">
       {/* ================= IMAGE CARD ================= */}
       <div
-        className="relative rounded-3xl overflow-hidden bg-gray-100 cursor-zoom-in transition-shadow hover:shadow-md"
-        onClick={onClick}
+        className={cn(
+          "relative rounded-3xl overflow-hidden bg-gray-100 transition-shadow hover:shadow-md",
+          isHovered ? "cursor-default" : "cursor-zoom-in"
+        )}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
+        onClick={onClick}
       >
         <Image
           src={`${item.img}?w=500&auto=format`}
@@ -97,11 +103,17 @@ export default function PinCard({
               className="absolute inset-0"
             >
               <PinOverlay
+                pinId={item.id as string | number}
+                isSaved={item.isSaved}
+                saveMode={saveMode} // Use the prop instead of conditional logic
+
                 profileValue={profileValue}
                 layout={layout}
+
                 showProfileButton={showProfileButton}
                 showSaveButton={showSaveButton}
                 showEditButton={showEditButton}
+
                 ProfileDialogContent={ProfileDialogContent}
                 SaveDialogContent={SaveDialogContent}
                 VisitDialogContent={VisitDialogContent}

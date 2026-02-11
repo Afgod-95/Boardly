@@ -1,2 +1,2 @@
 export { default as BoardsPopoverFilter } from './BoardsPopoverFilter'
-export { default as PinsDropdownFilter} from './PinDropdownFilter'
+export { default as PinsPopoverFilter} from './PinPopoverFilter'

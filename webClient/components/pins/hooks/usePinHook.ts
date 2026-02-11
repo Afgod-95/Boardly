@@ -14,27 +14,51 @@ const usePinHook = () => {
   const [sharePopover, setSharePopover] = useState<boolean>(false)
   const [savePopover, setSavePopover] = useState<boolean>(false)
 
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const hoveredItem = (index: null | number) => {
+    setHoveredIndex(index)
+  }
+
+
+  // Event handlers
+  const handleClick = (
+    e: React.MouseEvent,
+    handler: ((item: PinItem, index: number) => void) | undefined,
+    item: PinItem,
+    index: number
+  ) => {
+    e.stopPropagation();
+    handler?.(item, index);
+  };
+
   const { pins } = useSelector((state: RootState) => state.pins)
   const selectedPin = useSelector((state: RootState) => state.pins.selectedPin)
   const boards = useSelector((state: RootState) => state.boards.boards)
-  const activeFilter = useSelector(
-    (state: RootState) => state?.boardFilter?.pins?.activeFilter
-  )
-
+  const { activeFilter } = useSelector((state: RootState) => state.boardFilter.pins)
   const router = useRouter()
   const searchParams = useSearchParams()
   const layoutParam = searchParams.get("layout") as "compact" | "standard" | null
   const pinsLayout = layoutParam ?? "compact"
 
+  //show only saved pins to user 
+  const savedPins = pins.filter(pin => pin.isSaved)
+
   // Filter pins based on active filter
   const filteredPins = useMemo(() => {
-    if (!activeFilter) return pins
+    if(!activeFilter) {
+      return savedPins
+    }
+    if (activeFilter === 'favorites') {
+      console.log(pins.length, pins.filter(pin => pin.isFavourite).length)
+      return savedPins.filter(pin => pin.isFavourite)
+    }
+    if (activeFilter === 'created') {
+      console.log(pins.length, pins.filter(pin => pin.createdByUser).length)
+      return savedPins.filter(pin => pin.createdByUser)
+    }
 
-    if (activeFilter === 'favorites') return pins.filter(pin => pin.isFavourite)
-    if (activeFilter === 'created') return pins.filter(pin => pin.createdByUser)
-
-    return pins
-  }, [pins, activeFilter])
+    return savedPins
+  }, [savedPins, activeFilter])
 
   // ---------------------------
   // EDIT POPOVER
@@ -71,7 +95,7 @@ const usePinHook = () => {
           await navigator.clipboard.writeText(pinUrl)
           toast.success('Link copied to clipboard!')
           break
-        
+
         case 'facebook':
           window.open(
             `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pinUrl)}`,
@@ -79,7 +103,7 @@ const usePinHook = () => {
             'width=600,height=400'
           )
           break
-        
+
         case 'twitter':
           window.open(
             `https://twitter.com/intent/tweet?url=${encodeURIComponent(pinUrl)}&text=${encodeURIComponent(shareText)}`,
@@ -87,14 +111,14 @@ const usePinHook = () => {
             'width=600,height=400'
           )
           break
-        
+
         case 'whatsapp':
           window.open(
             `https://wa.me/?text=${encodeURIComponent(`${shareText} ${pinUrl}`)}`,
             '_blank'
           )
           break
-        
+
         case 'email':
           window.location.href = `mailto:?subject=${encodeURIComponent(shareText)}&body=${encodeURIComponent(pinUrl)}`
           break
@@ -133,7 +157,7 @@ const usePinHook = () => {
         dispatch(updatePin(pin))
         toast.success('Pin saved to profile!')
       }
-      
+
       handleCloseSavePopover()
     } catch (error) {
       toast.error('Failed to save pin')
@@ -161,13 +185,13 @@ const usePinHook = () => {
       if (pin.boardId) {
         dispatch(removePinFromBoard({ boardId: pin.boardId as string, pinId: pin.id! as string }))
       }
-      
+
       // Delete the pin
       dispatch(removePin(pin.id!))
-      
+
       toast.success('Pin deleted successfully')
       handleCloseEditPopover()
-      
+
       // Navigate away if on pin detail page
       if (window.location.pathname.includes(`/pins/${pin.id}`)) {
         router.push('/dashboard')
@@ -183,7 +207,7 @@ const usePinHook = () => {
   // ---------------------------
   const handlePinUpdate = (pin: Partial<PinItem> & { id?: string | number }) => {
     if (!pin.id) return
-    
+
     const existingPin = pins.find(p => p.id === pin.id)
     if (!existingPin) return
 
@@ -192,23 +216,23 @@ const usePinHook = () => {
       if (pin.boardId !== undefined && pin.boardId !== existingPin.boardId) {
         // Remove from old board
         if (existingPin.boardId) {
-          dispatch(removePinFromBoard({ 
-            boardId: existingPin.boardId as string, 
+          dispatch(removePinFromBoard({
+            boardId: existingPin.boardId as string,
             pinId: existingPin.id! as string
           }))
         }
 
         // Add to new board (unless it's "profile")
         if (pin.boardId && pin.boardId !== 'profile') {
-          dispatch(addPinToBoard({ 
-            boardId: pin.boardId as string, 
-            pinId: existingPin.id! as string 
+          dispatch(addPinToBoard({
+            boardId: pin.boardId as string,
+            pinId: existingPin.id! as string
           }))
         }
       }
 
       // Update the pin
-      dispatch(updatePin({...existingPin, ...pin, id: existingPin.id as string}))
+      dispatch(updatePin({ ...existingPin, ...pin, id: existingPin.id as string }))
 
       toast.success('Pin updated successfully')
     } catch (error) {
@@ -222,7 +246,7 @@ const usePinHook = () => {
   // ---------------------------
   const handleSaveChanges = () => {
     if (!selectedPin) return
-    
+
     toast.success('Changes saved!')
     handleCloseEditPopover()
   }
@@ -241,6 +265,11 @@ const usePinHook = () => {
     sharePopover,
     savePopover,
 
+
+    //hovering state
+    hoveredIndex,
+    hoveredItem,
+
     // navigation & layout
     router,
     searchParams,
@@ -255,6 +284,9 @@ const usePinHook = () => {
     pins,
     boards,
     dispatch,
+
+    // event handlers
+    handleClick,
 
     // popover actions
     handleOpenEditPopover,

@@ -2,7 +2,7 @@
 import { LayoutPanelLeft, Layers, Lightbulb } from "lucide-react"
 import { ActionButtons } from "../buttons"
 import { Settings2 } from 'lucide-react'
-import { PinsDropdownFilter } from "@/components/boards/tabFilters"
+import { PinsPopoverFilter} from "@/components/boards/tabs/tabFilters"
 
 
 export type PinsLayout = 'standard' | 'compact';
@@ -60,7 +60,7 @@ export default function MoreActions({
       </div>
      
         <ActionButtons buttons={boardsActionButtons}>
-          <PinsDropdownFilter value={layoutValue} onChange={handleLayoutChange} />
+          <PinsPopoverFilter value={layoutValue} onChange={handleLayoutChange} />
         </ActionButtons>
 
     </div>

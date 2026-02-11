@@ -1,16 +1,26 @@
 "use client"
 import { useEffect } from "react";
-import PinsGrid from "./grid/PinsGrid";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { setPins, setSelectedPin, setLoading } from "@/redux/pinSlice";
 import { PinItem } from "@/types/pin";
+import { PinCard } from "../card";
+import { motion } from "framer-motion";
+import { containerVariants, itemVariants } from "@/utils/animations";
+import clsx from "clsx";
+import usePinHook from "../hooks/usePinHook";
+import PinsGrid from "../grid/PinsGrid";
+//import usePinsHook from "@/hooks/usePinsHook";
 
 const PinsFeed = () => {
     const router = useRouter();
     const dispatch = useDispatch<AppDispatch>();
     const { pins, isLoading } = useSelector((state: RootState) => state.pins);
+
+    //local states and actions 
+    const { hoveredIndex, hoveredItem } = usePinHook()
+
 
     useEffect(() => {
         const fetchPins = async () => {
@@ -35,6 +45,9 @@ const PinsFeed = () => {
         }
     }, [dispatch, pins.length]);
 
+
+
+
     return (
         <>
             {isLoading && pins.length === 0 ? (
@@ -43,16 +56,9 @@ const PinsFeed = () => {
                 </div>
             ) : (
                 <>
-                    <PinsGrid
-                        variant="feed"
-                        items={pins}
-                        actions={{
-                            onItemClick: (item) => {
-                                dispatch(setSelectedPin(item));
-                                router.push(`/dashboard/pins/${item.id}`);
-                            },
-                        }}
-                    />
+                    <div className="w-full pb-24">
+                        <PinsGrid variant = 'feed' items={pins}/>
+                    </div>
                 </>
             )}
         </>

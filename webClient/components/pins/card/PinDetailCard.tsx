@@ -5,11 +5,12 @@ import { motion, AnimatePresence } from "framer-motion"
 import clsx from "clsx"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { PinItem } from "@/types/pin"
+import Image from "next/image"
 
 
 
 
-const PinDetailCard = ({ pin } : { pin:  PinItem }) => {
+const PinDetailCard = ({ pin }: { pin: PinItem }) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const MAX_TEXT = 120
 
@@ -78,17 +79,26 @@ const PinDetailCard = ({ pin } : { pin:  PinItem }) => {
       {/** image or video and text contents*/}
       <div className="flex flex-col justify-center gap-4 px-5">
         {mediaType === "image" ? (
-          <img
-            src={pin.img}
-            alt="Detail image"
-            className="w-full h-auto rounded-xl object-cover"
-          />
+          <div className="relative w-full max-h-150 overflow-hidden rounded-xl">
+            <Image
+              src={pin.img}
+              alt="Detail image"
+              width={800}
+              height={1000}
+              className="w-full h-full object-contain"
+            />
+          </div>
+
+
         ) : (
-          <video
-            src={pin.video}
-            controls
-            className="w-full h-auto rounded-xl"
-          />
+          <div className="w-full max-h-[600px] overflow-hidden rounded-xl">
+            <video
+              src={pin.video}
+              controls
+              className="w-full h-full object-contain"
+            />
+          </div>
+
         )}
 
         {/** contents */}
@@ -137,7 +147,7 @@ const PinDetailCard = ({ pin } : { pin:  PinItem }) => {
           <AvatarFallback>CN</AvatarFallback>
           <AvatarImage src={pin.author?.profileUrl} />
         </Avatar>
-        <span className="font-bold">{pin.author?.name}</span>  
+        <span className="font-bold">{pin.author?.name}</span>
       </div>
     </div>
   )

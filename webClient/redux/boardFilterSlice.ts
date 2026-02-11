@@ -3,6 +3,7 @@ import {
   PinsFilterView,
   BoardsFilterView,
   CollagesFilterView,
+  BoardsSortBy
 } from '@/types/board'
 
 interface FilterState {
@@ -11,6 +12,7 @@ interface FilterState {
   }
   boards: {
     activeFilter: BoardsFilterView
+    sortBy: BoardsSortBy
   }
   collages: {
     activeFilter: CollagesFilterView
@@ -19,7 +21,10 @@ interface FilterState {
 
 const initialState: FilterState = {
   pins: { activeFilter: null },
-  boards: { activeFilter: null },
+  boards: { 
+    activeFilter: null,
+    sortBy: "A-Z"
+  },
   collages: { activeFilter: null },
 }
 
@@ -28,31 +33,37 @@ const boardFilterSlice = createSlice({
   initialState,
   reducers: {
     setPinsFilter: (state, action: PayloadAction<PinsFilterView>) => {
-      // defend against bad persisted state
       state.pins ??= { activeFilter: null }
       state.pins.activeFilter = action.payload
     },
 
     setBoardsFilter: (state, action: PayloadAction<BoardsFilterView>) => {
-      // defend against bad persisted state
-      state.boards ??= { activeFilter: null }
+      state.boards ??= { 
+        activeFilter: null,
+        sortBy: "A-Z"
+      }
       state.boards.activeFilter = action.payload
     },
 
+   
+    setBoardsSortBy: (state, action: PayloadAction<BoardsSortBy>) => {
+      state.boards ??= {
+        activeFilter: null,
+        sortBy: "A-Z",
+      }
+      state.boards.sortBy = action.payload
+    },
+
     setCollagesFilter: (state, action: PayloadAction<CollagesFilterView>) => {
-      //defend against bad persisted state
       state.collages ??= { activeFilter: null }
       state.collages.activeFilter = action.payload
     },
 
     clearAllFilters: (state) => {
-      state.pins ??= { activeFilter: null }
-      state.boards ??= { activeFilter: null }
-      state.collages ??= { activeFilter: null }
-
       state.pins.activeFilter = null
       state.boards.activeFilter = null
       state.collages.activeFilter = null
+      state.boards.sortBy = "A-Z"
     },
   },
 })
@@ -60,6 +71,7 @@ const boardFilterSlice = createSlice({
 export const {
   setPinsFilter,
   setBoardsFilter,
+  setBoardsSortBy, 
   setCollagesFilter,
   clearAllFilters,
 } = boardFilterSlice.actions

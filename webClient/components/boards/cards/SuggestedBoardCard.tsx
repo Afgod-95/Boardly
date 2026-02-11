@@ -21,7 +21,6 @@ const SuggestedBoardCard = ({ board, allPins, onBoardClick }: SuggestedBoardCard
             <CreateBoardCard
                 pin={previewPins}
                 variant="suggestion"
-                onClick={() => console.log('Board suggestion button')}
             />
             {/* Board suggestion info */}
             <div className="mt-3 px-1">

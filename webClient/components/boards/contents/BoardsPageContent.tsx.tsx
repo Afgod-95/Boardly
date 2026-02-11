@@ -3,83 +3,114 @@
 import { useEffect, useMemo, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
-import { CreateBoardCard } from "@/components/boards/cards"
+import { CreateBoardCard, BoardsCard } from "@/components/boards/cards"
 import { useRouter } from "next/navigation"
-import { BoardsCard } from "@/components/boards/cards"
 import SuggestedBoards from "@/components/boards/SuggestedBoards"
 import { BoardItem } from "@/types/board"
 import { setBoards } from "@/redux/boardSlice"
 import EditBoardModal from "@/components/boards/modals/EditBoardModal"
-
+import CreateBoardModal from "../modals/CreateBoardModal"
 
 const BoardsPageContent = () => {
     const { pins } = useSelector((state: RootState) => state.pins)
-    const activeFilter = useSelector((state: RootState) => state?.boardFilter?.boards?.activeFilter)
+
+    const activeFilter = useSelector(
+        (state: RootState) => state?.boardFilter?.boards?.activeFilter
+    )
+
+    const sortBy = useSelector(
+        (state: RootState) => state?.boardFilter?.boards?.sortBy
+    )
+
     const router = useRouter()
     const dispatch = useDispatch()
 
     const [editingBoard, setEditingBoard] = useState<BoardItem | null>(null)
     const [openBoardModal, setOpenBoardModal] = useState<boolean>(false)
 
-
     // Generate mock boards
-    const mockBoards: BoardItem[] = useMemo(() => [
-        {
-            id: "1",
-            title: "Travel Inspiration",
-            pinIds: pins.slice(0, 7).map(p => p.id).filter((id): id is string | number => id !== undefined),
-            createdByUser: true, // Add this property
-        },
-        {
-            id: "2",
-            title: "Home Decor Ideas",
-            pinIds: pins.slice(0, 3).map(p => p.id).filter((id): id is string | number => id !== undefined),
-            createdByUser: false, // Saved board
-        },
-        {
-            id: "3",
-            title: "Recipe Collection",
-            pinIds: pins.slice(0, 12).map(p => p.id).filter((id): id is string | number => id !== undefined),
-            createdByUser: true,
-        },
-        {
-            id: "4",
-            title: "Fashion",
-            pinIds: pins.slice(0, 2).map(p => p.id).filter((id): id is string | number => id !== undefined),
-            createdByUser: false,
-        },
-    ], [pins])
+    const mockBoards: BoardItem[] = useMemo(
+        () => [
+            {
+                id: "1",
+                title: "Travel Inspiration",
+                pinIds: pins
+                    .slice(0, 7)
+                    .map((p) => p.id)
+                    .filter((id): id is string | number => id !== undefined),
+                createdByUser: true,
+            },
+            {
+                id: "2",
+                title: "Home Decor Ideas",
+                pinIds: pins
+                    .slice(0, 3)
+                    .map((p) => p.id)
+                    .filter((id): id is string | number => id !== undefined),
+                createdByUser: false,
+            },
+            {
+                id: "3",
+                title: "Recipe Collection",
+                pinIds: pins
+                    .slice(0, 12)
+                    .map((p) => p.id)
+                    .filter((id): id is string | number => id !== undefined),
+                createdByUser: true,
+            },
+            {
+                id: "4",
+                title: "Fashion",
+                pinIds: pins
+                    .slice(0, 2)
+                    .map((p) => p.id)
+                    .filter((id): id is string | number => id !== undefined),
+                createdByUser: false,
+            },
+        ],
+        [pins]
+    )
 
-    // Filter boards based on active filter
-    const filteredBoards = useMemo(() => {
-        if (!activeFilter) return mockBoards // Show all boards if no filter
+    /**
+     * FILTER + SORT PIPELINE
+     */
+    const processedBoards = useMemo(() => {
+        let boards = [...mockBoards]
 
-        if (activeFilter === 'all') {
-            return mockBoards.filter(board => board.createdByUser === true)
+        // 1. Filter
+        if (activeFilter === "all") {
+            boards = boards.filter((board) => board.createdByUser === true)
         }
 
-        if (activeFilter === 'group') {
-            return mockBoards.filter(board => board.createdByUser === false)
+        if (activeFilter === "group") {
+            boards = boards.filter((board) => board.createdByUser === false)
         }
 
-        return mockBoards
-    }, [mockBoards, activeFilter])
+        // 2. Sort
+        if (sortBy === "A-Z") {
+            boards.sort((a, b) => a.title.localeCompare(b.title))
+        }
 
+        if (sortBy === "LAST_ADDED") {
+            // Since mock data has no createdAt,
+            // simulate newest by ID descending
+            boards.sort((a, b) => Number(b.id) - Number(a.id))
+        }
 
-    //handle edit board 
+        // CUSTOM keeps original order 
+        return boards
+    }, [mockBoards, activeFilter, sortBy])
+
+    // Handle edit board
     const handleEditBoardItem = (item: BoardItem) => {
         setEditingBoard(item)
         setOpenBoardModal(true)
     }
 
-    //handle close edit board
     const handleCloseEditBoard = () => {
         setEditingBoard(null)
         setOpenBoardModal(false)
     }
-
-
-
 
     // Dispatch boards once when pins are ready
     useEffect(() => {
@@ -88,61 +119,54 @@ const BoardsPageContent = () => {
         }
     }, [pins, dispatch, mockBoards])
 
-    // Boards grid (used by both mobile and desktop)
-    const renderBoardsGrid = () => (
-        <>
+    return (
+        <div className="pb-8 md:pb-8">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 border-b pb-8">
-                {/* Filtered Boards */}
-                {filteredBoards.length > 0 ? (
-                    filteredBoards.map(board => (
+                {processedBoards.length > 0 ? (
+                    processedBoards.map((board) => (
                         <BoardsCard
                             key={board.id}
                             board={board}
-                            previewPins={pins.filter(pin =>
+                            previewPins={pins.filter((pin) =>
                                 board.pinIds.includes(pin.id as string | number)
                             )}
-                            onBoardClick={() => router.push(`/dashboard/boards/${board.id}`)}
+                            onBoardClick={() =>
+                                router.push(`/dashboard/boards/${board.id}`)
+                            }
                             onEdit={(item) => handleEditBoardItem(item)}
                         />
-
                     ))
                 ) : (
                     <div className="col-span-full text-center py-12 text-muted-foreground">
                         <p className="text-lg mb-2">
-                            {activeFilter === 'all' && "No boards created yet"}
-                            {activeFilter === 'group' && "No saved boards yet"}
+                            {activeFilter === "all" && "No boards created yet"}
+                            {activeFilter === "group" && "No saved boards yet"}
                         </p>
                         <p className="text-sm">
-                            {activeFilter === 'all' && "Start creating your own boards!"}
-                            {activeFilter === 'group' && "Start saving boards to see them here"}
+                            {activeFilter === "all" &&
+                                "Start creating your own boards!"}
+                            {activeFilter === "group" &&
+                                "Start saving boards to see them here"}
                         </p>
                     </div>
                 )}
 
-                {/* Create Board Card: Only on Desktop when no filter */}
                 {!activeFilter && (
                     <div className="hidden md:block">
-                        <CreateBoardCard
-                            variant="create"
-                            onClick={() => console.log('Create board')}
-                        />
+                        <CreateBoardCard variant="create">
+                            <CreateBoardModal />
+                        </CreateBoardCard>
                     </div>
                 )}
-
             </div>
 
-
-
-            {/* Suggested Boards - Only on Desktop when no filter */}
             {!activeFilter && (
                 <SuggestedBoards
                     suggested={mockBoards.slice(2)}
                     unorganizedPins={pins}
                     allPins={pins}
                 />
-
             )}
-
 
             {editingBoard && (
                 <EditBoardModal
@@ -151,13 +175,6 @@ const BoardsPageContent = () => {
                     onClose={handleCloseEditBoard}
                 />
             )}
-
-        </>
-    )
-
-    return (
-        <div className="pb-8 md:pb-8">
-            {renderBoardsGrid()}
         </div>
     )
 }

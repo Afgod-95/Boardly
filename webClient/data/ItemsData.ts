@@ -7,9 +7,9 @@ export const itemData: PinItem[] = [
     title: 'Bed',
     description: 'Modern bedroom design',
     author: { name: 'Design Studio' },
-    saved: false,
+    isSaved: false,
     isFavourite: false,
-    createdByUser: false,
+    createdByUser: true,
     saveCount: 234
   },
   { 
@@ -18,9 +18,9 @@ export const itemData: PinItem[] = [
     title: 'Books',
     description: 'Vintage book collection',
     author: { name: 'Book Lover' },
-    saved: false,
+    isSaved: false,
     isFavourite: false,
-    createdByUser: false,
+    createdByUser: true,
     saveCount: 156
   },
   { 
@@ -29,7 +29,7 @@ export const itemData: PinItem[] = [
     title: 'Sink',
     description: 'Minimalist bathroom',
     author: { name: 'Interior Design' },
-    saved: true,
+    isSaved: true,
     isFavourite: true,
     createdByUser: false,
     saveCount: 89
@@ -40,7 +40,7 @@ export const itemData: PinItem[] = [
     title: 'Kitchen',
     description: 'Contemporary kitchen ideas',
     author: { name: 'Home Decor' },
-    saved: false,
+    isSaved: false,
     isFavourite: false,
     createdByUser: true, // Example: you "created" this pin
     saveCount: 412
@@ -51,7 +51,7 @@ export const itemData: PinItem[] = [
     title: 'Blinds',
     description: 'Window treatment inspiration',
     author: { name: 'Style Guide' },
-    saved: false,
+    isSaved: false,
     isFavourite: false,
     createdByUser: false,
     saveCount: 78
@@ -62,7 +62,7 @@ export const itemData: PinItem[] = [
     title: 'Chairs',
     description: 'Dining room furniture',
     author: { name: 'Furniture Co' },
-    saved: true,
+    isSaved: true,
     isFavourite: true,
     createdByUser: true,
     saveCount: 567
@@ -73,7 +73,7 @@ export const itemData: PinItem[] = [
     title: 'Laptop',
     description: 'Workspace setup',
     author: { name: 'Tech Life' },
-    saved: false,
+    isSaved: false,
     isFavourite: false,
     createdByUser: false,
     saveCount: 234
@@ -84,7 +84,7 @@ export const itemData: PinItem[] = [
     title: 'Doors',
     description: 'Architectural details',
     author: { name: 'Architecture' },
-    saved: false,
+    isSaved: false,
     isFavourite: false,
     createdByUser: false,
     saveCount: 145
@@ -95,7 +95,7 @@ export const itemData: PinItem[] = [
     title: 'Coffee',
     description: 'Coffee time aesthetic',
     author: { name: 'Cafe Culture' },
-    saved: true,
+    isSaved: true,
     isFavourite: true,
     createdByUser: false,
     saveCount: 891
@@ -106,7 +106,7 @@ export const itemData: PinItem[] = [
     title: 'Storage',
     description: 'Organization solutions',
     author: { name: 'Organize It' },
-    saved: false,
+    isSaved: false,
     isFavourite: false,
     createdByUser: true,
     saveCount: 334
@@ -117,7 +117,7 @@ export const itemData: PinItem[] = [
     title: 'Candle',
     description: 'Cozy home vibes',
     author: { name: 'Lifestyle' },
-    saved: false,
+    isSaved: false,
     isFavourite: false,
     createdByUser: false,
     saveCount: 223
@@ -128,7 +128,7 @@ export const itemData: PinItem[] = [
     title: 'Coffee table',
     description: 'Living room centerpiece',
     author: { name: 'Design Ideas' },
-    saved: true,
+    isSaved: true,
     isFavourite: true,
     createdByUser: true,
     saveCount: 445
