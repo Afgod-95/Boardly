@@ -18,8 +18,9 @@ import BackButton from "@/components/buttons/BackButton"
 import PinsGrid from "@/components/pins/grid/PinsGrid"
 import { useState } from "react"
 import MobileHeaderStyle from "@/components/headers/MobileHeaderStyle"
-import BoardActions from "../boardDetailAction/DeleteAndEditBoard"
-import ShareOptions from "@/components/share/ShareOptions"
+import BoardActions from "../popovers/boardDetailAction/DeleteAndEditBoard"
+import ShareOptions from "@/components/boards/share/ShareOptions"
+import SmartPinsGrid from "@/components/pins/grid/SmartPinsGrid"
 
 export default function BoardDetailPage() {
   const params = useParams()
@@ -73,22 +74,22 @@ export default function BoardDetailPage() {
 
   return (
     <>
-    {/** MOBILE SCREEN */}
+      {/** MOBILE SCREEN */}
       <div className="block md:hidden">
-        <MobileHeaderStyle 
-          headerRight = {
+        <MobileHeaderStyle
+          headerRight={
             <div className="flex items-center justify-center gap-4">
-                <ShareOptions />
-                <BoardActions />
+              <ShareOptions />
+              <BoardActions />
             </div>
           }
         />
       </div>
       {/** desktop */}
       <div className=" hidden md:block">
-         <BackButton />
+        <BackButton />
       </div>
-     
+
       <div className="flex flex-row items-center justify-between py-8 gap-6">
         <div className=" flex items-start gap-4">
           <div className="space-y-1">
@@ -114,22 +115,22 @@ export default function BoardDetailPage() {
       {/** more actions like organize etc */}
       <div className="space-y-4 mb-10">
         <InviteCollaborators />
-        <MoreActions 
-          layoutValue= { layoutValue }
+        <MoreActions
+          layoutValue={layoutValue}
           setLayoutValue={() => setLayoutValue(layoutValue === 'standard' ? 'compact' : 'standard')}
         />
       </div>
 
       {/* PIN GRID */}
-      <PinsGrid
+      <SmartPinsGrid
         items={boardPins}
-        variant = 'pin'
-        layout= {layoutValue}
-        showMetadata = {true}
-        showStarIcon = {true}
+        variant='pin'
+        layout={layoutValue}
+        showMetadata={true}
+        showStarIcon={true}
         profileValue={board.title.length > 10 ? board.title.slice(0, 8) + '...' : board.title}
       />
-      
+
     </>
   )
 }

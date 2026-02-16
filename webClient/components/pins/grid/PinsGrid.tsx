@@ -11,7 +11,7 @@ import { setSelectedPin } from "@/redux/pinSlice";
 import { containerVariants, itemVariants } from "@/utils/animations";
 import usePinHook from "@/components/pins/hooks/usePinHook";
 
-export type PinCardVariant = "feed" | "board" | "pin";
+export type PinCardVariant = "feed" | "board" | "pin" | "detail";
 
 interface PinsGridProps {
   items?: PinItem[];
@@ -21,21 +21,21 @@ interface PinsGridProps {
   showStarIcon?: boolean;
   profileValue?: string;
 
-  /** Dialog content components */
-  dialogComponents?: {
-    ProfileDialogContent?: React.ComponentType<{
+  /** Popover content components */
+  PopoverComponents?: {
+    ProfilePopoverContent?: React.ComponentType<{
       item: PinItem;
       onClose: () => void;
     }>;
-    SaveDialogContent?: React.ComponentType<{
+    SavePopoverContent?: React.ComponentType<{
       item: PinItem;
       onClose: () => void;
     }>;
-    VisitDialogContent?: React.ComponentType<{
+    VisitPopoverContent?: React.ComponentType<{
       item: PinItem;
       onClose: () => void;
     }>;
-    ShareDialogContent?: React.ComponentType<{
+    SharePopoverContent?: React.ComponentType<{
       item: PinItem;
       onClose: () => void;
     }>;
@@ -56,35 +56,36 @@ export default function PinsGrid({
   items = [],
   variant,
   layout = "standard",
-  showStarIcon,
   profileValue,
   showMetadata,
-  dialogComponents,
+  PopoverComponents,
   popoverComponents,
+  ...props
+
 }: PinsGridProps) {
   const { hoveredItem, hoveredIndex } = usePinHook();
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
   const {
-    ProfileDialogContent,
-    SaveDialogContent,
-    VisitDialogContent,
-    ShareDialogContent,
+    ProfilePopoverContent,
+    SavePopoverContent,
+    VisitPopoverContent,
+    SharePopoverContent,
     EditDialogContent,
-  } = dialogComponents || {};
+  } = PopoverComponents || {};
 
   const {
     MoreOptionsPopoverContent,
     FavoritesPopoverContent,
   } = popoverComponents || {};
 
-  const showSaveButton = ["feed", "board", "pin"].includes(variant);
+  const showSaveButton = ["feed", "board", "pin", "detail"].includes(variant);
   const showEditButton = ["pin", "board"].includes(variant);
-  const showProfileButton = variant === "feed" || variant === "board";
+  const showProfileButton = variant === "feed" || variant === "board" || variant === "detail";
   
   // Determine save mode based on variant
-  const saveMode = variant === "board" ? "dialog" : "instant";
+  const saveMode = variant === "board" ? "popover" : "instant";
 
   const gridColumns = clsx(
     "gap-2 sm:gap-4 w-full",
@@ -98,7 +99,9 @@ export default function PinsGrid({
     variant === "pin" &&
     (layout === "standard"
       ? "columns-1 md:columns-3 lg:columns-5 xl:columns-4"
-      : "columns-2 md:columns-4 lg:columns- 2xl:columns-8")
+      : "columns-2 md:columns-4 lg:columns- 2xl:columns-8"),
+
+      variant === 'detail' && "columns-1 md:columns-2 2xl:columns-3"
   );
 
   return (
@@ -116,11 +119,11 @@ export default function PinsGrid({
             variants={itemVariants}
           >
             <PinCard
+              {...props}
               item={item}
               profileValue={profileValue}
               layout={layout}
-              saveMode={saveMode} // Add this
-              showStarIcon={showStarIcon}
+              saveMode={saveMode} 
               showMetadata={variant === "feed" ? true : showMetadata}
               isHovered={hoveredIndex === index}
               onMouseEnter={() => hoveredItem(index)}
@@ -133,30 +136,30 @@ export default function PinsGrid({
               showEditButton={showEditButton}
               showProfileButton={showProfileButton}
 
-              /* ================= DIALOGS ================= */
-              ProfileDialogContent={
-                ProfileDialogContent
-                  ? (props) => <ProfileDialogContent item={item} {...props} />
+              /* ================= PopoverS ================= */
+              ProfilePopoverContent={
+                ProfilePopoverContent
+                  ? (props: any) => <ProfilePopoverContent item={item} onClose={props.onClose} />
                   : undefined
               }
-              SaveDialogContent={
-                SaveDialogContent
-                  ? (props) => <SaveDialogContent item={item} {...props} />
+              SavePopoverContent={
+                SavePopoverContent
+                  ? (props: any) => <SavePopoverContent item={item} onClose={props.onClose} />
                   : undefined
               }
-              VisitDialogContent={
-                VisitDialogContent
-                  ? (props) => <VisitDialogContent item={item} {...props} />
+              VisitPopoverContent={
+                VisitPopoverContent
+                  ? (props: any) => <VisitPopoverContent item={item} onClose={props.onClose} />
                   : undefined
               }
-              ShareDialogContent={
-                ShareDialogContent
-                  ? (props) => <ShareDialogContent item={item} {...props} />
+              SharePopoverContent={
+                SharePopoverContent
+                  ? (props: any) => <SharePopoverContent item={item} onClose={props.onClose} />
                   : undefined
               }
               EditDialogContent={
                 EditDialogContent
-                  ? (props) => <EditDialogContent item={item} {...props} />
+                  ? (props: any) => <EditDialogContent item={item} onClose={props.onClose} />
                   : undefined
               }
 

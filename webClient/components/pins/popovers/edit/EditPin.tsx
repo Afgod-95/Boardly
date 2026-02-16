@@ -10,7 +10,7 @@ import { RootState } from "@/redux/store";
 import { PinItem } from "@/types/pin";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { X, Trash2, ChevronDown } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
@@ -19,10 +19,9 @@ interface PinEditFieldsProps {
     onChange: (updates: Partial<PinItem> & { id?: string | number }) => void;
     onSave: () => void;
     onDelete: () => void;
-    onClose: () => void;
 }
 
-const EditPin = ({ pin, onChange, onSave, onDelete, onClose }: PinEditFieldsProps) => {
+const EditPin = ({ pin, onChange, onSave, onDelete }: PinEditFieldsProps) => {
     const boards = useSelector((state: RootState) => state.boards.boards);
     const [selectedBoardId, setSelectedBoardId] = useState(
         pin.boardId || "profile"
@@ -38,21 +37,40 @@ const EditPin = ({ pin, onChange, onSave, onDelete, onClose }: PinEditFieldsProp
         });
     };
 
-
-    const selectedBoardData = boards.find((b) => b.id === selectedBoardId);
-
     return (
-        <div className="w-full">
+        <div className="w-full max-w-full overflow-hidden">
             {/* Header */}
-            <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-semibold">Edit this Pin</h2>
+            <div className="flex items-center justify-between mb-5">
+                <h2 className="text-lg sm:text-xl font-bold tracking-tight">Edit Pin</h2>
             </div>
-            <div className="no-scrollbar -mx-6 max-h-[60vh] lg:max-h-[75vh] overflow-y-auto px-6">
-                <div className="flex flex-col md:flex-row gap-6">
-                    {/* Left side - Board selection */}
-                    <div className="flex-1 flex flex-col">
-                        <div className="mb-6">
-                            <label className="text-sm font-semibold mb-3 block">
+
+            {/* Scrollable Container */}
+            <div className="no-scrollbar max-h-[60vh] overflow-y-auto px-1">
+                <div className="flex flex-col sm:flex-row gap-5 items-start">
+
+                    {/* Small Image Preview - Fixed size for consistency */}
+                    <div className="w-24 sm:w-32 shrink-0 mx-auto sm:mx-0">
+                        <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-muted shadow-sm border">
+                            <Image
+                                src={pin.img}
+                                alt={pin.title || "Pin"}
+                                fill
+                                sizes="(max-width: 640px) 96px, 128px"
+                                className="object-cover"
+                                priority
+                            />
+                        </div>
+                        {pin.title && (
+                            <p className="mt-2 text-[10px] font-medium text-center truncate text-muted-foreground">
+                                {pin.title}
+                            </p>
+                        )}
+                    </div>
+
+                    {/* Board selection - Expands to fill space */}
+                    <div className="flex-1 w-full min-w-0">
+                        <div className="space-y-1.5">
+                            <label className="text-xs font-bold text-foreground ml-1">
                                 Board
                             </label>
                             <div onClick={(e: React.MouseEvent) => e.stopPropagation()}>
@@ -60,40 +78,31 @@ const EditPin = ({ pin, onChange, onSave, onDelete, onClose }: PinEditFieldsProp
                                     value={selectedBoardId as string}
                                     onValueChange={handleBoardChange}
                                 >
-                                    <SelectTrigger className="h-12 rounded-xl">
+                                    <SelectTrigger className="h-11 w-full rounded-xl bg-background border transition-all">
                                         <SelectValue placeholder="Select a board" />
                                     </SelectTrigger>
 
-                                    <SelectContent className="rounded-xl">
-                                        {/* Profile option */}
-                                        <SelectItem value="profile">
-                                            Profile
-                                        </SelectItem>
-
-                                        {/* Boards */}
+                                    <SelectContent className="rounded-xl max-h-48">
+                                        <SelectItem value="profile">Profile</SelectItem>
                                         {boards.map((board) => (
                                             <SelectItem key={board.id} value={board.id}>
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-6 h-6 rounded-md bg-gray-200 flex items-center justify-center overflow-hidden">
+                                                <div className="flex items-center gap-2">
+                                                    <div className="w-6 h-6 rounded bg-secondary flex items-center justify-center overflow-hidden shrink-0">
                                                         {board.coverPinId ? (
-                                                            <div>
-                                                                <Image
-                                                                    src={board.coverPinId}
-                                                                    alt={board.title}
-                                                                    width={24}
-                                                                    height={24}
-                                                                    className="object-cover"
-                                                                />
-                                                            </div>
-
+                                                            <Image
+                                                                src={board.coverPinId}
+                                                                alt={board.title}
+                                                                width={24}
+                                                                height={24}
+                                                                className="object-cover h-full w-full"
+                                                            />
                                                         ) : (
-                                                            <span className="text-xs font-semibold">
+                                                            <span className="text-[10px] font-bold">
                                                                 {board.title.charAt(0).toUpperCase()}
                                                             </span>
                                                         )}
                                                     </div>
-
-                                                    <span className="text-sm font-medium">
+                                                    <span className="text-sm truncate">
                                                         {board.title}
                                                     </span>
                                                 </div>
@@ -102,93 +111,38 @@ const EditPin = ({ pin, onChange, onSave, onDelete, onClose }: PinEditFieldsProp
                                     </SelectContent>
                                 </Select>
                             </div>
-
-                        </div>
-
-                    </div>
-
-                    {/* Right side - Pin preview */}
-                    <div className="w-full md:w-70 shrink-0">
-                        <div className="sticky top-0">
-                            <div className="relative w-full aspect-3/4 rounded-2xl overflow-hidden bg-gray-100 shadow-lg">
-                                <Image
-                                    src={pin.img}
-                                    alt={pin.title || "Pin"}
-                                    fill
-                                    sizes="280px"
-                                    className="object-cover"
-                                />
-                            </div>
-                            {pin.title && (
-                                <p className="mt-3 text-sm font-semibold text-center truncate">
-                                    {pin.title}
-                                </p>
-                            )}
                         </div>
                     </div>
                 </div>
-
             </div>
 
             {/* Bottom Action Buttons */}
-            <div className="flex items-center justify-between gap-3 mt-8 pt-6 border-t">
-                {/* Delete Button */}
-                <motion.div
-                    whileTap={{ scale: 0.9 }}
-                    whileHover={{ scale: 1.01 }}
-                >
+            <div className="flex items-center justify-end gap-2 mt-6 pt-4 border-t">
+                <motion.div whileTap={{ scale: 0.96 }}>
                     <Button
-                        variant="outline"
+                        variant="ghost"
                         onClick={(e: React.MouseEvent) => {
                             e.stopPropagation();
                             onDelete();
                         }}
-                        className="rounded-full px-6 py-5 font-semibold border-2 hover:bg-red-50 hover:border-red-300 hover:text-red-600"
+                        className="rounded-full border h-10 px-4 text-xs font-bold text-muted-foreground hover:text-destructive transition-colors"
                     >
-                        <Trash2 className="h-4 w-4 mr-2" />
+                        <Trash2 className="h-3.5 w-3.5 mr-1.5" />
                         Delete
                     </Button>
-
                 </motion.div>
 
-
-                <div className="flex gap-3">
-                    {/* Cancel Button */}
-                    <motion.div
-                        whileTap={{ scale: 0.9 }}
-                        whileHover={{ scale: 1.01 }}
+                <motion.div whileTap={{ scale: 0.96 }}>
+                    <Button
+                        onClick={(e: React.MouseEvent) => {
+                            e.stopPropagation();
+                            onSave();
+                        }}
+                        className="rounded-full h-10 px-8 text-xs font-bold bg-violet-600 hover:bg-violet-700 text-white"
                     >
-                        <Button
-                            variant="outline"
-                            onClick={(e: React.MouseEvent) => {
-                                e.stopPropagation();
-                                onClose();
-                            }}
-                            className="rounded-full px-6 py-5 font-semibold"
-                        >
-                            Cancel
-                        </Button>
-                    </motion.div>
-
-                    <motion.div
-                        whileTap={{ scale: 0.9 }}
-                        whileHover={{ scale: 1.01 }}
-                    >
-                        {/* Save Button */}
-                        <Button
-                            onClick={(e: React.MouseEvent) => {
-                                e.stopPropagation();
-                                onSave();
-                            }}
-                            className="rounded-full px-8 py-5 font-semibold bg-violet-600 hover:bg-violet-700"
-                        >
-                            Save
-                        </Button>
-                    </motion.div>
-
-
-
-                </div>
+                        Save
+                    </Button>
+                </motion.div>
             </div>
         </div>
     );

@@ -1,136 +1,148 @@
 import { PinItem } from "@/types/pin";
 
 export const itemData: PinItem[] = [
-  { 
+  {
     id: 1,
-    img: 'https://images.unsplash.com/photo-1549388604-817d15aa0110', 
+    img: 'https://images.unsplash.com/photo-1549388604-817d15aa0110',
     title: 'Bed',
     description: 'Modern bedroom design',
     author: { name: 'Design Studio' },
     isSaved: false,
     isFavourite: false,
     createdByUser: true,
-    saveCount: 234
+    saveCount: 234,
+    boardId: '4'
   },
-  { 
+  {
     id: 2,
-    img: 'https://images.unsplash.com/photo-1525097487452-6278ff080c31', 
+    img: 'https://images.unsplash.com/photo-1525097487452-6278ff080c31',
     title: 'Books',
     description: 'Vintage book collection',
     author: { name: 'Book Lover' },
     isSaved: false,
     isFavourite: false,
     createdByUser: true,
-    saveCount: 156
+    saveCount: 156,
+    boardId: '4'
   },
-  { 
+  {
     id: 3,
-    img: 'https://images.unsplash.com/photo-1523413651479-597eb2da0ad6', 
+    img: 'https://images.unsplash.com/photo-1523413651479-597eb2da0ad6',
     title: 'Sink',
     description: 'Minimalist bathroom',
     author: { name: 'Interior Design' },
     isSaved: true,
     isFavourite: true,
     createdByUser: false,
-    saveCount: 89
+    saveCount: 89,
+    boardId: '1'
   },
-  { 
+  {
     id: 4,
-    img: 'https://images.unsplash.com/photo-1563298723-dcfebaa392e3', 
+    img: 'https://images.unsplash.com/photo-1563298723-dcfebaa392e3',
     title: 'Kitchen',
     description: 'Contemporary kitchen ideas',
     author: { name: 'Home Decor' },
     isSaved: false,
     isFavourite: false,
-    createdByUser: true, // Example: you "created" this pin
-    saveCount: 412
+    createdByUser: true,
+    saveCount: 412,
+    boardId: '2'
   },
-  { 
+  {
     id: 5,
-    img: 'https://images.unsplash.com/photo-1588436706487-9d55d73a39e3', 
+    img: 'https://images.unsplash.com/photo-1588436706487-9d55d73a39e3',
     title: 'Blinds',
     description: 'Window treatment inspiration',
     author: { name: 'Style Guide' },
     isSaved: false,
     isFavourite: false,
     createdByUser: false,
-    saveCount: 78
+    saveCount: 78,
+    boardId: '3'
   },
-  { 
+  {
     id: 6,
-    img: 'https://images.unsplash.com/photo-1574180045827-681f8a1a9622', 
+    img: 'https://images.unsplash.com/photo-1574180045827-681f8a1a9622',
     title: 'Chairs',
     description: 'Dining room furniture',
     author: { name: 'Furniture Co' },
     isSaved: true,
     isFavourite: true,
     createdByUser: true,
-    saveCount: 567
+    saveCount: 567,
+    boardId: '4'
   },
-  { 
+  {
     id: 7,
-    img: 'https://images.unsplash.com/photo-1530731141654-5993c3016c77', 
+    img: 'https://images.unsplash.com/photo-1530731141654-5993c3016c77',
     title: 'Laptop',
     description: 'Workspace setup',
     author: { name: 'Tech Life' },
     isSaved: false,
     isFavourite: false,
     createdByUser: false,
-    saveCount: 234
+    saveCount: 234,
+    boardId: '1'
   },
-  { 
+  {
     id: 8,
-    img: 'https://images.unsplash.com/photo-1481277542470-605612bd2d61', 
+    img: 'https://images.unsplash.com/photo-1481277542470-605612bd2d61',
     title: 'Doors',
     description: 'Architectural details',
     author: { name: 'Architecture' },
     isSaved: false,
     isFavourite: false,
     createdByUser: false,
-    saveCount: 145
+    saveCount: 145,
+    boardId: '1'
   },
-  { 
+  {
     id: 9,
-    img: 'https://images.unsplash.com/photo-1517487881594-2787fef5ebf7', 
+    img: 'https://images.unsplash.com/photo-1517487881594-2787fef5ebf7',
     title: 'Coffee',
     description: 'Coffee time aesthetic',
     author: { name: 'Cafe Culture' },
     isSaved: true,
     isFavourite: true,
     createdByUser: false,
-    saveCount: 891
+    saveCount: 891,
+    boardId: '4'
   },
-  { 
+  {
     id: 10,
-    img: 'https://images.unsplash.com/photo-1516455207990-7a41ce80f7ee', 
+    img: 'https://images.unsplash.com/photo-1516455207990-7a41ce80f7ee',
     title: 'Storage',
     description: 'Organization solutions',
     author: { name: 'Organize It' },
     isSaved: false,
     isFavourite: false,
     createdByUser: true,
-    saveCount: 334
+    saveCount: 334,
+    boardId: '1'
   },
-  { 
+  {
     id: 11,
-    img: 'https://images.unsplash.com/photo-1597262975002-c5c3b14bbd62', 
+    img: 'https://images.unsplash.com/photo-1597262975002-c5c3b14bbd62',
     title: 'Candle',
     description: 'Cozy home vibes',
     author: { name: 'Lifestyle' },
     isSaved: false,
     isFavourite: false,
     createdByUser: false,
-    saveCount: 223
+    saveCount: 223,
+    boardId: '4'
   },
-  { 
+  {
     id: 12,
-    img: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4', 
+    img: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4',
     title: 'Coffee table',
     description: 'Living room centerpiece',
     author: { name: 'Design Ideas' },
     isSaved: true,
     isFavourite: true,
     createdByUser: true,
-    saveCount: 445
+    saveCount: 445,
+    boardId: '1'
   },
 ];

@@ -1,45 +1,24 @@
 'use client'
-import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useEffect, useCallback } from 'react'
 import Header from '@/components/headers/Header'
 import PageWrapper from '@/components/wrapper/PageWrapper'
 import { PinMediaUpload, PinFormFields, PinDraftsSidebar } from '@/components/pins/create'
 import { PinForm } from '@/types/pin'
 import clsx from 'clsx'
-import Image from 'next/image'
 import BackButton from '@/components/buttons/BackButton'
-
-interface PinDraft extends PinForm {
-  id: number | string
-}
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '@/redux/store'
+import { saveDraft, deleteDraft, PinDraft } from '@/redux/pinSlice'
+import { cn } from '@/lib/utils'
 
 const CreatePinPage = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false)
+  const dispatch = useDispatch<AppDispatch>()
+  const { pinDrafts } = useSelector((state: RootState) => state.pins)
 
-  const [drafts, setDrafts] = useState<PinDraft[]>([
-    {
-      id: 1,
-      title: 'Summer Travel Inspiration',
-      img: '',
-      board: 'Travel',
-      description: '',
-      link: '',
-      saved: false,
-      saveCount: 0,
-      author: { name: 'John Doe' },
-    },
-    {
-      id: 2,
-      title: 'Recipe Ideas',
-      img: '',
-      board: 'Food',
-      description: '',
-      link: '',
-      saved: false,
-      saveCount: 0,
-      author: { name: 'Jane Doe' },
-    },
-  ])
+  const [isCollapsed, setIsCollapsed] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const [activeDraftId, setActiveDraftId] = useState<string | number | null>(null)
 
   const [currentPin, setCurrentPin] = useState<PinForm>({
     title: '',
@@ -52,132 +31,143 @@ const CreatePinPage = () => {
     author: { name: 'Current User' },
   })
 
+  // 1. Unified Save Logic
+  const performSave = useCallback(() => {
+    // Only save if there's significant content
+    if (!currentPin.title && !currentPin.img && !currentPin.description) return;
+
+    setIsSaving(true);
+
+    // Create the draft object
+    const draftId = activeDraftId || Date.now();
+    const draftToSave: PinDraft = {
+      ...currentPin,
+      id: draftId
+    };
+
+    // Simulate small delay for the "Saving..." UI feel
+    setTimeout(() => {
+      dispatch(saveDraft(draftToSave));
+      if (!activeDraftId) setActiveDraftId(draftId);
+      setIsSaving(false);
+    }, 600);
+  }, [currentPin, activeDraftId, dispatch]);
+
+  // 2. Debounce
+  useEffect(() => {
+    const timer = setTimeout(performSave, 1200);
+    return () => clearTimeout(timer);
+  }, [currentPin, performSave]);
+
   const handleOpenDraft = (draft: PinDraft) => {
-    setCurrentPin({ ...draft })
-    setIsCollapsed(false)
-  }
+    setActiveDraftId(draft.id);
+    setCurrentPin({ ...draft });
+    setIsCollapsed(false);
+  };
 
   const handleCreateNew = () => {
+    setActiveDraftId(null);
     setCurrentPin({
       title: '',
       img: '',
-      video: '',
       board: '',
       description: '',
       link: '',
       saved: false,
       saveCount: 0,
       author: { name: 'Current User' },
-    })
-  }
+    });
+  };
 
-  const handleSaveDraft = () => {
-    if (!currentPin.title) return alert('Enter a title')
-    const newDraft: PinDraft = {
-      id: drafts.length + 1,
-      ...currentPin,
-    }
-    setDrafts([...drafts, newDraft])
-    handleCreateNew()
-  }
+  const handleDeleteDraft = (id: string | number) => {
+    dispatch(deleteDraft(id));
+    if (activeDraftId === id) handleCreateNew();
+  };
 
   const handlePinChange = (updates: Partial<PinForm>) => {
-    setCurrentPin({ ...currentPin, ...updates })
-  }
-
-  const handleRemoveMedia = () => {
-    setCurrentPin({ ...currentPin, img: '', video: '' })
-  }
+    setCurrentPin(prev => ({ ...prev, ...updates }));
+  };
 
   return (
     <PageWrapper>
       <Header />
       <motion.div
         className="flex flex-col lg:grid gap-8"
-        // Animate only on Large screens where grid is active
         animate={{
-          gridTemplateColumns: typeof window !== 'undefined' && window.innerWidth >= 1024 
-            ? (isCollapsed ? '1fr 60px' : '1fr 320px') 
+          gridTemplateColumns: typeof window !== 'undefined' && window.innerWidth >= 1024
+            ? (isCollapsed ? '1fr 72px' : '1fr 340px')
             : '1fr',
         }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
+        transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
       >
-        {/* LEFT PANEL: Pin Form */}
-        <div className="space-y-6 lg:space-y-8 px-4 sm:px-6 lg:px-0">
-          
-          {/* Sticky Header with improved padding for mobile */}
-          <div className="flex items-center justify-between sticky top-18 lg:top-22 bg-white/90 backdrop-blur-md z-10 py-4 border-b lg:border-none">
-            <div className='flex items-center gap-4'>
-                <div className='md:hidden block'>
-                     <BackButton />
+        <div className="space-y-6 lg:space-y-8 px-4 sm:px-6 lg:px-0 relative">
+
+          {/* SKELETON SAVING OVERLAY */}
+          <AnimatePresence>
+            {isSaving && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0 bg-white/40 z-50 pointer-events-none flex items-start justify-center pt-24"
+              >
+                <div className="flex items-center gap-2 bg-white px-5 py-2.5 rounded-full shadow-2xl border border-slate-100 animate-pulse">
+                  <div className="w-2 h-2 bg-violet-600 rounded-full animate-bounce" />
+                  <span className="text-[11px] font-black text-slate-600 uppercase tracking-widest">Auto-Saving</span>
                 </div>
-                <h2 className="text-lg lg:text-xl font-bold">Create Pin</h2>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Header */}
+          <div className="flex items-center justify-between sticky top-18 lg:top-22 bg-white/90 backdrop-blur-md z-10 py-4">
+            <div className='flex items-center gap-4'>
+              <div className='md:hidden block'><BackButton /></div>
+              <h2 className="text-xl lg:text-3xl font-black tracking-tighter text-slate-900 italic">
+                {activeDraftId ? 'Refining Draft' : 'New Inspiration'}
+              </h2>
             </div>
-            
-            <button className="px-6 lg:px-8 py-2.5 lg:py-3 shadow-sm text-white bg-violet-700 hover:bg-violet-600 rounded-full font-semibold transition text-sm lg:text-base">
+
+            <motion.button 
+              whileTap={{scale: 0.92}}
+              className={cn(
+                "px-10 py-4 shadow-xl rounded-full text-white bg-violet-700",
+                "hover:bg-violet-600 font-black transition-all active:scale-95 text-sm"
+              )}
+            >
               Publish
-            </button>
+            </motion.button>
           </div>
 
-          <div className="flex flex-col lg:flex-row gap-8 items-start lg:items-center justify-center">
-            {/* Media Upload (Full width on mobile, auto on desktop) */}
-            <div className="w-full lg:w-auto flex justify-center">
+          {/* Form Area */}
+          <div className="flex flex-col lg:flex-row gap-16 items-start justify-center pt-8">
+            <div className="w-full lg:w-auto lg:sticky lg:top-48">
               <PinMediaUpload
                 imageValue={currentPin.img}
                 videoValue={currentPin.video}
                 onImageChange={(url) => handlePinChange({ img: url, video: '' })}
                 onVideoChange={(url) => handlePinChange({ video: url, img: '' })}
-                onRemove={handleRemoveMedia}
+                onRemove={() => handlePinChange({ img: '', video: '' })}
               />
             </div>
 
-            {/* Form Fields - Responsive width handling */}
-            <div className={clsx(
-                'w-full flex flex-col gap-4', 
-                !isCollapsed ? 'max-w-full' : 'max-w-2xl'
-              )}
-            >
-              <PinFormFields
-                pin={currentPin}
-                onChange={handlePinChange}
-                onSaveDraft={handleSaveDraft}
-              />
+            <div className="w-full flex flex-col gap-4 transition-all duration-500 max-w-2xl">
+              <PinFormFields pin={currentPin} onChange={handlePinChange} />
             </div>
           </div>
         </div>
 
-        {/* RIGHT PANEL: Drafts - Hidden on mobile, toggleable on LG */}
+        {/* SIDEBAR */}
         <div className="hidden lg:block h-[calc(100vh-120px)] sticky top-24">
           <PinDraftsSidebar
-            drafts={drafts}
+            drafts={pinDrafts}
             isCollapsed={isCollapsed}
             onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
             onCreateNew={handleCreateNew}
             onOpenDraft={handleOpenDraft}
+            onDeleteDraft={handleDeleteDraft}
           />
         </div>
-
-        {/* MOBILE DRAFTS (Optional: Bottom Drawer or simple list if needed) */}
-        {drafts.length > 0 && (
-            <div className="block lg:hidden px-4 pb-10">
-                <h3 className="font-bold mb-4">Your Drafts ({drafts.length})</h3>
-                <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
-                    {drafts.map((draft) => (
-                        <button 
-                            key={draft.id}
-                            onClick={() => handleOpenDraft(draft)}
-                            className="flex-shrink-0 w-32 aspect-square bg-gray-100 rounded-xl overflow-hidden border"
-                        >
-                            {draft.img ? (
-                                <Image src={draft.img} className="w-full h-full object-cover" alt="" />
-                            ) : (
-                                <div className="p-2 text-xs text-left truncate">{draft.title}</div>
-                            )}
-                        </button>
-                    ))}
-                </div>
-            </div>
-        )}
       </motion.div>
     </PageWrapper>
   )

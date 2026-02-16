@@ -1,12 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { nanoid } from "@reduxjs/toolkit";
 import { PinForm, PinItem } from "@/types/pin";
 
+export interface PinDraft extends PinForm {
+    id: string | number,
+}
 interface PinState {
   pins: PinItem[];
   selectedPin: PinItem | null;
   isLoading: boolean;
   pinForm: PinForm,
-  pinDrafts: PinForm[],
+  pinDrafts: PinDraft[],
 }
 
 const initialState: PinState = {
@@ -58,6 +62,20 @@ const pinsSlice = createSlice({
             }
         },
 
+        addPinToFavourite: (state, action: PayloadAction<string | number>) => {
+            const pin = state.pins.find(pin => pin.id === action.payload);
+            if (pin) {
+                pin.isFavourite = true;
+            }
+        },
+
+        removePinFromFavourite: (state, action: PayloadAction<string | number>) => {
+            const pin = state.pins.find(pin => pin.id === action.payload);
+            if (pin) {
+                pin.isFavourite = false;
+            }
+        },
+
         setSelectedPin: (state, action: PayloadAction<PinItem | null>) => {
             state.selectedPin = action.payload;
         },
@@ -74,8 +92,24 @@ const pinsSlice = createSlice({
             state.pinForm = action.payload
         },
 
+
+        saveDraft: (state, action: PayloadAction<PinDraft>) => {
+            const index = state.pinDrafts.findIndex(d => d.id === action.payload.id);
+            if (index !== -1) {
+                // Update existing
+                state.pinDrafts[index] = action.payload;
+            } else {
+                // Add new to the beginning
+                state.pinDrafts.unshift(action.payload);
+            }
+        },
+
+        deleteDraft: (state, action: PayloadAction<string | number>) => {
+            state.pinDrafts = state.pinDrafts.filter(d => d.id !== action.payload);
+        },
+
         drafts: (state) => {
-            const draft: PinForm = {...state.pinForm}
+            const draft: PinDraft = {...state.pinForm, id: nanoid()}
             state.pinDrafts.push(draft)
             state.pinForm = { 
                 title: '',
@@ -100,7 +134,11 @@ export const {
     setLoading,
     setSelectedPin,
     clearSelectedPin,
+    addPinToFavourite,
+    removePinFromFavourite,
     uploadPin,
-    drafts
+    drafts,
+    saveDraft,
+    deleteDraft
 } = pinsSlice.actions
 export default pinsSlice.reducer

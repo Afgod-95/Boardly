@@ -1,6 +1,6 @@
 import React from 'react'
 import Sidebar from '@/components/layouts/dashboard/Sidebar'
-import BottomNavigator from '@/components/layouts/dashboard/Mobile'
+import BottomNavigator from '@/components/layouts/dashboard/MobileBottomNav'
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -16,7 +16,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       </div>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto bg-background">
+      <main className="flex-1 h-screen overflow-y-auto bg-background" id="dashboard-scroll">
         {children}
       </main>
     </div>

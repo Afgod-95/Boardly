@@ -24,7 +24,7 @@ import { usePathname } from "next/navigation"
 import { useState } from "react"
 import clsx from "clsx"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
-import CreateBoardModal from "@/components/boards/modals/CreateBoardModal"
+import CreateBoardModal from "@/components/boards/popovers/CreateBoardModal"
 
 /* ---------------------------------- TYPES --------------------------------- */
 
@@ -143,7 +143,7 @@ const Sidebar = () => {
               <h2 className="text-xl font-semibold pb-4">Create</h2>
               <div className="flex flex-col gap-1">
                 {createItems.map((item) => (
-                  <div key = {item.id}>
+                  <div key={item.id}>
                     {item.id === 2 ? (
                       <Dialog>
                         <DialogTrigger

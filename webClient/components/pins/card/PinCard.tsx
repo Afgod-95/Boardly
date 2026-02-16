@@ -5,76 +5,84 @@ import Image from "next/image";
 import { Ellipsis, Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PinOverlay from "./PinOverlay";
-import { PinsLayout } from "@/components/boards/MoreActions";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { addPinToFavourite } from "@/redux/pinSlice";
+import { Toast } from "radix-ui";
+import { toast } from "sonner";
 
-interface PinCardProps {
+// We can define a type for just the popover content props to keep it clean
+interface PinCardProps extends React.HTMLAttributes<HTMLDivElement> {
   item: PinItem;
   profileValue?: string;
-  layout?: PinsLayout;
-  
-  // Add this prop
-  saveMode?: "dialog" | "instant";
-
+  layout?: any;
+  saveMode?: "popover" | "instant";
   isHovered?: boolean;
   onMouseEnter: () => void;
   onMouseLeave?: () => void;
   onClick?: () => void;
-
   showSaveButton?: boolean;
   showEditButton?: boolean;
   showProfileButton?: boolean;
   showMetadata?: boolean;
   showStarIcon?: boolean;
 
-  // Dialog contents
-  ProfileDialogContent?: React.ComponentType<{ onClose: () => void }>;
-  SaveDialogContent?: React.ComponentType<{ onClose: () => void }>;
-  VisitDialogContent?: React.ComponentType<{ onClose: () => void }>;
-  ShareDialogContent?: React.ComponentType<{ onClose: () => void }>;
-  EditDialogContent?: React.ComponentType<{ onClose: () => void }>;
-
-  // Metadata popovers
-  MoreOptionsPopoverContent?: React.ComponentType;
-  FavoritesPopoverContent?: React.ComponentType;
+  // Popover Contents
+  ProfilePopoverContent?: React.ComponentType<any>;
+  SavePopoverContent?: React.ComponentType<any>;
+  VisitPopoverContent?: React.ComponentType<any>;
+  SharePopoverContent?: React.ComponentType<any>;
+  EditDialogContent?: React.ComponentType<any>;
+  MoreOptionsPopoverContent?: React.ComponentType<any>;
+  FavoritesPopoverContent?: React.ComponentType<any>;
 }
 
 export default function PinCard({
   item,
   profileValue = "Profile",
-  layout,
-  saveMode = "instant", // Default to instant for feed
   isHovered,
   onMouseEnter,
   onMouseLeave,
   onClick,
-
-  showSaveButton = true,
-  showEditButton = false,
-  showProfileButton = true,
   showMetadata,
   showStarIcon,
-
-  ProfileDialogContent,
-  SaveDialogContent,
-  VisitDialogContent,
-  ShareDialogContent,
-  EditDialogContent,
-
-  MoreOptionsPopoverContent,
-  FavoritesPopoverContent,
+  ...props // Captures all overlay and button visibility props
 }: PinCardProps) {
   const [metadataOpen, setMetadataOpen] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+
+  // Logic: Handle Star Click (Favorite toggle)
+  const handleStarClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    dispatch(addPinToFavourite(item.id as number | string));
+    toast.success("Pin added to favourites");
+  };
+
+  // The actual Button component used in both scenarios
+  const IconButton = (
+    <motion.button
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9 }}
+      onClick={showStarIcon ? handleStarClick : (e) => e.stopPropagation()}
+      className="p-2 rounded-full hover:bg-gray-100 transition-colors shrink-0"
+    >
+      {showStarIcon ? (
+        <Star
+          size={18}
+          className={item.isFavourite ? "text-yellow-foreground" : "text-gray-400"}
+          fill={item.isFavourite ? "currentColor" : "none"}
+        />
+      ) : (
+        <Ellipsis size={20} className="text-gray-600" />
+      )}
+    </motion.button>
+  );
 
   return (
     <div className="break-inside-avoid mb-5 group">
-      {/* ================= IMAGE CARD ================= */}
       <div
         className={cn(
           "relative rounded-3xl overflow-hidden bg-gray-100 transition-shadow hover:shadow-md",
@@ -89,11 +97,9 @@ export default function PinCard({
           alt={item.title || "Pin image"}
           width={500}
           height={700}
-          loading="lazy"
           className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
         />
 
-        {/* ================= OVERLAY ================= */}
         <AnimatePresence>
           {isHovered && (
             <motion.div
@@ -102,67 +108,42 @@ export default function PinCard({
               exit={{ opacity: 0 }}
               className="absolute inset-0"
             >
+              {/* Spreading props here makes PinOverlay clean */}
               <PinOverlay
-                pinId={item.id as string | number}
+                pinId={item.id as number | string}
                 isSaved={item.isSaved}
-                saveMode={saveMode} // Use the prop instead of conditional logic
-
                 profileValue={profileValue}
-                layout={layout}
-
-                showProfileButton={showProfileButton}
-                showSaveButton={showSaveButton}
-                showEditButton={showEditButton}
-
-                ProfileDialogContent={ProfileDialogContent}
-                SaveDialogContent={SaveDialogContent}
-                VisitDialogContent={VisitDialogContent}
-                ShareDialogContent={ShareDialogContent}
-                EditDialogContent={EditDialogContent}
+                {...props}
               />
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      {/* ================= METADATA ================= */}
       {showMetadata && (
         <div className="flex items-center justify-between mt-3 px-2">
-          <span className="text-sm font-bold text-gray-800 truncate">
+          <span className="text-sm font-bold text-gray-800 truncate pr-2">
             {item.title}
           </span>
 
-          <Popover open={metadataOpen} onOpenChange={setMetadataOpen}>
-            <PopoverTrigger asChild>
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={(e) => e.stopPropagation()}
-                className="p-2 rounded-full hover:bg-gray-100"
-              >
-                {showStarIcon ? (
-                  <Star size={18} />
-                ) : (
-                  <Ellipsis size={20} className="text-gray-600" />
-                )}
-              </motion.button>
-            </PopoverTrigger>
-
-            {(showStarIcon
-              ? FavoritesPopoverContent
-              : MoreOptionsPopoverContent) && (
+          {/* Conditional Rendering: Popover only if NOT a star icon */}
+          {!showStarIcon ? (
+            <Popover open={metadataOpen} onOpenChange={setMetadataOpen}>
+              <PopoverTrigger asChild>
+                {IconButton}
+              </PopoverTrigger>
               <PopoverContent
                 onClick={(e) => e.stopPropagation()}
-                className="p-4 rounded-2xl border-0 shadow-xl"
+                side="top"
+                align="end"
+                className="p-2 rounded-2xl border-0 shadow-2xl bg-white min-w-50"
               >
-                {showStarIcon && FavoritesPopoverContent ? (
-                  <FavoritesPopoverContent />
-                ) : (
-                  MoreOptionsPopoverContent && <MoreOptionsPopoverContent />
-                )}
+                {props.MoreOptionsPopoverContent && <props.MoreOptionsPopoverContent />}
               </PopoverContent>
-            )}
-          </Popover>
+            </Popover>
+          ) : (
+            IconButton
+          )}
         </div>
       )}
     </div>

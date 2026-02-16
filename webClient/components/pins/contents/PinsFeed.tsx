@@ -5,22 +5,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { setPins, setSelectedPin, setLoading } from "@/redux/pinSlice";
 import { PinItem } from "@/types/pin";
-import { PinCard } from "../card";
-import { motion } from "framer-motion";
-import { containerVariants, itemVariants } from "@/utils/animations";
-import clsx from "clsx";
-import usePinHook from "../hooks/usePinHook";
-import PinsGrid from "../grid/PinsGrid";
+import SmartPinsGrid from "../grid/SmartPinsGrid";
+
 //import usePinsHook from "@/hooks/usePinsHook";
 
 const PinsFeed = () => {
-    const router = useRouter();
     const dispatch = useDispatch<AppDispatch>();
     const { pins, isLoading } = useSelector((state: RootState) => state.pins);
+    const { boards } = useSelector((state:RootState) => state.boards);
 
-    //local states and actions 
-    const { hoveredIndex, hoveredItem } = usePinHook()
-
+    //get profile value 
+    const profileValue = pins.map((pin) => boards.find((b) => b.id === pin?.boardId)?.title);
 
     useEffect(() => {
         const fetchPins = async () => {
@@ -57,7 +52,11 @@ const PinsFeed = () => {
             ) : (
                 <>
                     <div className="w-full pb-24">
-                        <PinsGrid variant = 'feed' items={pins}/>
+                        <SmartPinsGrid variant="feed" 
+                            items={pins}
+                            profileValue={profileValue?.[0]}
+                            showMetadata={true}
+                        />
                     </div>
                 </>
             )}

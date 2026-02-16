@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils'
 import PinsGrid from '@/components/pins/grid/PinsGrid'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
+import SmartPinsGrid from '../pins/grid/SmartPinsGrid'
 
 const SearchPageClient = () => {
 
@@ -105,7 +106,7 @@ const SearchPageClient = () => {
                 </header>
 
                 {/* MASONRY GRID PLACEHOLDER */}
-                <PinsGrid items={pins} variant='feed' />
+                <SmartPinsGrid items={pins} variant='feed' />
             </main>
         </div>
     )

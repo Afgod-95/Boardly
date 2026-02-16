@@ -8,8 +8,9 @@ import { useRouter } from "next/navigation"
 import SuggestedBoards from "@/components/boards/SuggestedBoards"
 import { BoardItem } from "@/types/board"
 import { setBoards } from "@/redux/boardSlice"
-import EditBoardModal from "@/components/boards/modals/EditBoardModal"
-import CreateBoardModal from "../modals/CreateBoardModal"
+import EditBoardModal from "@/components/boards/popovers/EditBoardModal"
+import CreateBoardModal from "../popovers/CreateBoardModal"
+import SmartPinsGrid from "@/components/pins/grid/SmartPinsGrid"
 
 const BoardsPageContent = () => {
     const { pins } = useSelector((state: RootState) => state.pins)
@@ -161,11 +162,21 @@ const BoardsPageContent = () => {
             </div>
 
             {!activeFilter && (
-                <SuggestedBoards
-                    suggested={mockBoards.slice(2)}
-                    unorganizedPins={pins}
-                    allPins={pins}
-                />
+                <div className="space-y-4 mt-6">
+                    {/* unorganized pins */}
+                    <div className='flex items-center justify-between'>
+                        <h2 className='font-bold text-xl'>Unorganized Pins</h2>
+                        <button className='px-5 py-2 text-sm md:text-lg font-medium bg-accent rounded-full transition-colors cursor-pointer text-foreground hover:bg-muted'>
+                            Organize
+                        </button>
+                    </div>
+
+                    <SmartPinsGrid variant="board"
+                        items={pins}
+                        showMetadata={false}
+                    />
+
+                </div>
             )}
 
             {editingBoard && (

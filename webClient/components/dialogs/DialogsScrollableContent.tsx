@@ -35,7 +35,7 @@ export function DialogScrollableContent({
         // Default mobile width
         "w-[95vw] sm:w-full",
         // Scalable desktop widths
-        "sm:max-w-137.5 md:max-w-162.5 lg:max-w-212.5",
+        "max-w-2xl",
         "rounded-3xl p-6",
         className
       )}

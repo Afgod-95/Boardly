@@ -8,7 +8,7 @@ import { motion } from "framer-motion"
 import { itemVariants } from '@/utils/animations'
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { DialogScrollableContent } from "@/components/dialogs/DialogsScrollableContent"
-import CreateBoardModal from "../modals/CreateBoardModal"
+import CreateBoardModal from "../popovers/CreateBoardModal"
 
 interface CreateBoardCardProps {
   pin?: PinItem[]
@@ -84,7 +84,7 @@ const CreateBoardCard = ({
             </div>
           </div>
         </DialogTrigger>
-        { children }
+        {children}
       </Dialog>
     </>
 

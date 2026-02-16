@@ -2,38 +2,32 @@
 
 import { PinsLayout } from "@/components/boards/MoreActions";
 import { Pencil, ChevronDown, ArrowUpRight, Upload } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useState } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { updatePinSaveStatus } from "@/redux/pinSlice";
+import SaveButton from "../button/SaveButton";
 
-type DialogType = "profile" | "save" | "visit" | "share" | "edit" | null;
-type SaveMode = "dialog" | "instant";
+type PopoverType = "profile" | "save" | "visit" | "share" | "edit" | null;
+type SaveMode = "popover" | "instant";
 
 interface PinOverlayProps {
   layout?: PinsLayout;
   profileValue?: string;
-
   showProfileButton?: boolean;
   showSaveButton?: boolean;
   showEditButton?: boolean;
-
   saveMode?: SaveMode;
   pinId: string | number;
   isSaved?: boolean;
-
-  ProfileDialogContent?: React.ComponentType<{ onClose: () => void }>;
-  SaveDialogContent?: React.ComponentType<{ onClose: () => void }>;
-  VisitDialogContent?: React.ComponentType<{ onClose: () => void }>;
-  ShareDialogContent?: React.ComponentType<{ onClose: () => void }>;
-  EditDialogContent?: React.ComponentType<{ onClose: () => void }>;
-}
-
-interface Particle {
-  id: number | string;
+  ProfilePopoverContent?: React.ComponentType<{}>;
+  SavePopoverContent?: React.ComponentType<{}>;
+  VisitPopoverContent?: React.ComponentType<{}>;
+  SharePopoverContent?: React.ComponentType<{}>;
+  EditDialogContent?: React.ComponentType<{}>;
 }
 
 export default function PinOverlay({
@@ -42,213 +36,172 @@ export default function PinOverlay({
   showProfileButton = true,
   showSaveButton = true,
   showEditButton = false,
-
-  saveMode = "dialog",
-
+  saveMode = "popover",
   pinId,
   isSaved = false,
-
-  ProfileDialogContent,
-  SaveDialogContent,
-  VisitDialogContent,
-  ShareDialogContent,
+  ProfilePopoverContent,
+  SavePopoverContent,
+  VisitPopoverContent,
+  SharePopoverContent,
   EditDialogContent,
 }: PinOverlayProps) {
   const dispatch = useDispatch<AppDispatch>();
-  const [openDialog, setOpenDialog] = useState<DialogType>(null);
-  const [particles, setParticles] = useState<Particle[]>([]);
+  const [openPopover, setOpenPopover] = useState<PopoverType>(null);
 
-  const closeDialog = (e?: React.MouseEvent) => {
-    e?.stopPropagation();
-    setOpenDialog(null);
+  const handlePopoverOpenChange = (type: PopoverType, open: boolean) => {
+    setOpenPopover(open ? type : null);
   };
 
-  const handleDialogOpenChange = (open: boolean) => {
-    if (!open) {
-      setOpenDialog(null);
+  const shouldPreventInteractOutside = (target: HTMLElement): boolean => {
+    return (
+      !!target.closest('[role="dialog"]') ||
+      !!target.closest('[data-radix-popper-content-wrapper]') ||
+      target.hasAttribute('data-radix-portal')
+    );
+  };
+
+  const handleInteractOutside = (e: Event) => {
+    const target = e.target as HTMLElement;
+    if (shouldPreventInteractOutside(target)) {
+      e.preventDefault();
     }
   };
 
-  const triggerSave = () => {
-    dispatch(updatePinSaveStatus({ id: pinId, isSaved: !isSaved }));
-
-    const p = Array.from({ length: 8 }, (_, i) => ({
-      id: Date.now() + i,
-    }));
-
-    setParticles(p);
-    setTimeout(() => setParticles([]), 900);
-  };
-
-  const handleSaveClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-
-    if (saveMode === "instant") {
-      triggerSave();
-    } else {
-      setOpenDialog("save");
-    }
-  };
-
-  const handleDialogClick = (
-    e: React.MouseEvent,
-    type: Exclude<DialogType, null>
-  ) => {
-    e.stopPropagation();
-    setOpenDialog(type);
-  };
-
-  const dialogClass = cn(
-    "w-[95vw] sm:w-full",
-    "sm:max-w-137.5 md:max-w-162.5 lg:max-w-212.5",
-    "rounded-3xl p-6"
+  // Modern Pinterest-style Popover Class
+  const popoverStyles = cn(
+    "z-50 rounded-3xl bg-white p-4 shadow-xl border-none",
+    "w-[calc(100vw-2rem)] sm:w-auto sm:min-w-[320px] max-w-[95vw]", // Responsive width
+    "max-h-[80vh] overflow-y-auto no-scrollbar" // Prevents overflow on short screens
   );
 
   return (
     <>
-      {/* ================= OVERLAY ROOT ================= */}
       <div className="absolute inset-0 rounded-2xl overflow-hidden">
-        {/* BACKGROUND */}
         <div className="absolute inset-0 bg-black/40 pointer-events-none" />
-
-        {/* INTERACTIVE LAYER */}
         <div className="absolute inset-0 z-10 pointer-events-auto">
-          {/* ================= TOP ================= */}
+
+          {/* ================= TOP ACTIONS ================= */}
           <div className="absolute top-3 left-3 right-3 flex justify-between">
-            {/* PROFILE */}
-            {showProfileButton ? (
-              <motion.button
-                onClick={(e) => handleDialogClick(e, "profile")}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-1 px-3 py-2 rounded-full hover:bg-white/10 text-white"
-              >
-                <span className="text-sm font-semibold truncate hidden sm:inline">
-                  {profileValue}
-                </span>
-                <ChevronDown size={16} />
-              </motion.button>
-            ) : (
-              <div />
+            {showProfileButton && (
+              <Popover open={openPopover === "profile"} onOpenChange={(o) => handlePopoverOpenChange("profile", o)} modal={true}>
+                <PopoverTrigger asChild>
+                  <motion.button
+                    onClick={(e) => e.stopPropagation()}
+                    whileTap={{ scale: 0.95 }}
+                    className="flex items-center gap-1 px-3 py-2 rounded-full hover:bg-white/10 text-white backdrop-blur-sm"
+                  >
+                    <span className="text-sm font-semibold truncate hidden sm:inline">{profileValue}</span>
+                    <ChevronDown size={16} />
+                  </motion.button>
+                </PopoverTrigger>
+                <PopoverContent
+                  align="start"
+                  sideOffset={8}
+                  className={popoverStyles}
+                  onClick={(e) => e.stopPropagation()}
+                  onInteractOutside={handleInteractOutside}
+                >
+                  {ProfilePopoverContent && <ProfilePopoverContent />}
+                </PopoverContent>
+              </Popover>
             )}
 
-            {/* SAVE */}
             {showSaveButton && (
-              <div className="relative">
-                <motion.button
-                  onClick={handleSaveClick}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={cn(
-                    "rounded-full px-4 py-2 font-semibold",
-                    saveMode === 'instant' ? (isSaved
-                      ? "bg-black text-white"
-                      : "bg-violet-700 text-white hover:bg-violet-800")
-                      : "bg-violet-700 text-white hover:bg-violet-800"
-                    
-                  )}
+              <Popover open={openPopover === "save"} onOpenChange={(o) => handlePopoverOpenChange("save", o)} modal={true}>
+                <PopoverTrigger asChild>
+                  <div onClick={(e) => e.stopPropagation()}>
+                    <SaveButton pinId={pinId} isSaved={isSaved} saveMode={saveMode} setOpenPopover={setOpenPopover} />
+                  </div>
+                </PopoverTrigger>
+                <PopoverContent
+                  align="end"
+                  sideOffset={8}
+                  className={cn(popoverStyles, "sm:min-w-90")}
+                  onClick={(e) => e.stopPropagation()}
+                  onInteractOutside={handleInteractOutside}
                 >
-                  {saveMode === "instant" ? (isSaved ? "Saved" : "Save") : "Save"}
-                </motion.button>
-
-                {/* PARTICLES */}
-                <AnimatePresence>
-                  {particles.map((p, i) => {
-                    const angle = (i / particles.length) * Math.PI * 2;
-                    return (
-                      <motion.div
-                        key={p.id}
-                        initial={{ x: 0, y: 0, scale: 0, opacity: 1 }}
-                        animate={{
-                          x: Math.cos(angle) * 50,
-                          y: Math.sin(angle) * 50,
-                          scale: [0, 1.2, 0],
-                          opacity: [1, 1, 0],
-                        }}
-                        transition={{ duration: 0.8 }}
-                        className="absolute top-1/2 left-1/2 w-2.5 h-2.5 bg-violet-400 rounded-full pointer-events-none"
-                      />
-                    );
-                  })}
-                </AnimatePresence>
-              </div>
+                  {SavePopoverContent && <SavePopoverContent />}
+                </PopoverContent>
+              </Popover>
             )}
           </div>
 
           {/* ================= BOTTOM LEFT ================= */}
           <div className="absolute bottom-3 left-3">
-            <motion.button
-              onClick={(e) => handleDialogClick(e, "visit")}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-white/90 rounded-xl p-2 flex items-center gap-2"
-            >
-              <ArrowUpRight size={16} />
-              {layout === "standard" && (
-                <span className="hidden md:inline text-sm font-medium pr-1">
-                  Visit
-                </span>
-              )}
-            </motion.button>
+            <Popover open={openPopover === "visit"} onOpenChange={(o) => handlePopoverOpenChange("visit", o)} modal={true}>
+              <PopoverTrigger asChild>
+                <motion.button
+                  onClick={(e) => e.stopPropagation()}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-white/90 rounded-xl p-2.5 flex items-center gap-2 shadow-sm"
+                >
+                  <ArrowUpRight size={18} />
+                  {layout === "standard" && <span className="hidden md:inline text-sm font-bold pr-1">Visit</span>}
+                </motion.button>
+              </PopoverTrigger>
+              <PopoverContent
+                side="top"
+                align="start"
+                sideOffset={12}
+                className={popoverStyles}
+                onClick={(e) => e.stopPropagation()}
+                onInteractOutside={handleInteractOutside}
+              >
+                {VisitPopoverContent && <VisitPopoverContent />}
+              </PopoverContent>
+            </Popover>
           </div>
 
           {/* ================= BOTTOM RIGHT ================= */}
           <div className="absolute bottom-3 right-3 flex gap-2">
             {showEditButton && (
-              <motion.button
-                onClick={(e) => handleDialogClick(e, "edit")}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-white/90 p-2 rounded-xl"
-              >
-                <Pencil size={16} />
-              </motion.button>
+              <Popover open={openPopover === "edit"} onOpenChange={(o) => handlePopoverOpenChange("edit", o)} modal={true}>
+                <PopoverTrigger asChild>
+                  <motion.button
+                    onClick={(e) => e.stopPropagation()}
+                    whileTap={{ scale: 0.95 }}
+                    className="bg-white/90 p-2.5 rounded-xl shadow-sm"
+                  >
+                    <Pencil size={18} />
+                  </motion.button>
+                </PopoverTrigger>
+                <PopoverContent
+                  sideOffset={12}
+                  className={cn(popoverStyles, "sm:w-112.5 md:w-150")} // Wider for Edit fields
+                  onClick={(e) => e.stopPropagation()}
+                  onInteractOutside={handleInteractOutside}
+                >
+                  <div className="p-1">
+                    {EditDialogContent && <EditDialogContent />}
+                  </div>
+                </PopoverContent>
+              </Popover>
             )}
 
-            <motion.button
-              onClick={(e) => handleDialogClick(e, "share")}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-white/90 p-2 rounded-xl"
-            >
-              <Upload size={16} />
-            </motion.button>
+            <Popover open={openPopover === "share"} onOpenChange={(o) => handlePopoverOpenChange("share", o)} modal={true}>
+              <PopoverTrigger asChild>
+                <motion.button
+                  onClick={(e) => e.stopPropagation()}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-white/90 p-2.5 rounded-xl shadow-sm"
+                >
+                  <Upload size={18} />
+                </motion.button>
+              </PopoverTrigger>
+              <PopoverContent
+                side="top"
+                align="end"
+                sideOffset={12}
+                className={popoverStyles}
+                onClick={(e) => e.stopPropagation()}
+                onInteractOutside={handleInteractOutside}
+              >
+                {SharePopoverContent && <SharePopoverContent />}
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
       </div>
-
-      {/* ================= DIALOG ================= */}
-      <Dialog open={openDialog !== null} onOpenChange={handleDialogOpenChange}>
-        <DialogContent 
-          className={dialogClass}
-          
-        >
-          {openDialog === "profile" && ProfileDialogContent && (
-            <ProfileDialogContent onClose={closeDialog} />
-          )}
-
-          {openDialog === "save" && SaveDialogContent && (
-            <SaveDialogContent
-              onClose={() => {
-                triggerSave();
-                closeDialog();
-              }}
-            />
-          )}
-
-          {openDialog === "visit" && VisitDialogContent && (
-            <VisitDialogContent onClose={closeDialog} />
-          )}
-
-          {openDialog === "edit" && EditDialogContent && (
-            <EditDialogContent onClose={closeDialog} />
-          )}
-
-          {openDialog === "share" && ShareDialogContent && (
-            <ShareDialogContent onClose={closeDialog} />
-          )}
-        </DialogContent>
-      </Dialog>
     </>
   );
 }

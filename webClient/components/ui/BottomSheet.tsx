@@ -50,7 +50,7 @@ const BottomSheet = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={closeOnBackdropClick ? onClose : undefined}
-            className="block md:hidden fixed inset-0 bg-black/50 z-60"
+            className="block md:hidden fixed inset-0 bg-black/5 z-60 backdrop-blur-xs "
           />
 
           {/* Bottom Sheet */}
