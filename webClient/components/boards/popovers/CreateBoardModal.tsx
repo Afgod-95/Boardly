@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { DialogScrollableContent } from '../../dialogs/DialogsScrollableContent'
+import { DialogScrollableContent } from '../../shared/dialogs/DialogsScrollableContent'
 import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
 import { Label } from '../../ui/label'
 import { Users, Pencil, AlignLeft, Plus, Check } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar' 
+import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar'
 
 const SUGGESTIONS = [
   { id: 1, name: 'Alex Rivera', email: 'alex@example.com', initials: 'AR' },
@@ -17,11 +17,11 @@ const CreateBoardModal = () => {
     description: '',
     collaborators: ''
   })
-  
+
   const [selectedIds, setSelectedIds] = useState<number[]>([])
 
   const toggleCollaborator = (id: number) => {
-    setSelectedIds(prev => 
+    setSelectedIds(prev =>
       prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
     )
   }
@@ -31,7 +31,7 @@ const CreateBoardModal = () => {
   }
 
   return (
-    <DialogScrollableContent 
+    <DialogScrollableContent
       dialogTitle='Create Board'
       isActionButton={true}
       buttonTitle='Create Board'
@@ -44,12 +44,12 @@ const CreateBoardModal = () => {
             <Pencil size={16} className="text-muted-foreground" />
             Board Title
           </Label>
-          <Input 
+          <Input
             id="title"
-            placeholder='e.g., "Architecture Inspiration"' 
+            placeholder='e.g., "Architecture Inspiration"'
             className="rounded-xl border-muted-foreground/20 focus:ring-accent"
             value={formData.title}
-            onChange={(e) => setFormData({...formData, title: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           />
         </div>
 
@@ -59,12 +59,12 @@ const CreateBoardModal = () => {
             <AlignLeft size={16} className="text-muted-foreground" />
             Board Description
           </Label>
-          <Textarea 
+          <Textarea
             id="description"
-            placeholder="What's this board about?" 
+            placeholder="What's this board about?"
             className="min-h-[80px] rounded-xl border-muted-foreground/20 resize-none"
             value={formData.description}
-            onChange={(e) => setFormData({...formData, description: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           />
         </div>
 
@@ -75,12 +75,12 @@ const CreateBoardModal = () => {
             Add Collaborators
           </Label>
           <div className="relative">
-            <Input 
+            <Input
               id="collaborators"
-              placeholder="Search by name or email" 
+              placeholder="Search by name or email"
               className="rounded-xl border-muted-foreground/20 pl-10 h-11"
               value={formData.collaborators}
-              onChange={(e) => setFormData({...formData, collaborators: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, collaborators: e.target.value })}
             />
             <Users size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground/40" />
           </div>
@@ -95,9 +95,8 @@ const CreateBoardModal = () => {
                   <button
                     key={user.id}
                     onClick={() => toggleCollaborator(user.id)}
-                    className={`flex items-center justify-between p-2 rounded-xl border transition-all ${
-                      isSelected ? 'bg-accent/10 border-accent' : 'bg-muted/30 border-transparent hover:bg-muted/50'
-                    }`}
+                    className={`flex items-center justify-between p-2 rounded-xl border transition-all ${isSelected ? 'bg-accent/10 border-accent' : 'bg-muted/30 border-transparent hover:bg-muted/50'
+                      }`}
                   >
                     <div className="flex items-center gap-3">
                       <Avatar className="h-8 w-8 border border-background">

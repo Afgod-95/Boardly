@@ -10,7 +10,7 @@ import { BoardItem } from "@/types/board"
 import { setBoards } from "@/redux/boardSlice"
 import EditBoardModal from "@/components/boards/popovers/EditBoardModal"
 import CreateBoardModal from "../popovers/CreateBoardModal"
-import SmartPinsGrid from "@/components/pins/grid/SmartPinsGrid"
+import SmartPinsGrid from "@/components/shared/grid/SmartPinsGrid"
 
 const BoardsPageContent = () => {
     const { pins } = useSelector((state: RootState) => state.pins)

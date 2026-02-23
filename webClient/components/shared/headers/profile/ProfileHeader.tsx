@@ -10,7 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import Searchbar from '@/components/searchbar/Searchbar'
+import Searchbar from '@/components/shared/searchbar/Searchbar'
 
 const ProfileHeader = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -18,7 +18,7 @@ const ProfileHeader = () => {
   return (
     <div className="max-w-screen-6xl mx-auto py-5">
       <div className="flex items-center justify-between w-full gap-4">
-        
+
         {/* 1. SEARCH BAR - Motion enabled */}
         <Searchbar />
 
@@ -34,7 +34,7 @@ const ProfileHeader = () => {
                   <AvatarImage src="https://github.com/shadcn.png" />
                   <AvatarFallback>GD</AvatarFallback>
                 </Avatar>
-                
+
                 <span className="text-sm font-bold hidden sm:inline-block">Godwin</span>
 
                 <motion.div
@@ -48,8 +48,8 @@ const ProfileHeader = () => {
             </motion.div>
           </PopoverTrigger>
 
-          <PopoverContent 
-            align="end" 
+          <PopoverContent
+            align="end"
             className="w-72 p-2 rounded-3xl shadow-2xl border-gray-100 mt-2"
           >
             <div className="p-4">
@@ -70,9 +70,9 @@ const ProfileHeader = () => {
             <div className="h-[1px] bg-gray-100 my-2 mx-2" />
 
             <div className="flex flex-col gap-1 p-1">
-              <ProfileMenuItem icon={<Settings size={18}/>} label="Settings" />
-              <ProfileMenuItem icon={<Repeat size={18}/>} label="Switch account" />
-              <ProfileMenuItem icon={<LogOut size={18} className="text-red-500"/>} label="Log out" isRed />
+              <ProfileMenuItem icon={<Settings size={18} />} label="Settings" />
+              <ProfileMenuItem icon={<Repeat size={18} />} label="Switch account" />
+              <ProfileMenuItem icon={<LogOut size={18} className="text-red-500" />} label="Log out" isRed />
             </div>
           </PopoverContent>
         </Popover>

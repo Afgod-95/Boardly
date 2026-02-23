@@ -7,7 +7,7 @@ import {
   DialogClose
 } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 
 
 
@@ -19,7 +19,7 @@ interface Props {
   onSubmit?: () => void;
   isLoading?: boolean
   children: React.ReactNode;
-  className?: string 
+  className?: string
 }
 
 export function DialogScrollableContent({

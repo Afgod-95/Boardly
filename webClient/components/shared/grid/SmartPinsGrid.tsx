@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
-import PinsGrid, { PinCardVariant } from './PinsGrid';
-import usePinHook from "@/components/pins/hooks/usePinHook"; // Adjust path
+import PinsGrid, { PinCardVariant } from '../../pins/grid/PinsGrid';
+import usePinHook from "@/components/pins/hooks/usePinHook";
 import { SaveToBoard, SharePin, EditPin, MoreOptionsContent } from "@/components/pins/popovers";
 import { PinItem } from '@/types/pin';
 
@@ -11,8 +11,10 @@ interface SmartPinsGridProps {
     layout?: "standard" | "compact";
     profileValue?: string;
     showMetadata?: boolean;
-    showStarIcon?: boolean
-   
+    showStarIcon?: boolean;
+    showStarButton?: boolean;
+    showPlusButton?: boolean;
+
 }
 
 const SmartPinsGrid = ({ items, variant, layout, profileValue, showMetadata, ...restOfProps }: SmartPinsGridProps) => {

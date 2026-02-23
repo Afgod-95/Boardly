@@ -1,6 +1,6 @@
 
 import React from 'react'
-import Searchbar from '@/components/searchbar/Searchbar'
+import Searchbar from '@/components/shared/searchbar/Searchbar'
 import { motion } from 'framer-motion'
 import { Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -25,7 +25,7 @@ const Profile = () => {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
             >
-               {profileIcon}
+                {profileIcon}
                 <div className='text-center text-sm text-gray-500 sm:hidden'>
                     {/** name */}
                     <h2 className='text-center font-bold text-2xl'>Godwin</h2>
@@ -37,19 +37,19 @@ const Profile = () => {
                 </div>
             </motion.div>
 
-             {/** desktop */}
-             <motion.div
+            {/** desktop */}
+            <motion.div
                 className='hidden md:flex flex-row items-center justify-center text-center p-5 hover:accent transition-all gap-8 '
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
             >
                 <div className='flex flex-row items-center gap-3'>
                     {profileIcon}
-                     <div className='text-center text-sm text-gray-500'>
-                    {/** name */}
-                    <h2 className='text-center font-bold text-2xl'>Godwin</h2>
-                    <span>afgod98</span>
-                </div>
+                    <div className='text-center text-sm text-gray-500'>
+                        {/** name */}
+                        <h2 className='text-center font-bold text-2xl'>Godwin</h2>
+                        <span>afgod98</span>
+                    </div>
                 </div>
                 <div className='flex flex-row items-center justify-center gap-4'>
                     <Button className='px-4 bg-accent text-foreground hover:bg-muted cursor-pointer'>Share</Button>

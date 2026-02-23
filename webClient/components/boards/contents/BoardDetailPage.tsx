@@ -1,31 +1,25 @@
 "use client"
 
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
-import PinCard from "@/components/pins/card/PinCard"
-import usePinsHook from "@/hooks/usePinsHook"
-import { Upload, MoreHorizontal, Link as LinkIcon, Mail, Share, Share2 } from "lucide-react"
+import { ChevronLeft, Mail } from "lucide-react"
 import { FaWhatsapp, FaFacebook, } from "react-icons/fa"
 import { BsTwitterX } from "react-icons/bs";
-import { PopoverContent, PopoverTrigger } from "@radix-ui/react-popover"
-import { Popover } from "@/components/ui/popover"
 import { toast } from "sonner"
-import Link from "next/link"
 import { InviteCollaborators } from "@/components/boards/InviteCollaborators"
 import MoreActions, { PinsLayout } from "@/components/boards/MoreActions"
-import BackButton from "@/components/buttons/BackButton"
-import PinsGrid from "@/components/pins/grid/PinsGrid"
 import { useState } from "react"
-import MobileHeaderStyle from "@/components/headers/MobileHeaderStyle"
+import MobileHeaderStyle from "@/components/shared/headers/MobileHeaderStyle"
 import BoardActions from "../popovers/boardDetailAction/DeleteAndEditBoard"
 import ShareOptions from "@/components/boards/share/ShareOptions"
-import SmartPinsGrid from "@/components/pins/grid/SmartPinsGrid"
+import SmartPinsGrid from "@/components/shared/grid/SmartPinsGrid"
+import CustomButton from "@/components/shared/buttons/CustomButton"
 
 export default function BoardDetailPage() {
   const params = useParams()
   const { id } = params
-
+  const router = useRouter()
   //layout value 
   const [layoutValue, setLayoutValue] = useState<PinsLayout>('standard')
 
@@ -87,7 +81,7 @@ export default function BoardDetailPage() {
       </div>
       {/** desktop */}
       <div className=" hidden md:block">
-        <BackButton />
+        <CustomButton icon={<ChevronLeft />} onClick={() => router.back()} />
       </div>
 
       <div className="flex flex-row items-center justify-between py-8 gap-6">

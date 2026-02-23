@@ -2,7 +2,7 @@
 
 import { PinItem } from "@/types/pin";
 import Image from "next/image";
-import { Ellipsis, Star } from "lucide-react";
+import { Ellipsis, Star, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PinOverlay from "./PinOverlay";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -29,6 +29,8 @@ interface PinCardProps extends React.HTMLAttributes<HTMLDivElement> {
   showProfileButton?: boolean;
   showMetadata?: boolean;
   showStarIcon?: boolean;
+  showPlusButton?: boolean;
+  onPlusClick?: () => void;
 
   // Popover Contents
   ProfilePopoverContent?: React.ComponentType<any>;

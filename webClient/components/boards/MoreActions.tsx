@@ -1,6 +1,6 @@
 
 import { LayoutPanelLeft, Layers, Lightbulb } from "lucide-react"
-import { ActionButtons } from "../buttons"
+import { ActionButtons } from "@/components/shared/buttons";
 import { Settings2 } from 'lucide-react'
 import { PinsPopoverFilter} from "@/components/boards/tabs/tabFilters"
 

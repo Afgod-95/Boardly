@@ -4,7 +4,7 @@ import React from "react"
 import { useMediaQuery } from "react-responsive"
 import { Dialog } from "../../ui/dialog"
 import BottomSheet from "../../ui/BottomSheet"
-import { DialogScrollableContent } from "../../dialogs/DialogsScrollableContent"
+import { DialogScrollableContent } from "../../shared/dialogs/DialogsScrollableContent"
 import { Button } from "../../ui/button"
 import { BottomSheetProps } from "@/types/bottomSheet"
 
@@ -62,35 +62,35 @@ const ModalRoot = ({
   }
 
   /* ---------------- MOBILE / TABLET ---------------- */
-  if (isMobileOrTablet){
+  if (isMobileOrTablet) {
     return (
-    <BottomSheet
-      isOpen={isOpen}
-      onClose={onClose}
-      maxHeight={maxHeight}
-      showHandle={showHandle}
-      closeOnBackdropClick={closeOnBackdropClick}
-      dragToClose={dragToClose}
-      dragThreshold={dragThreshold}
-      velocityThreshold={velocityThreshold}
-    >
-      <div className="px-6 pb-6">
-        <h2 className="text-center sm:text-left text-xl font-bold">
-          {dialogTitle}
-        </h2>
+      <BottomSheet
+        isOpen={isOpen}
+        onClose={onClose}
+        maxHeight={maxHeight}
+        showHandle={showHandle}
+        closeOnBackdropClick={closeOnBackdropClick}
+        dragToClose={dragToClose}
+        dragThreshold={dragThreshold}
+        velocityThreshold={velocityThreshold}
+      >
+        <div className="px-6 pb-6">
+          <h2 className="text-center sm:text-left text-xl font-bold">
+            {dialogTitle}
+          </h2>
 
-        <div className="pt-4">{children}</div>
+          <div className="pt-4">{children}</div>
 
-        {buttonTitle && (
-          <div className="pt-6">
-            <Button className="w-full bg-violet-600" onClick={onSubmit}>
-              {buttonTitle}
-            </Button>
-          </div>
-        )}
-      </div>
-    </BottomSheet>
-  )
+          {buttonTitle && (
+            <div className="pt-6">
+              <Button className="w-full bg-violet-600" onClick={onSubmit}>
+                {buttonTitle}
+              </Button>
+            </div>
+          )}
+        </div>
+      </BottomSheet>
+    )
   }
 }
 

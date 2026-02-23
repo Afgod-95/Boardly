@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 import ModalRoot from "./ModalRoot"
-import { DialogScrollableContent } from "../../dialogs/DialogsScrollableContent"
+import { DialogScrollableContent } from "../../shared/dialogs/DialogsScrollableContent"
 import { Input } from "../../ui/input"
 import { Textarea } from "../../ui/textarea"
 import { Label } from "../../ui/label"
@@ -141,8 +141,8 @@ const EditBoardModal = ({
                   key={user.id}
                   onClick={() => toggleCollaborator(user.id)}
                   className={`flex items-center justify-between p-2 rounded-xl border transition ${isSelected
-                      ? "bg-accent/10 border-accent"
-                      : "hover:bg-muted/50"
+                    ? "bg-accent/10 border-accent"
+                    : "hover:bg-muted/50"
                     }`}
                 >
                   <div className="flex items-center gap-3">
@@ -161,8 +161,8 @@ const EditBoardModal = ({
 
                   <div
                     className={`p-1 rounded-full ${isSelected
-                        ? "bg-violet-600 text-white"
-                        : "bg-muted"
+                      ? "bg-violet-600 text-white"
+                      : "bg-muted"
                       }`}
                   >
                     {isSelected ? <Check size={14} /> : <Plus size={14} />}

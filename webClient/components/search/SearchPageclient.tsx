@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 import PinsGrid from '@/components/pins/grid/PinsGrid'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
-import SmartPinsGrid from '../pins/grid/SmartPinsGrid'
+import SmartPinsGrid from '@/components/shared/grid/SmartPinsGrid'
 
 const SearchPageClient = () => {
 

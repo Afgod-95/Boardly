@@ -4,5 +4,7 @@
   "editor.formatOnPaste": true,
   "editor.formatOnType": false,
 
-  "prettier.requireConfig": true
+  "prettier.requireConfig": true,
+  "trae.tab.enableRename": false,
+  "trae.tab.enableAutoImport": false
 }

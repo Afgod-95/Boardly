@@ -1,16 +1,17 @@
 "use client"
 
 import clsx from 'clsx'
-import { PopoverTrigger, PopoverContent, Popover } from '../ui/popover'
-import { Dialog, DialogTrigger } from '../ui/dialog'
+import { PopoverTrigger, PopoverContent, Popover } from '@/components/ui/popover'
+import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import CreateBoardModal from '../boards/popovers/CreateBoardModal'
+import CreateBoardModal from '@/components/boards/popovers/CreateBoardModal'
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
-import BottomSheet from '../ui/BottomSheet'
+import BottomSheet from '@/components/ui/BottomSheet'
 import Link from 'next/link'
+import CreateItemMobile from '../mobileCreate/CreateItemMobile'
 
 
 const CreateButton = () => {
@@ -62,12 +63,12 @@ const CreateButton = () => {
               <CreateBoardModal />
             </Dialog>
 
-            {/** Link to pin */}
+            {/** Link to collage */}
             <motion.div
               whileTap={{ scale: 0.9 }}
               className="w-full flex items-center gap-4 rounded-md px-3 py-2 text-left cursor-pointer text-sm hover:bg-muted"
             >
-              <Link href={"/dashboard/create/pin"}>
+              <Link href={"/dashboard/create/collage"}>
                 <span className='text-xl font-medium'>Collage</span>
               </Link>
             </motion.div>
@@ -82,39 +83,12 @@ const CreateButton = () => {
           onClose={() => setOpenSheet(false)}
           maxHeight="45vh"
         >
-          <h1 className='text-center text-2xl font-bold py-4'>Create</h1>
-          <div className="flex flex-col gap-1 px-10 pb-10">
-            {/** Link to pin */}
-            <motion.div
-              whileTap={{ scale: 0.9 }}
-              className="w-full flex items-center gap-4 rounded-md px-3 py-2 text-left cursor-pointer text-sm hover:bg-muted"
-            >
-              <Link href={"/dashboard/create/pin"}>
-                <span className='text-xl font-medium'>Pin</span>
-              </Link>
-            </motion.div>
-
-
-            <motion.button onClick={handleBoardClick}
-              whileTap={{ scale: 0.9 }}
-            >
-              <div
-                className="w-full flex items-center gap-4 rounded-md px-3 py-2 text-left cursor-pointer text-sm hover:bg-muted"
-              >
-                <span className='text-xl font-medium'>Board</span>
-              </div>
-            </motion.button>
-
-            {/** Link to pin */}
-            <motion.div
-              whileTap={{ scale: 0.9 }}
-              className="w-full flex items-center gap-4 rounded-md px-3 py-2 text-left cursor-pointer text-sm hover:bg-muted"
-            >
-              <Link href={"/dashboard/create/pin"}>
-                <span className='text-xl font-medium'>Pin</span>
-              </Link>
-            </motion.div>
-          </div>
+          <CreateItemMobile
+            openSheet={openSheet}
+            setOpenSheet={setOpenSheet}
+            openBoardDialog={openBoardDialog}
+            setOpenBoardDialog={setOpenBoardDialog}
+          />
         </BottomSheet>
       </Popover>
 

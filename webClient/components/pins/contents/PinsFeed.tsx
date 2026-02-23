@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { setPins, setSelectedPin, setLoading } from "@/redux/pinSlice";
 import { PinItem } from "@/types/pin";
-import SmartPinsGrid from "../grid/SmartPinsGrid";
+import SmartPinsGrid from "@/components/shared/grid/SmartPinsGrid";
 
 //import usePinsHook from "@/hooks/usePinsHook";
 
@@ -23,7 +23,8 @@ const PinsFeed = () => {
                 dispatch(setLoading(true));
                 const res = await fetch("/api/pins", {
                     next: { revalidate: 60 },
-                });
+                    cache: 'force-cache'
+                }); 
 
                 if (!res.ok) throw new Error("Failed to fetch pins");
 

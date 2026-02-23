@@ -10,12 +10,12 @@ import {
 } from "@/components/ui/avatar"
 import { PlusIcon, Search, Link as LinkIcon, Info, Check } from "lucide-react"
 import { Dialog, DialogTrigger } from "../ui/dialog"
-import { DialogScrollableContent } from "../dialogs/DialogsScrollableContent"
-import { 
-  Tooltip, 
-  TooltipContent, 
-  TooltipTrigger, 
-  TooltipProvider 
+import { DialogScrollableContent } from "../shared/dialogs/DialogsScrollableContent"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  TooltipProvider
 } from "@/components/ui/tooltip" // Using shadcn path; adjust if using @radix-ui directly
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
@@ -64,7 +64,7 @@ export function InviteCollaborators() {
               </div>
             </DialogTrigger>
           </TooltipTrigger>
-          
+
           <TooltipContent side="bottom" className="font-medium">
             Invite collaborators
           </TooltipContent>
@@ -72,7 +72,7 @@ export function InviteCollaborators() {
 
         <DialogScrollableContent dialogTitle="Invite collaborators">
           <div className="flex flex-col gap-6 py-2">
-            
+
             {/* 1. SEARCH SECTION */}
             <div className="relative">
               <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">

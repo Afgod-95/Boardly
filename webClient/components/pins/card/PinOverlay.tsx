@@ -1,7 +1,7 @@
 "use client";
 
 import { PinsLayout } from "@/components/boards/MoreActions";
-import { Pencil, ChevronDown, ArrowUpRight, Upload } from "lucide-react";
+import { Pencil, ChevronDown, ArrowUpRight, Upload, Plus } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -23,6 +23,8 @@ interface PinOverlayProps {
   saveMode?: SaveMode;
   pinId: string | number;
   isSaved?: boolean;
+  showPlusButton?: boolean,
+  onPlusClick?: () => void;
   ProfilePopoverContent?: React.ComponentType<{}>;
   SavePopoverContent?: React.ComponentType<{}>;
   VisitPopoverContent?: React.ComponentType<{}>;
@@ -37,6 +39,8 @@ export default function PinOverlay({
   showSaveButton = true,
   showEditButton = false,
   saveMode = "popover",
+  showPlusButton = false,
+  onPlusClick,
   pinId,
   isSaved = false,
   ProfilePopoverContent,
@@ -126,80 +130,102 @@ export default function PinOverlay({
             )}
           </div>
 
-          {/* ================= BOTTOM LEFT ================= */}
-          <div className="absolute bottom-3 left-3">
-            <Popover open={openPopover === "visit"} onOpenChange={(o) => handlePopoverOpenChange("visit", o)} modal={true}>
-              <PopoverTrigger asChild>
-                <motion.button
-                  onClick={(e) => e.stopPropagation()}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-white/90 rounded-xl p-2.5 flex items-center gap-2 shadow-sm"
-                >
-                  <ArrowUpRight size={18} />
-                  {layout === "standard" && <span className="hidden md:inline text-sm font-bold pr-1">Visit</span>}
-                </motion.button>
-              </PopoverTrigger>
-              <PopoverContent
-                side="top"
-                align="start"
-                sideOffset={12}
-                className={popoverStyles}
-                onClick={(e) => e.stopPropagation()}
-                onInteractOutside={handleInteractOutside}
-              >
-                {VisitPopoverContent && <VisitPopoverContent />}
-              </PopoverContent>
-            </Popover>
-          </div>
+          {showPlusButton === true ? (
+            <motion.button
+              onClick={(e) => {
+                e.stopPropagation();
+                onPlusClick?.();
+              }}
+              whileTap={{ scale: 0.95 }}
+              className="absolute bottom-2 right-2 bg-white/90 p-2.5 rounded-xl shadow-sm "
+            >
+              <Plus size={18} />
+            </motion.button>
 
-          {/* ================= BOTTOM RIGHT ================= */}
-          <div className="absolute bottom-3 right-3 flex gap-2">
-            {showEditButton && (
-              <Popover open={openPopover === "edit"} onOpenChange={(o) => handlePopoverOpenChange("edit", o)} modal={true}>
-                <PopoverTrigger asChild>
-                  <motion.button
+          ) : (
+
+            <>
+
+              {/* ================= BOTTOM LEFT ================= */}
+              <div className="absolute bottom-3 left-3">
+                <Popover open={openPopover === "visit"} onOpenChange={(o) => handlePopoverOpenChange("visit", o)} modal={true}>
+                  <PopoverTrigger asChild>
+                    <motion.button
+                      onClick={(e) => e.stopPropagation()}
+                      whileTap={{ scale: 0.95 }}
+                      className="bg-white/90 rounded-xl p-2.5 flex items-center gap-2 shadow-sm"
+                    >
+                      <ArrowUpRight size={18} />
+                      {layout === "standard" && <span className="hidden md:inline text-sm font-bold pr-1">Visit</span>}
+                    </motion.button>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    side="top"
+                    align="start"
+                    sideOffset={12}
+                    className={popoverStyles}
                     onClick={(e) => e.stopPropagation()}
-                    whileTap={{ scale: 0.95 }}
-                    className="bg-white/90 p-2.5 rounded-xl shadow-sm"
+                    onInteractOutside={handleInteractOutside}
                   >
-                    <Pencil size={18} />
-                  </motion.button>
-                </PopoverTrigger>
-                <PopoverContent
-                  sideOffset={12}
-                  className={cn(popoverStyles, "sm:w-112.5 md:w-150")} // Wider for Edit fields
-                  onClick={(e) => e.stopPropagation()}
-                  onInteractOutside={handleInteractOutside}
-                >
-                  <div className="p-1">
-                    {EditDialogContent && <EditDialogContent />}
-                  </div>
-                </PopoverContent>
-              </Popover>
-            )}
+                    {VisitPopoverContent && <VisitPopoverContent />}
+                  </PopoverContent>
+                </Popover>
+              </div>
 
-            <Popover open={openPopover === "share"} onOpenChange={(o) => handlePopoverOpenChange("share", o)} modal={true}>
-              <PopoverTrigger asChild>
-                <motion.button
-                  onClick={(e) => e.stopPropagation()}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-white/90 p-2.5 rounded-xl shadow-sm"
-                >
-                  <Upload size={18} />
-                </motion.button>
-              </PopoverTrigger>
-              <PopoverContent
-                side="top"
-                align="end"
-                sideOffset={12}
-                className={popoverStyles}
-                onClick={(e) => e.stopPropagation()}
-                onInteractOutside={handleInteractOutside}
-              >
-                {SharePopoverContent && <SharePopoverContent />}
-              </PopoverContent>
-            </Popover>
-          </div>
+              {/* ================= BOTTOM RIGHT ================= */}
+              <div className="absolute bottom-3 right-3 flex gap-2">
+                {showEditButton && (
+                  <Popover open={openPopover === "edit"} onOpenChange={(o) => handlePopoverOpenChange("edit", o)} modal={true}>
+                    <PopoverTrigger asChild>
+                      <motion.button
+                        onClick={(e) => e.stopPropagation()}
+                        whileTap={{ scale: 0.95 }}
+                        className="bg-white/90 p-2.5 rounded-xl shadow-sm"
+                      >
+                        <Pencil size={18} />
+                      </motion.button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      sideOffset={12}
+                      className={cn(popoverStyles, "sm:w-112.5 md:w-150")} // Wider for Edit fields
+                      onClick={(e) => e.stopPropagation()}
+                      onInteractOutside={handleInteractOutside}
+                    >
+                      <div className="p-1">
+                        {EditDialogContent && <EditDialogContent />}
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                )}
+
+                <Popover open={openPopover === "share"} onOpenChange={(o) => handlePopoverOpenChange("share", o)} modal={true}>
+                  <PopoverTrigger asChild>
+                    <motion.button
+                      onClick={(e) => e.stopPropagation()}
+                      whileTap={{ scale: 0.95 }}
+                      className="bg-white/90 p-2.5 rounded-xl shadow-sm"
+                    >
+                      <Upload size={18} />
+                    </motion.button>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    side="top"
+                    align="end"
+                    sideOffset={12}
+                    className={popoverStyles}
+                    onClick={(e) => e.stopPropagation()}
+                    onInteractOutside={handleInteractOutside}
+                  >
+                    {SharePopoverContent && <SharePopoverContent />}
+                  </PopoverContent>
+                </Popover>
+
+
+              </div>
+            </>
+
+          )}
+
         </div>
       </div>
     </>

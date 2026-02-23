@@ -17,7 +17,7 @@ import MoreActions, { PinsLayout } from "@/components/boards/MoreActions"
 import BackButton from "@/components/buttons/BackButton"
 import PinsGrid from "@/components/pins/grid/PinsGrid"
 import { useState } from "react"
-import MobileHeaderStyle from "@/components/headers/MobileHeaderStyle"
+import MobileHeaderStyle from "@/components/shared/headers/MobileHeaderStyle"
 
 export default function ShareOptions() {
   const params = useParams()
@@ -64,63 +64,63 @@ export default function ShareOptions() {
 
   return (
     <>
-    {/** MOBILE SCREEN */}
-      
+      {/** MOBILE SCREEN */}
 
-        {/* ACTION BUTTONS */}
-        <div className="flex items-center gap-3">
-          {/* ---------------- SHARE BUTTON ---------------- */}
-          <Popover>
-            <PopoverTrigger asChild>
-              <div className="flex items-center justify-center gap-2 md:bg-gray-100 md:hover:bg-gray-200 md:p-4 nd:px-8 rounded-full transition-all active:scale-95 font-semibold">
-                <Share2 size={22} strokeWidth={2.5} />
-                <div className="hidden md:block">Share</div>
-              </div>
-            </PopoverTrigger>
 
-            <PopoverContent
-              side="bottom"
-              align="center"
-              className="z-50 w-96 p-0 bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden mt-2"
-            >
-              <div className="p-6 space-y-6">
-                <h3 className="text-2xl text-center text-muted-foreground">Share Board</h3>
+      {/* ACTION BUTTONS */}
+      <div className="flex items-center gap-3">
+        {/* ---------------- SHARE BUTTON ---------------- */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <div className="flex items-center justify-center gap-2 md:bg-gray-100 md:hover:bg-gray-200 md:p-4 nd:px-8 rounded-full transition-all active:scale-95 font-semibold">
+              <Share2 size={22} strokeWidth={2.5} />
+              <div className="hidden md:block">Share</div>
+            </div>
+          </PopoverTrigger>
 
-                {/* Social Grid */}
-                <div className="grid grid-cols-4 gap-6">
-                  {socialLinks.map((social) => (
-                    <Link
-                      key={social.name}
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex flex-col items-center gap-2 group"
+          <PopoverContent
+            side="bottom"
+            align="center"
+            className="z-50 w-96 p-0 bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden mt-2"
+          >
+            <div className="p-6 space-y-6">
+              <h3 className="text-2xl text-center text-muted-foreground">Share Board</h3>
+
+              {/* Social Grid */}
+              <div className="grid grid-cols-4 gap-6">
+                {socialLinks.map((social) => (
+                  <Link
+                    key={social.name}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex flex-col items-center gap-2 group"
+                  >
+                    <div
+                      className={`w-14 h-14 ${social.color} text-white rounded-full flex items-center justify-center transition-transform group-hover:scale-110`}
                     >
-                      <div
-                        className={`w-14 h-14 ${social.color} text-white rounded-full flex items-center justify-center transition-transform group-hover:scale-110`}
-                      >
-                        <social.icon size={24} />
-                      </div>
-                      <span className="text-sm font-medium text-gray-600">{social.name}</span>
-                    </Link>
-                  ))}
-                </div>
-
-                {/* Copy Link Button */}
-                <button
-                  onClick={() => copyToClipboard()}
-                  className="w-full flex items-center border gap-3 p-4 hover:bg-gray-50 rounded-xl transition-colors font-semibold text-gray-800"
-                >
-                  <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
-                    <LinkIcon size={22} />
-                  </div>
-                  Copy link
-                </button>
+                      <social.icon size={24} />
+                    </div>
+                    <span className="text-sm font-medium text-gray-600">{social.name}</span>
+                  </Link>
+                ))}
               </div>
-            </PopoverContent>
-          </Popover>
-        </div>
-   
+
+              {/* Copy Link Button */}
+              <button
+                onClick={() => copyToClipboard()}
+                className="w-full flex items-center border gap-3 p-4 hover:bg-gray-50 rounded-xl transition-colors font-semibold text-gray-800"
+              >
+                <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
+                  <LinkIcon size={22} />
+                </div>
+                Copy link
+              </button>
+            </div>
+          </PopoverContent>
+        </Popover>
+      </div>
+
     </>
   )
 }

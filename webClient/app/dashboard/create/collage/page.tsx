@@ -1,8 +1,9 @@
+import CollageResizablePanel from '@/components/collages/contents/CollageResizablePanel'
 import React from 'react'
 
 const page = () => {
   return (
-    <div>page</div>
+    <CollageResizablePanel />
   )
 }
 

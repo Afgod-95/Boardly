@@ -10,13 +10,14 @@ import { useRouter } from "next/navigation"
 import { setSelectedPin } from "@/redux/pinSlice"
 import usePinsHook from "@/hooks/usePinsHook"
 import SuggestionIdeasCard from "../card/SuggestedIdeasCard"
-import PageWrapper from "@/components/wrapper/PageWrapper"
-import Header from "@/components/headers/Header"
-import BackButton from "@/components/buttons/BackButton"
+import PageWrapper from "@/components/shared/wrapper/PageWrapper"
+import Header from "@/components/shared/headers/Header"
+import BackButton from "@/components/shared/buttons/CustomButton"
 import { containerVariants, itemVariants } from '@/utils/animations';
-import MobileHeaderStyle from "@/components/headers/MobileHeaderStyle"
-// Import the SmartPinsGrid we built
-import SmartPinsGrid from "../grid/SmartPinsGrid"
+import MobileHeaderStyle from "@/components/shared/headers/MobileHeaderStyle"
+import SmartPinsGrid from "@/components/shared/grid/SmartPinsGrid"
+import CustomButton from "@/components/shared/buttons/CustomButton"
+import { ChevronLeft } from "lucide-react"
 
 interface Props {
   initialPin: PinItem
@@ -66,7 +67,7 @@ export default function PinDetailClient({ initialPin }: Props) {
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: -100, opacity: 0 }}
             >
-              <BackButton />
+              <CustomButton icon={<ChevronLeft />} onClick={() => router.back()} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -86,7 +87,7 @@ export default function PinDetailClient({ initialPin }: Props) {
               <div className="space-y-4">
                 <h2 className="font-bold text-xl px-2">More like this</h2>
                 <SmartPinsGrid
-                  variant = 'detail'
+                  variant='detail'
                   items={leftColumnPins}
                   showMetadata={true}
                 />

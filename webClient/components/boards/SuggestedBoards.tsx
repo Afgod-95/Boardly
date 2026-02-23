@@ -35,7 +35,7 @@ const SuggestedBoards = ({ suggested = [], unorganizedPins, allPins }: BoardSugg
           })}
         </div>
        */}
-      
+
 
 
       {/* unorganized pins */}
@@ -48,7 +48,7 @@ const SuggestedBoards = ({ suggested = [], unorganizedPins, allPins }: BoardSugg
 
 
       <PinsGrid items={unorganizedPins} variant='board'
-        
+
       />
 
     </div>

@@ -22,6 +22,7 @@ import { useState, useEffect, useRef } from "react";
 import { Dialog } from "@/components/ui/dialog";
 import CreateBoardModal from "@/components/boards/popovers/CreateBoardModal";
 import BottomSheet from "@/components/ui/BottomSheet";
+import CreateItemMobile from "@/components/shared/mobileCreate/CreateItemMobile";
 
 interface DashboardLink {
   id: number;
@@ -73,8 +74,14 @@ const BottomNavigator = () => {
     "/dashboard",
     "/dashboard/search",
     "/dashboard/boards",
+    "/dashboard/collages",
     "/dashboard/settings",
-  ].includes(pathname);
+  ].some(route => {
+    if (route === "/dashboard") {
+      return pathname === "/dashboard"  
+    }
+    return pathname.startsWith(route)  
+  })
 
   // SCROLL LOGIC
   useEffect(() => {
@@ -190,48 +197,12 @@ const BottomNavigator = () => {
         onClose={() => setOpenSheet(false)}
         maxHeight="45vh"
       >
-        <div className="p-4">
-          <h2 className="text-xl text-center font-semibold pb-4">Create</h2>
-
-          <div className="flex flex-col gap-2">
-            {createItems.map((item) =>
-              item.id === 2 ? (
-                <button
-                  key={item.id}
-                  onClick={handleBoardClick}
-                  className="flex gap-4 items-center rounded-xl p-3 hover:bg-muted w-full text-left"
-                >
-                  <div className="p-4 rounded-xl bg-accent">
-                    <item.icon size={22} />
-                  </div>
-                  <div>
-                    <p className="font-medium">{item.title}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {item.description}
-                    </p>
-                  </div>
-                </button>
-              ) : (
-                <Link
-                  key={item.id}
-                  href={item.href as string}
-                  onClick={() => setOpenSheet(false)}
-                  className="flex gap-4 items-center rounded-xl p-3 hover:bg-muted"
-                >
-                  <div className="p-4 rounded-xl bg-accent">
-                    <item.icon size={22} />
-                  </div>
-                  <div>
-                    <p className="font-medium">{item.title}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {item.description}
-                    </p>
-                  </div>
-                </Link>
-              )
-            )}
-          </div>
-        </div>
+        <CreateItemMobile
+          openSheet={openSheet}
+          setOpenSheet={setOpenSheet}
+          openBoardDialog={openBoardDialog}
+          setOpenBoardDialog={setOpenBoardDialog}
+        />
       </BottomSheet>
 
       <Dialog open={openBoardDialog} onOpenChange={setOpenBoardDialog}>

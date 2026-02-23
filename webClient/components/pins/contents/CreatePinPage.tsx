@@ -1,16 +1,18 @@
 'use client'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect, useCallback } from 'react'
-import Header from '@/components/headers/Header'
-import PageWrapper from '@/components/wrapper/PageWrapper'
+import Header from '@/components/shared/headers/Header'
+import PageWrapper from '@/components/shared/wrapper/PageWrapper'
 import { PinMediaUpload, PinFormFields, PinDraftsSidebar } from '@/components/pins/create'
 import { PinForm } from '@/types/pin'
 import clsx from 'clsx'
-import BackButton from '@/components/buttons/BackButton'
+import BackButton from '@/components/shared/buttons/CustomButton'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@/redux/store'
 import { saveDraft, deleteDraft, PinDraft } from '@/redux/pinSlice'
 import { cn } from '@/lib/utils'
+import CustomButton from '@/components/shared/buttons/CustomButton'
+import { ChevronLeft } from 'lucide-react'
 
 const CreatePinPage = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -122,14 +124,14 @@ const CreatePinPage = () => {
           {/* Header */}
           <div className="flex items-center justify-between sticky top-18 lg:top-22 bg-white/90 backdrop-blur-md z-10 py-4">
             <div className='flex items-center gap-4'>
-              <div className='md:hidden block'><BackButton /></div>
+              <div className='md:hidden block'><CustomButton icon = {<ChevronLeft />} onClick={() => setIsCollapsed(!isCollapsed)} /></div>
               <h2 className="text-xl lg:text-3xl font-black tracking-tighter text-slate-900 italic">
                 {activeDraftId ? 'Refining Draft' : 'New Inspiration'}
               </h2>
             </div>
 
-            <motion.button 
-              whileTap={{scale: 0.92}}
+            <motion.button
+              whileTap={{ scale: 0.92 }}
               className={cn(
                 "px-10 py-4 shadow-xl rounded-full text-white bg-violet-700",
                 "hover:bg-violet-600 font-black transition-all active:scale-95 text-sm"
