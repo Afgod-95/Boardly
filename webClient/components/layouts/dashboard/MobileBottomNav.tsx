@@ -184,7 +184,7 @@ const BottomNavigator = () => {
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => setOpenSheet(true)}
-            className="absolute -right-8 -translate-x-1/2 h-16 w-16 bg-violet-600 text-white rounded-full flex items-center justify-center shadow-lg"
+            className="absolute -right-8 -translate-x-1/2 h-16 w-16 bg-black text-white rounded-full flex items-center justify-center shadow-lg"
           >
             <Plus size={28} strokeWidth={3} />
           </motion.button>

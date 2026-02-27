@@ -14,6 +14,7 @@ interface SmartPinsGridProps {
     showStarIcon?: boolean;
     showStarButton?: boolean;
     showPlusButton?: boolean;
+    onAddToCanvasClick?: (pin: PinItem) => void;
 
 }
 

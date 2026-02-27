@@ -6,7 +6,7 @@ import { Pencil } from 'lucide-react'
 
 
 
-const BoardsCard = ({ board, previewPins, onBoardClick, onEdit }: BoardsCardProps) => {
+const BoardsCard = ({ variant='board', board, previewPins, onBoardClick, onEdit }: BoardsCardProps) => {
     const pinCount = board.pinIds.length // Use total pins from board, not just preview
     const displayPins = previewPins.slice(0, 5)
 
@@ -165,7 +165,7 @@ const BoardsCard = ({ board, previewPins, onBoardClick, onEdit }: BoardsCardProp
                     </div>
                 )}
 
-                {isHovered && (
+                {variant === 'board' && isHovered && (
                     <div className='absolute bg-black/40 inset-0 transition-opacity duration-300 rounded-2xl ' >
                         <motion.button
                             whileHover={{ scale: 1.05, backgroundColor: "rgba(255, 255, 255, 1)" }}

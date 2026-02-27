@@ -1,5 +1,12 @@
+// types/types.ts
+import { PinItem } from "@/types/pin"
+
 export interface Cutout {
-    id: string
-    name: string
-    imageUrl: string
+    pin?: PinItem
+    shape?: {
+        id: string | number
+        type: 'text' | 'rect' | 'circle' | 'line'
+        label: string
+        thumbnail: string // base64
+    }
 }

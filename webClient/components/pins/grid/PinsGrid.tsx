@@ -21,7 +21,7 @@ interface PinsGridProps {
   showStarIcon?: boolean;
   profileValue?: string;
   showPlusButton?: boolean;
-  onPlusClick?: (item: PinItem) => void;
+  onAddToCanvasClick?: (item: PinItem) => void;
 
   /** Popover content components */
   PopoverComponents?: {
@@ -103,12 +103,12 @@ export default function PinsGrid({
       ? "columns-1 md:columns-3 lg:columns-5 xl:columns-4"
       : "columns-2 md:columns-4 lg:columns- 2xl:columns-7"),
 
-    variant === 'detail' && "columns-1 md:columns-2 2xl:columns-3",
+    variant === 'detail' && "columns-2 md:columns-2 2xl:columns-3",
     variant === 'collage' && "columns-2",
   );
 
   return (
-    <div className="w-full pb-24">
+    <div className="w-full">
       <motion.div
         className={gridColumns}
         variants={containerVariants}
@@ -124,7 +124,7 @@ export default function PinsGrid({
             <PinCard
               {...props}
               showPlusButton={props.showPlusButton}
-              onPlusClick={props.onPlusClick ? () => props.onPlusClick?.(item) : undefined}
+              onAddToCanvasClick={props.onAddToCanvasClick ? () => props.onAddToCanvasClick?.(item) : undefined}
               item={item}
               profileValue={profileValue}
               layout={layout}

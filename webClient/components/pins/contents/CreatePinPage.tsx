@@ -13,8 +13,11 @@ import { saveDraft, deleteDraft, PinDraft } from '@/redux/pinSlice'
 import { cn } from '@/lib/utils'
 import CustomButton from '@/components/shared/buttons/CustomButton'
 import { ChevronLeft } from 'lucide-react'
+import { Router } from 'next/router'
+import { useRouter } from 'next/navigation'
 
 const CreatePinPage = () => {
+  const router = useRouter()
   const dispatch = useDispatch<AppDispatch>()
   const { pinDrafts } = useSelector((state: RootState) => state.pins)
 
@@ -124,7 +127,14 @@ const CreatePinPage = () => {
           {/* Header */}
           <div className="flex items-center justify-between sticky top-18 lg:top-22 bg-white/90 backdrop-blur-md z-10 py-4">
             <div className='flex items-center gap-4'>
-              <div className='md:hidden block'><CustomButton icon = {<ChevronLeft />} onClick={() => setIsCollapsed(!isCollapsed)} /></div>
+              <div className='md:hidden block'>
+                <CustomButton icon = {<ChevronLeft />} 
+                  onClick={() => { 
+                    setIsCollapsed(!isCollapsed)
+                    router.back()
+                  }} 
+                />
+              </div>
               <h2 className="text-xl lg:text-3xl font-black tracking-tighter text-slate-900 italic">
                 {activeDraftId ? 'Refining Draft' : 'New Inspiration'}
               </h2>

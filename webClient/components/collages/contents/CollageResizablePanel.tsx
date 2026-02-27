@@ -16,12 +16,15 @@ import { pressedButtons } from "@/lib/animations/pressedButtons"
 import clsx from "clsx"
 import { CenterPanel, LeftPanel, RightPanel } from "../panels"
 import { Cutout } from '../types/types'
+import { PinItem } from '@/types/pin'
+import { FabricObject } from 'fabric'
 
 const CollageResizablePanel = () => {
     const router = useRouter()
 
     // Shared fabric canvas ref
     const fabricRef = useRef<fabric.Canvas | null>(null)
+    const fabricObjectsRef = useRef<Map<string | number, fabric.FabricImage>>(new Map())
 
     // Undo history stack
     const historyRef = useRef<string[]>([])
@@ -31,6 +34,20 @@ const CollageResizablePanel = () => {
     const [activeObject, setActiveObject] = useState<fabric.Object | null>(null)
     const [canvasBg, setCanvasBg] = useState('')
     const [cutouts, setCutouts] = useState<Cutout[]>([])
+
+
+    // Delete from canvas by pin id (called from LeftPanel)
+    const deleteFromCanvas = useCallback((pinId: string | number) => {
+        const img = fabricObjectsRef.current.get(pinId)
+        if (img && fabricRef.current) {
+            fabricRef.current.remove(img)
+            fabricRef.current.renderAll()
+            fabricObjectsRef.current.delete(pinId)
+        }
+        // ← fix: use getCutoutId instead of c.pin.id
+        setCutouts(prev => prev.filter(c => (c.pin?.id ?? c.shape?.id) !== pinId))
+        setActiveObject(null)
+    }, [])
 
     // Sync background to canvas
     const handleBgChange = useCallback((color: string) => {
@@ -42,32 +59,36 @@ const CollageResizablePanel = () => {
     }, [])
 
     // Save state to history before any action
+    const isUndoRedoing = useRef(false)
+
     const saveHistory = useCallback(() => {
-        if (!fabricRef.current) return
+        if (!fabricRef.current || isUndoRedoing.current) return
         const json = JSON.stringify(fabricRef.current.toJSON())
         historyRef.current.push(json)
-        redoRef.current = [] // clear redo on new action
+        redoRef.current = []
     }, [])
 
-    // Undo
     const handleUndo = useCallback(() => {
         if (!fabricRef.current || historyRef.current.length === 0) return
+        isUndoRedoing.current = true
         const current = JSON.stringify(fabricRef.current.toJSON())
         redoRef.current.push(current)
         const previous = historyRef.current.pop()!
         fabricRef.current.loadFromJSON(JSON.parse(previous), () => {
             fabricRef.current?.renderAll()
+            isUndoRedoing.current = false
         })
     }, [])
 
-    // Redo
     const handleRedo = useCallback(() => {
         if (!fabricRef.current || redoRef.current.length === 0) return
+        isUndoRedoing.current = true
         const current = JSON.stringify(fabricRef.current.toJSON())
         historyRef.current.push(current)
         const next = redoRef.current.pop()!
         fabricRef.current.loadFromJSON(JSON.parse(next), () => {
             fabricRef.current?.renderAll()
+            isUndoRedoing.current = false
         })
     }, [])
 
@@ -82,23 +103,59 @@ const CollageResizablePanel = () => {
     }, [])
 
 
-    //add cutout to canvas
-    const addCutoutToCanvas = useCallback((imageUrl: string) => {
+    // Select object on canvas when clicked in left panel
+    const selectOnCanvas = useCallback((pinId: string | number) => {
+        const img = fabricObjectsRef.current.get(pinId)
+        if (img && fabricRef.current) {
+            fabricRef.current.setActiveObject(img)
+            fabricRef.current.renderAll()
+        }
+    }, [])
+
+    // Reorder z-index on canvas to match left panel order
+    const handleReorder = useCallback((reorderedCutouts: Cutout[]) => {
         if (!fabricRef.current) return
-        fabric.FabricImage.fromURL(imageUrl, {}).then((img) => {
+        const total = reorderedCutouts.length
+        reorderedCutouts.forEach((cutout, index) => {
+            const id = cutout.pin?.id ?? cutout.shape?.id!
+            const obj = fabricObjectsRef.current.get(id)
+            if (obj) {
+                // Reverse: first in list = top layer, last = bottom
+                fabricRef.current?.moveObjectTo(obj, total - 1 - index)
+            }
+        })
+        fabricRef.current.renderAll()
+    }, [])
+
+
+    //add cutout to canvas
+    const addCutoutToCanvas = useCallback((pin: PinItem) => {
+        if (!fabricRef.current) return
+
+        // Prevent duplicate
+        if (fabricObjectsRef.current.has(pin.id!)) return
+        setCutouts(prev => {
+            if (prev.find(c => (c.pin?.id ?? c.shape?.id) === pin.id)) return prev
+            return [...prev, { pin }]
+        })
+
+        fabric.FabricImage.fromURL(pin.img, {}).then((img) => {
             img.scaleToWidth(200)
             img.set({
                 left: Math.random() * 200 + 50,
                 top: Math.random() * 200 + 50,
+                data: { cutoutId: pin.id }
             })
+            fabricObjectsRef.current.set(pin.id!, img)
             fabricRef.current?.add(img)
+            fabricRef.current?.bringObjectToFront(img)  
             fabricRef.current?.setActiveObject(img)
             fabricRef.current?.renderAll()
         })
     }, [])
 
     return (
-        <PageWrapper className="space-y-4 pt-4">
+        <PageWrapper className="space-y-4 pt-4 h-screen ">
 
             {/* Header */}
             <div className="flex items-center justify-between sticky top-0 z-10 bg-white pb-2 border-b">
@@ -148,7 +205,7 @@ const CollageResizablePanel = () => {
             {/* Resizable Panels */}
             <ResizablePanelGroup
                 orientation="horizontal"
-                className="w-full rounded-xl border min-h-[calc(100vh-120px)]"
+                className="w-full rounded-xl border h-[calc(100vh-120px)]"
             >
                 {/* Left Panel — Cutouts + Background */}
                 <ResizablePanel defaultSize="25%">
@@ -158,6 +215,10 @@ const CollageResizablePanel = () => {
                         canvasBg={canvasBg}
                         onAddToCanvas={addCutoutToCanvas}
                         onBgChange={handleBgChange}
+                        onDeleteCutout={deleteFromCanvas}
+                        activeObject={activeObject}
+                        onSelectCutout={selectOnCanvas}   // ← new
+                        onReorder={handleReorder}          // ← now actually does something
                     />
                 </ResizablePanel>
 
@@ -173,6 +234,7 @@ const CollageResizablePanel = () => {
                         cutouts={cutouts}
                         setCutouts={setCutouts}
                         onSaveHistory={saveHistory}
+                        onDeleteCutout={deleteFromCanvas}
                     />
                 </ResizablePanel>
 
@@ -180,7 +242,11 @@ const CollageResizablePanel = () => {
 
                 {/* Right Panel — Properties */}
                 <ResizablePanel defaultSize="25%">
-                    <RightPanel />
+                    <RightPanel
+                        onAddToCanvas={addCutoutToCanvas}
+                        activeObject={activeObject}
+                        fabricRef={fabricRef}
+                    />
                 </ResizablePanel>
 
             </ResizablePanelGroup>

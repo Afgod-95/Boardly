@@ -3,9 +3,7 @@
 import { useParams } from "next/navigation"
 import { useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
-import PinCard from "@/components/pins/card/PinCard"
-import usePinsHook from "@/hooks/usePinsHook"
-import { Upload, MoreHorizontal, Link as LinkIcon, Mail, Share, Share2 } from "lucide-react"
+import {  Link as LinkIcon, Mail, Share, Share2 } from "lucide-react"
 import { FaWhatsapp, FaFacebook, } from "react-icons/fa"
 import { BsTwitterX } from "react-icons/bs";
 import { PopoverContent, PopoverTrigger } from "@radix-ui/react-popover"

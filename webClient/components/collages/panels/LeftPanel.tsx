@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
     DndContext,
     closestCenter,
@@ -12,15 +12,13 @@ import {
 import {
     arrayMove,
     SortableContext,
-    useSortable,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
-import { GripVertical, Trash2, Palette, Plus } from 'lucide-react'
+import { Palette } from 'lucide-react'
 import { Cutout } from '../types/types'
 import { CutoutItem } from '../card/CutoutItem'
-
-
+import { PinItem } from '@/types/pin'
+import { FabricObject } from 'fabric'
 
 const BACKGROUND_COLORS = [
     { label: 'Default', value: '', isDotted: true },
@@ -34,92 +32,61 @@ const BACKGROUND_COLORS = [
     { label: 'Mint', value: '#d1fae5' },
 ]
 
+const getCutoutId = (c: Cutout): string | number => c.pin?.id ?? c.shape?.id!
 
-// ── Types ──
 interface LeftPanelProps {
     cutouts: Cutout[]
     setCutouts: React.Dispatch<React.SetStateAction<Cutout[]>>
     canvasBg: string
     onBgChange: (color: string) => void
-    onAddToCanvas: (imageUrl: string) => void
+    onAddToCanvas: (pin: PinItem) => void
+    onReorder?: (cutouts: Cutout[]) => void
+    activeObject: FabricObject | null
+    onDeleteCutout: (id: string | number) => void
+    onSelectCutout: (id: string | number) => void
 }
 
-
-
-
-// ── Main LeftPanel ──
-const LeftPanel = ({ cutouts, setCutouts, canvasBg, onBgChange, onAddToCanvas }: LeftPanelProps) => {
+const LeftPanel = ({
+    activeObject, cutouts, setCutouts,
+    canvasBg, onBgChange, onAddToCanvas, onReorder,
+    onDeleteCutout, onSelectCutout,
+}: LeftPanelProps) => {
     const [showBgPicker, setShowBgPicker] = useState(false)
 
-    const sensors = useSensors(useSensor(PointerSensor))
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: { distance: 8 }
+        })
+    )
+
+    const activeCutoutId = (activeObject as any)?.data?.cutoutId ?? null
 
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event
         if (!over || active.id === over.id) return
         setCutouts((items) => {
-            const oldIndex = items.findIndex(i => i.id === active.id)
-            const newIndex = items.findIndex(i => i.id === over.id)
-            return arrayMove(items, oldIndex, newIndex)
+            const oldIndex = items.findIndex(i => getCutoutId(i) === active.id)
+            const newIndex = items.findIndex(i => getCutoutId(i) === over.id)
+            const reordered = arrayMove(items, oldIndex, newIndex)
+            onReorder?.(reordered)
+            return reordered
         })
     }
-
-    const handleDelete = (id: string) => {
-        setCutouts(prev => prev.filter(c => c.id !== id))
-    }
-
-    const handleAddCutout = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0]
-        if (!file) return
-        const url = URL.createObjectURL(file)
-        const newCutout: Cutout = {
-            id: Date.now().toString(),
-            name: file.name.replace(/\.[^/.]+$/, ''), // remove extension
-            imageUrl: url,
-        }
-        setCutouts(prev => [...prev, newCutout])
-    }
-
 
     return (
         <div className="h-full flex flex-col p-5 gap-5 overflow-y-auto">
 
             {/* Cutouts Header */}
-            <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                    <h2 className="font-bold text-sm">Cutouts</h2>
-                    <span className="text-gray-400 text-xs">
-                        Drag to reorder
-                    </span>
-                </div>
-
-                {/* Add cutout button */}
-                <label className="cursor-pointer">
-                    <div className="w-8 h-8 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
-                        <Plus size={16} className="text-gray-600" />
-                    </div>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={handleAddCutout}
-                    />
-                </label>
+            <div className="space-y-0.5">
+                <h2 className="font-bold text-sm">Cutouts</h2>
+                <span className="text-gray-400 text-xs">Drag to reorder</span>
             </div>
 
             {/* Cutout list */}
             {cutouts.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-gray-200 rounded-xl gap-2">
+                <div className="flex items-center justify-center h-32 border-2 border-dashed border-gray-200 rounded-xl">
                     <span className="text-gray-400 text-xs text-center">
-                        No cutouts yet.{' '}
-                        <label className="text-violet-600 cursor-pointer underline">
-                            Add one
-                            <input
-                                type="file"
-                                accept="image/*"
-                                className="hidden"
-                                onChange={handleAddCutout}
-                            />
-                        </label>
+                        No cutouts yet. Add pins from the right panel.
                     </span>
                 </div>
             ) : (
@@ -129,16 +96,18 @@ const LeftPanel = ({ cutouts, setCutouts, canvasBg, onBgChange, onAddToCanvas }:
                     onDragEnd={handleDragEnd}
                 >
                     <SortableContext
-                        items={cutouts.map(c => c.id)}
+                        items={cutouts.map(getCutoutId)}
                         strategy={verticalListSortingStrategy}
                     >
                         <div className="space-y-2">
                             {cutouts.map(cutout => (
                                 <CutoutItem
-                                    key={cutout.id}
+                                    key={getCutoutId(cutout)}
                                     cutout={cutout}
-                                    onDelete={handleDelete}
+                                    onDelete={onDeleteCutout}
                                     onAddToCanvas={onAddToCanvas}
+                                    onSelect={onSelectCutout}
+                                    isActive={getCutoutId(cutout) === activeCutoutId}
                                 />
                             ))}
                         </div>
@@ -154,12 +123,8 @@ const LeftPanel = ({ cutouts, setCutouts, canvasBg, onBgChange, onAddToCanvas }:
                 <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
                         <h2 className="font-bold text-sm">Background</h2>
-                        <span className="text-gray-400 text-xs">
-                            Change canvas color
-                        </span>
+                        <span className="text-gray-400 text-xs">Change canvas color</span>
                     </div>
-
-                    {/* Color preview toggle */}
                     <button
                         onClick={() => setShowBgPicker(!showBgPicker)}
                         className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-gray-200 hover:border-gray-400 transition-colors"
@@ -178,10 +143,8 @@ const LeftPanel = ({ cutouts, setCutouts, canvasBg, onBgChange, onAddToCanvas }:
                         />
                         <Palette size={14} className="text-gray-500" />
                     </button>
-
                 </div>
 
-                {/* Color swatches */}
                 {showBgPicker && (
                     <div className="grid grid-cols-4 gap-2">
                         {BACKGROUND_COLORS.map((color) => (
@@ -211,7 +174,6 @@ const LeftPanel = ({ cutouts, setCutouts, canvasBg, onBgChange, onAddToCanvas }:
                             />
                         ))}
 
-                        {/* Custom color */}
                         <label
                             className="w-full aspect-square rounded-xl border-2 border-dashed border-gray-300 hover:border-gray-500 flex items-center justify-center cursor-pointer transition-colors"
                             title="Custom color"
@@ -227,7 +189,6 @@ const LeftPanel = ({ cutouts, setCutouts, canvasBg, onBgChange, onAddToCanvas }:
                     </div>
                 )}
             </div>
-
         </div>
     )
 }

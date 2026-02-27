@@ -30,7 +30,7 @@ interface PinCardProps extends React.HTMLAttributes<HTMLDivElement> {
   showMetadata?: boolean;
   showStarIcon?: boolean;
   showPlusButton?: boolean;
-  onPlusClick?: () => void;
+  onAddToCanvasClick?: (item: PinItem) => void;
 
   // Popover Contents
   ProfilePopoverContent?: React.ComponentType<any>;
@@ -113,8 +113,10 @@ export default function PinCard({
               {/* Spreading props here makes PinOverlay clean */}
               <PinOverlay
                 pinId={item.id as number | string}
+                pin={item}  // ← add this
                 isSaved={item.isSaved}
                 profileValue={profileValue}
+                onAddToCanvasClick={() => props.onAddToCanvasClick?.(item)}
                 {...props}
               />
             </motion.div>

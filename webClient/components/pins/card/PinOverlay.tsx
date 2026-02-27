@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { updatePinSaveStatus } from "@/redux/pinSlice";
 import SaveButton from "../button/SaveButton";
+import { PinItem } from "@/types/pin";
 
 type PopoverType = "profile" | "save" | "visit" | "share" | "edit" | null;
 type SaveMode = "popover" | "instant";
@@ -22,9 +23,10 @@ interface PinOverlayProps {
   showEditButton?: boolean;
   saveMode?: SaveMode;
   pinId: string | number;
+  pin?: PinItem;
   isSaved?: boolean;
   showPlusButton?: boolean,
-  onPlusClick?: () => void;
+  onAddToCanvasClick?: (item: PinItem) => void;
   ProfilePopoverContent?: React.ComponentType<{}>;
   SavePopoverContent?: React.ComponentType<{}>;
   VisitPopoverContent?: React.ComponentType<{}>;
@@ -40,8 +42,9 @@ export default function PinOverlay({
   showEditButton = false,
   saveMode = "popover",
   showPlusButton = false,
-  onPlusClick,
+  onAddToCanvasClick,
   pinId,
+  pin,
   isSaved = false,
   ProfilePopoverContent,
   SavePopoverContent,
@@ -134,7 +137,8 @@ export default function PinOverlay({
             <motion.button
               onClick={(e) => {
                 e.stopPropagation();
-                onPlusClick?.();
+                if (pin) onAddToCanvasClick?.(pin);
+               
               }}
               whileTap={{ scale: 0.95 }}
               className="absolute bottom-2 right-2 bg-white/90 p-2.5 rounded-xl shadow-sm "
