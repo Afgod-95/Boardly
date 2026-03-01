@@ -2,50 +2,139 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { ArrowUpRight } from "lucide-react";
 
-
-// --- Bottom CTA ---
 const BottomCTA = () => (
-    <section className="py-24 px-6 bg-white overflow-hidden">
-        <div className="max-w-6xl mx-auto rounded-[3rem] p-8 md:p-12 relative">
-            <div className="grid md:grid-cols-2 gap-16 items-center">
-                
-                {/* Left: Avatar Stack Image Card */}
-                <motion.div 
-                    initial={{ opacity: 0, x: -50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    className="relative bg-slate-100 rounded-[2.5rem] p-4 hidden md:block max-w-sm mx-auto shadow-2xl"
-                >
-                    {/* Main Image */}
-                    <div className="rounded-[2rem] overflow-hidden aspect-[4/5] mb-4 relative">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&fit=crop" alt="Fashion" className="w-full h-full object-cover"/>
-                    </div>
-                    {/* 3 Avatars Row */}
-                    <div className="flex justify-center gap-4 pb-2">
-                        {[1,2,3].map((i) => (
-                            <div key={i} className="w-14 h-14 rounded-full overflow-hidden border-2 border-white shadow-md">
-                                <img src={`https://images.unsplash.com/photo-${i === 1 ? '1544005313-94ddf0286df2' : i === 2 ? '1506794778202-cad84cf45f1d' : '1507003211169-0a1dd7228f2d'}?w=100&fit=crop`} alt="User" className="w-full h-full object-cover"/>
-                            </div>
-                        ))}
-                    </div>
-                </motion.div>
+  <>
+    <style>{`
+      @import url('https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@300;400;500&display=swap');
+    `}</style>
 
-                {/* Right: Text Content */}
-                <div className="space-y-8 text-left">
-                    <h2 className="text-4xl font-extrabold text-slate-900 leading-tight">
-                        Start Building Your <br/> Inspiration Library
-                    </h2>
-                    <p className="text-slate-500 text-lg leading-relaxed">
-                        Join thousands of creators and start saving ideas today.
-                    </p>
-                    <div className="flex flex-wrap gap-4 pt-2">
-                        <Button className="bg-violet-600 hover:bg-violet-700 text-white rounded-full px-8 h-12 text-base font-semibold shadow-xl shadow-violet-200">Get Started Free</Button>
-                        <Button className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-8 h-12 text-base font-semibold shadow-xl shadow-blue-200">View Demo</Button>
-                    </div>
+    <section className="py-10 md:py-24 px-6 bg-white overflow-hidden">
+      <div className="max-w-6xl mx-auto">
+
+        {/* Outer card — dark background for contrast */}
+        <div className="relative rounded-3xl bg-slate-950 overflow-hidden">
+
+          {/* Subtle grid texture */}
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.04]"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h40v1H0zm0 20h40v1H0zM0 0v40h1V0zm20 0v40h1V0z' fill='%23ffffff'/%3E%3C/svg%3E")`,
+            }}
+          />
+
+          <div className="grid md:grid-cols-2 gap-0 items-stretch">
+
+            {/* Left: Image card */}
+            <motion.div
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              className="hidden md:flex flex-col p-8 border-r border-white/5"
+            >
+              {/* Main image */}
+              <div className="rounded-2xl overflow-hidden flex-1 relative mb-4">
+                <img
+                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&fit=crop"
+                  alt="Fashion"
+                  className="w-full h-full object-cover"
+                  style={{ minHeight: '320px' }}
+                />
+                {/* Overlay label */}
+                <div className="absolute bottom-4 left-4">
+                  <span
+                    className="text-[9px] uppercase text-white/50"
+                    style={{ fontFamily: "'Geist Mono', monospace", letterSpacing: '0.16em' }}
+                  >
+                    Inspiration Board
+                  </span>
                 </div>
-            </div>
+              </div>
+
+              {/* Avatar row */}
+              <div className="flex items-center gap-3 pt-2">
+                <div className="flex -space-x-2">
+                  {[
+                    'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&fit=crop',
+                    'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&fit=crop',
+                    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&fit=crop',
+                  ].map((src, i) => (
+                    <div key={i} className="w-8 h-8 rounded-full overflow-hidden border-2 border-slate-950 ring-1 ring-white/10">
+                      <img src={src} alt="User" className="w-full h-full object-cover" />
+                    </div>
+                  ))}
+                </div>
+                <p
+                  className="text-[11px] text-white/40"
+                  style={{ fontFamily: "'Geist Mono', monospace", letterSpacing: '0.04em' }}
+                >
+                  12,000+ creators joined
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Right: Text */}
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="flex flex-col justify-center p-10 md:p-14 space-y-8"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-5 h-px bg-white/20" />
+                <span
+                  className="uppercase text-white/30"
+                  style={{ fontFamily: "'Geist Mono', monospace", fontSize: '10px', letterSpacing: '0.18em' }}
+                >
+                  Get started today
+                </span>
+              </div>
+
+              <h2
+                className="text-[clamp(2.2rem,3.5vw,3.2rem)] font-black text-white leading-[1.05] tracking-[-0.03em]"
+                style={{ fontFamily: "'Cabinet Grotesk', sans-serif" }}
+              >
+                Start building your{" "}
+                <span
+                  className="font-normal italic text-white/50"
+                  style={{ fontFamily: "'Instrument Serif', serif" }}
+                >
+                  inspiration
+                </span>{" "}
+                library.
+              </h2>
+
+              <p
+                className="text-[15px] text-white/40 leading-[1.8] max-w-xs"
+                style={{ fontFamily: "'Cabinet Grotesk', sans-serif" }}
+              >
+                Join thousands of creators and start saving ideas today. It's free.
+              </p>
+
+              <div className="flex flex-wrap gap-3 pt-2">
+                <Button
+                  className="group bg-white hover:bg-slate-100 text-slate-900 rounded-full h-12 px-7 text-[13px] font-bold transition-all duration-200"
+                  style={{ fontFamily: "'Cabinet Grotesk', sans-serif", letterSpacing: '0.02em' }}
+                >
+                  Get Started Free
+                  <ArrowUpRight className="ml-1.5 w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="text-white/50 hover:text-white hover:bg-white/5 rounded-full h-12 px-7 text-[13px] font-semibold transition-all duration-200"
+                  style={{ fontFamily: "'Cabinet Grotesk', sans-serif", letterSpacing: '0.02em' }}
+                >
+                  View Demo
+                </Button>
+              </div>
+            </motion.div>
+
+          </div>
         </div>
+      </div>
     </section>
+  </>
 );
 
-export default BottomCTA
+export default BottomCTA;

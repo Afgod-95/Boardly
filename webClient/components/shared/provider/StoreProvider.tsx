@@ -12,9 +12,6 @@ export default function StoreProvider({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  useEffect(() => {
-    router.replace('/dashboard')
-  },[router])
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>

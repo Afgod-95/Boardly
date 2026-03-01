@@ -11,9 +11,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import Searchbar from '@/components/shared/searchbar/Searchbar'
+import { Button } from '@/components/ui/button'
+import { useRouter } from 'next/navigation'
 
 const ProfileHeader = () => {
   const [isOpen, setIsOpen] = useState(false)
+  const router = useRouter()
 
   return (
     <div className="max-w-screen-6xl mx-auto py-5">
@@ -72,7 +75,11 @@ const ProfileHeader = () => {
             <div className="flex flex-col gap-1 p-1">
               <ProfileMenuItem icon={<Settings size={18} />} label="Settings" />
               <ProfileMenuItem icon={<Repeat size={18} />} label="Switch account" />
-              <ProfileMenuItem icon={<LogOut size={18} className="text-red-500" />} label="Log out" isRed />
+              <ProfileMenuItem icon={<LogOut size={18} className="text-red-500" />} label="Log out" isRed 
+                onClick = {() => {
+                  router.push('/auth/login')
+                }}
+              />
             </div>
           </PopoverContent>
         </Popover>
@@ -82,8 +89,8 @@ const ProfileHeader = () => {
 }
 
 // Sub-component for Menu Items to keep things clean
-const ProfileMenuItem = ({ icon, label, isRed = false }: { icon: React.ReactNode, label: string, isRed?: boolean }) => (
-  <button className="flex items-center gap-3 w-full p-3 hover:bg-gray-50 rounded-xl transition-colors text-left group">
+const ProfileMenuItem = ({onClick, icon, label, isRed = false }: { onClick?: () => void, icon: React.ReactNode, label: string, isRed?: boolean }) => (
+  <button onClick={onClick} className="flex items-center gap-3 w-full p-3 hover:bg-gray-50 rounded-xl transition-colors text-left group">
     <div className="text-gray-500 group-hover:text-gray-900 transition-colors">
       {icon}
     </div>

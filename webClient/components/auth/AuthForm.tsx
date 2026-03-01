@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { User, Mail, Lock, Sparkles, } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 
 // --- Custom Icons ---
@@ -23,6 +24,11 @@ const GoogleIcon = () => (
 
 const AuthForm = ({ type }: { type: "login" | "signup" }) => {
   const isSignUp = type === "signup";
+  const router = useRouter();
+
+  const handleNavigate = () => {
+    router.push('/dashboard/')
+  }
 
   return (
     <motion.div 
@@ -30,13 +36,12 @@ const AuthForm = ({ type }: { type: "login" | "signup" }) => {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
       className={cn(
-        "flex flex-col w-full max-w-[400px] sm:w-[380px] overflow-hidden rounded-[2.5rem] bg-white shadow-2xl shadow-slate-200/50",
-        isSignUp ? "border-2 border-violet-100" : "border border-slate-100"
+        "flex flex-col w-full max-w-100 sm:w-95 overflow-hidden rounded-[2.5rem] bg-white shadow-2xl shadow-slate-200/50",
+        isSignUp ? "border border-violet-100" : "border"
       )}
     >
       {isSignUp && (
-        <div className="bg-gradient-to-br from-violet-600 to-indigo-600 p-8 text-white relative">
-          <Sparkles className="absolute top-6 right-6 w-6 h-6 opacity-40 animate-pulse" />
+        <div className="bg-linear-to-br from-violet-600 to-indigo-600 p-8 text-white relative">
           <h4 className="text-2xl font-bold tracking-tight">Join Boardly</h4>
           <p className="text-violet-100 text-sm mt-1">Discover and save your next big idea.</p>
         </div>
@@ -81,7 +86,7 @@ const AuthForm = ({ type }: { type: "login" | "signup" }) => {
           </div>
         </div>
 
-        <Button className={cn(
+        <Button onClick={handleNavigate} className={cn(
           "w-full rounded-2xl py-7 font-bold text-lg shadow-xl transition-all active:scale-[0.97]",
           isSignUp ? "bg-violet-600 hover:bg-violet-700 shadow-violet-200" : "bg-slate-900 hover:bg-slate-800"
         )}>

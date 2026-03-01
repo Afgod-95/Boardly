@@ -116,7 +116,7 @@ const SaveToBoard = ({ pin, boards, onSave, onCreateBoard, onClose }: SaveToBoar
                 e.stopPropagation();
                 handleSave();
               }}
-              className="w-full rounded-full py-6 font-semibold bg-[#E60023] hover:bg-[#AD081B] shadow-lg shadow-red-500/20"
+              className="w-full rounded-full py-6 font-semibold bg-violet-600 hover:bg-violet-700 shadow-lg shadow-violet-500/20"
             >
               Save Pin
             </Button>

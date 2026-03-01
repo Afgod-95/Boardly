@@ -72,7 +72,7 @@ const Navbar = () => {
                         <PopoverTrigger asChild>
                             <span className="cursor-pointer hover:text-violet-600 transition-colors font-semibold">Login</span>
                         </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0 rounded-2xl shadow-2xl border-none mt-4" align="end">
+                        <PopoverContent className="bg-transparent shadow-none border-none mt-4" align="end">
                             <AuthForm type="login" />
                         </PopoverContent>
                     </Popover>
@@ -83,7 +83,7 @@ const Navbar = () => {
                                 Sign Up
                             </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0 rounded-2xl shadow-2xl border-none mt-4" align="end">
+                        <PopoverContent className="bg-transparent shadow-none border-none mt-4" align="end">
                             <AuthForm type="signup" />
                         </PopoverContent>
                     </Popover>
