@@ -19,7 +19,7 @@ import AuthForm from "../auth/AuthForm";
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [activeSection, setActiveSection] = useState<string | null>(null);
-    const links = ["Home", "Features", "Explore", "How it Works", "FAQs", "Contact"];
+    const links = ["Home", "Features", "How it Works", "Explore", "FAQs", "Contact"];
 
     const router = useRouter();
 
