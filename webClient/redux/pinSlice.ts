@@ -121,13 +121,20 @@ const pinsSlice = createSlice({
                 saved: false,
                 saveCount: 0,
             }
+        },
+
+        resetPinState: (state) => {
+            state.pins = [];
+            state.selectedPin = null;
+            state.isLoading = false;
         }
     }
 })
 
 export const { 
-    setPins, 
     addPin, 
+    setPins,
+    resetPinState,
     updatePin, 
     removePin,
     updatePinSaveStatus,

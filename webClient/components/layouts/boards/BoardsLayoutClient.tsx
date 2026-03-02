@@ -14,9 +14,9 @@ const BoardsLayoutClient = ({ children }: BoardsLayoutWrapperProps) => {
         <>
 
             <BoardsLayout>
-                <PageWrapper>
-                    {children}
-                </PageWrapper>
+              
+                {children}
+             
             </BoardsLayout>
 
         </>

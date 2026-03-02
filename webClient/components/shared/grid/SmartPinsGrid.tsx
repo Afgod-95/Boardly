@@ -7,6 +7,10 @@ import { PinItem } from '@/types/pin';
 
 interface SmartPinsGridProps {
     items: PinItem[];
+    isLoading?: boolean;
+    isFetchingNextPage?: boolean;
+    hasNextPage?: boolean;
+    onLoadMore?: () => void;
     variant: PinCardVariant;
     layout?: "standard" | "compact";
     profileValue?: string;
@@ -15,11 +19,20 @@ interface SmartPinsGridProps {
     showStarButton?: boolean;
     showPlusButton?: boolean;
     onAddToCanvasClick?: (pin: PinItem) => void;
-
 }
 
-const SmartPinsGrid = ({ items, variant, layout, profileValue, showMetadata, ...restOfProps }: SmartPinsGridProps) => {
-    // Pull all the logic from your hook once
+const SmartPinsGrid = ({
+    items,
+    variant,
+    layout,
+    profileValue,
+    showMetadata,
+    isLoading,
+    isFetchingNextPage,
+    hasNextPage,
+    onLoadMore,
+    ...restOfProps
+}: SmartPinsGridProps) => {
     const {
         boards,
         handleSharePin,
@@ -37,8 +50,10 @@ const SmartPinsGrid = ({ items, variant, layout, profileValue, showMetadata, ...
             layout={layout}
             profileValue={profileValue}
             showMetadata={showMetadata}
-
-            // Inject all the logic automatically
+            isLoading={isLoading}
+            isFetchingNextPage={isFetchingNextPage}
+            hasNextPage={hasNextPage}
+            onLoadMore={onLoadMore}
             PopoverComponents={{
                 ProfilePopoverContent: ({ item }) => (
                     <SaveToBoard
@@ -65,7 +80,7 @@ const SmartPinsGrid = ({ items, variant, layout, profileValue, showMetadata, ...
                         pin={item}
                         onDelete={() => handleDeletePin(item)}
                         onSave={handleSaveChanges}
-                        onChange={() => { }} // Handle logic inside EditPin
+                        onChange={() => {}}
                     />
                 ),
                 VisitPopoverContent: ({ item, onClose }) => {

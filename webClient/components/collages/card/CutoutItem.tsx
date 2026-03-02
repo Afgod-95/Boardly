@@ -1,7 +1,7 @@
 import { useSortable } from '@dnd-kit/sortable'
 import { Trash2, Type, Square, Circle, Minus } from 'lucide-react'
 import { CSS } from '@dnd-kit/utilities'
-import { Cutout } from '../types/types'
+import { Cutout } from '../types/cutout.types'
 import { PinItem } from '@/types/pin'
 
 interface CutoutItemProps {

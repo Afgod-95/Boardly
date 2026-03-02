@@ -8,7 +8,6 @@ import { PinDetailCard } from "../card"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRouter } from "next/navigation"
 import { setSelectedPin } from "@/redux/pinSlice"
-import usePinsHook from "@/hooks/usePinsHook"
 import SuggestionIdeasCard from "../card/SuggestedIdeasCard"
 import PageWrapper from "@/components/shared/wrapper/PageWrapper"
 import Header from "@/components/shared/headers/Header"
@@ -18,6 +17,8 @@ import MobileHeaderStyle from "@/components/shared/headers/MobileHeaderStyle"
 import SmartPinsGrid from "@/components/shared/grid/SmartPinsGrid"
 import CustomButton from "@/components/shared/buttons/CustomButton"
 import { ChevronLeft } from "lucide-react"
+import { useMediaQuery } from "react-responsive"
+
 
 interface Props {
   initialPin: PinItem
@@ -26,6 +27,7 @@ interface Props {
 export default function PinDetailClient({ initialPin }: Props) {
   const { pins } = useSelector((state: RootState) => state?.pins)
   const { boards } = useSelector((state: RootState) => state?.boards)
+const isMobile = useMediaQuery({ maxWidth: 767 })
   const router = useRouter()
   const dispatch = useDispatch()
 
@@ -47,12 +49,15 @@ export default function PinDetailClient({ initialPin }: Props) {
 
   return (
     <PageWrapper>
-      <Header />
-
-      <div className="sm:flex md:hidden">
-        <MobileHeaderStyle title="Pin Details" />
-      </div>
-
+      {!isMobile ? (
+        <div>
+          <Header />
+          <CustomButton icon={<ChevronLeft className="text-foreground"/>} onClick={() => router.back()} 
+            className="absolute text-foreground left-30 top-20 z-50 bg-muted hover:bg-accent shadow-lg transition-opacity animate-fadeIn"
+          />
+        </div> )
+        : (<MobileHeaderStyle title="Pin Details" />)}
+    
       <motion.div
         className="py-5 px-4 md:px-8"
         variants={containerVariants}
@@ -72,7 +77,7 @@ export default function PinDetailClient({ initialPin }: Props) {
           )}
         </AnimatePresence>
 
-        <div className="max-w-350 mx-auto">
+        <div className="max-w-full mx-auto">
           <div className="grid lg:grid-cols-2 gap-8">
 
             {/* --- LEFT COLUMN: Detail + Masonry Subset --- */}

@@ -15,6 +15,7 @@ import BoardActions from "../popovers/boardDetailAction/DeleteAndEditBoard"
 import ShareOptions from "@/components/boards/share/ShareOptions"
 import SmartPinsGrid from "@/components/shared/grid/SmartPinsGrid"
 import CustomButton from "@/components/shared/buttons/CustomButton"
+import PageWrapper from "@/components/shared/wrapper/PageWrapper"
 
 export default function BoardDetailPage() {
   const params = useParams()
@@ -69,61 +70,62 @@ export default function BoardDetailPage() {
   return (
     <>
       {/** MOBILE SCREEN */}
-      <div className="block md:hidden">
-        <MobileHeaderStyle
-          headerRight={
-            <div className="flex items-center justify-center gap-4">
-              <ShareOptions />
-              <BoardActions />
-            </div>
-          }
-        />
-      </div>
+      <MobileHeaderStyle
+        headerRight={
+          <div className="flex items-center justify-center gap-4">
+            <ShareOptions />
+            <BoardActions />
+          </div>
+        }
+      />
       {/** desktop */}
-      <div className=" hidden md:block">
-        <CustomButton icon={<ChevronLeft />} onClick={() => router.back()} />
-      </div>
+      <PageWrapper>
+        <div className=" hidden md:block">
+          <CustomButton icon={<ChevronLeft />} onClick={() => router.back()} />
+        </div>
 
-      <div className="flex flex-row items-center justify-between py-8 gap-6">
-        <div className=" flex items-start gap-4">
-          <div className="space-y-1">
-            <h1 className="text-2xl font-bold md:text-3xl tracking-tight max-w-2xl wrap-break-words">
-              {board.title}
-            </h1>
-            <p className="font-medium text-lg text-gray-600">
-              {boardPins.length} {boardPins.length === 1 ? "pin" : "pins"}
-            </p>
+        <div className="flex flex-row items-center justify-between py-8 gap-6">
+          <div className=" flex items-start gap-4">
+            <div className="space-y-1">
+              <h1 className="text-2xl font-bold md:text-3xl tracking-tight max-w-2xl wrap-break-words">
+                {board.title}
+              </h1>
+              <p className="font-medium text-lg text-gray-600">
+                {boardPins.length} {boardPins.length === 1 ? "pin" : "pins"}
+              </p>
+            </div>
+
           </div>
 
+          {/* ACTION BUTTONS */}
+          <div className="hidden md:flex items-center gap-3">
+            {/* ---------------- SHARE BUTTON ---------------- */}
+            <ShareOptions />
+            {/* ---------------- MORE BUTTON ---------------- */}
+            <BoardActions />
+          </div>
         </div>
 
-        {/* ACTION BUTTONS */}
-        <div className="hidden md:flex items-center gap-3">
-          {/* ---------------- SHARE BUTTON ---------------- */}
-          <ShareOptions />
-          {/* ---------------- MORE BUTTON ---------------- */}
-          <BoardActions />
+        {/** more actions like organize etc */}
+        <div className="space-y-4 mb-10">
+          <InviteCollaborators />
+          <MoreActions
+            layoutValue={layoutValue}
+            setLayoutValue={() => setLayoutValue(layoutValue === 'standard' ? 'compact' : 'standard')}
+          />
         </div>
-      </div>
 
-      {/** more actions like organize etc */}
-      <div className="space-y-4 mb-10">
-        <InviteCollaborators />
-        <MoreActions
-          layoutValue={layoutValue}
-          setLayoutValue={() => setLayoutValue(layoutValue === 'standard' ? 'compact' : 'standard')}
+        {/* PIN GRID */}
+        <SmartPinsGrid
+          items={boardPins}
+          variant='pin'
+          layout={layoutValue}
+          showMetadata={true}
+          showStarIcon={true}
+          profileValue={board.title.length > 10 ? board.title.slice(0, 8) + '...' : board.title}
         />
-      </div>
+      </PageWrapper>
 
-      {/* PIN GRID */}
-      <SmartPinsGrid
-        items={boardPins}
-        variant='pin'
-        layout={layoutValue}
-        showMetadata={true}
-        showStarIcon={true}
-        profileValue={board.title.length > 10 ? board.title.slice(0, 8) + '...' : board.title}
-      />
 
     </>
   )

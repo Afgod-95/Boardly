@@ -19,6 +19,7 @@ import AuthForm from "../auth/AuthForm";
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [activeSection, setActiveSection] = useState<string | null>(null);
+    const links = ["Home", "Features", "Explore", "How it Works", "FAQs", "Contact"];
 
     const router = useRouter();
 
@@ -57,7 +58,7 @@ const Navbar = () => {
 
                 {/* Desktop Navigation */}
                 <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-                    {["Features", "Explore", "How it Works"].map((item) => (
+                    {links.map((item) => (
                         <span
                             key={item}
                             onClick={() => triggerScroll(item)}
@@ -67,10 +68,14 @@ const Navbar = () => {
                             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-violet-600 transition-all group-hover:w-full" />
                         </span>
                     ))}
-
+                    
+                </div>
+                <div className=" hidden md:flex items-center gap-5">
                     <Popover>
-                        <PopoverTrigger asChild>
-                            <span className="cursor-pointer hover:text-violet-600 transition-colors font-semibold">Login</span>
+                        <PopoverTrigger  asChild>
+                            <Button className="bg-transparent hover:bg-muted text-foreground border rounded-full px-7 h-11 font-bold hover:shadow-xl hover:shadow-background-100 transition-all hover:-translate-y-0.5 active:scale-95">
+                                Login
+                            </Button>
                         </PopoverTrigger>
                         <PopoverContent className="bg-transparent shadow-none border-none mt-4" align="end">
                             <AuthForm type="login" />
@@ -87,7 +92,8 @@ const Navbar = () => {
                             <AuthForm type="signup" />
                         </PopoverContent>
                     </Popover>
-                </div>
+                        
+                    </div>
 
                 {/* Animated Hamburger Button */}
                 <button
@@ -122,7 +128,7 @@ const Navbar = () => {
                         className="fixed inset-y-0 right-0 w-full h-screen max-w-sm bg-background shadow-2xl md:hidden z-40 p-8 flex flex-col"
                     >
                         <div className="mt-16 flex flex-col gap-8">
-                            {["Features", "Explore", "How it Works"].map((item) => (
+                            {links.map((item) => (
                                 <span
                                     key={item}
                                     onClick={() => triggerScroll(item)}

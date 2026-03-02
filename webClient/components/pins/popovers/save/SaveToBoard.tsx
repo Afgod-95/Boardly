@@ -126,7 +126,7 @@ const SaveToBoard = ({ pin, boards, onSave, onCreateBoard, onClose }: SaveToBoar
 
       {/* Dialog placed outside the Popover/Select structure */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[425px] rounded-2xl">
+        <DialogContent className="sm:max-w-106.25 rounded-2xl">
           <DialogHeader>
             <DialogTitle className="text-xl">Create new board</DialogTitle>
           </DialogHeader>

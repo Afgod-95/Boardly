@@ -11,8 +11,8 @@ import { cn } from "@/lib/utils";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { addPinToFavourite } from "@/redux/pinSlice";
-import { Toast } from "radix-ui";
 import { toast } from "sonner";
+import { PinCardSkeleton } from "./PinCardSkeleton";
 
 // We can define a type for just the popover content props to keep it clean
 interface PinCardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -42,6 +42,8 @@ interface PinCardProps extends React.HTMLAttributes<HTMLDivElement> {
   FavoritesPopoverContent?: React.ComponentType<any>;
 }
 
+
+
 export default function PinCard({
   item,
   profileValue = "Profile",
@@ -55,6 +57,7 @@ export default function PinCard({
 }: PinCardProps) {
   const [metadataOpen, setMetadataOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+
 
   // Logic: Handle Star Click (Favorite toggle)
   const handleStarClick = (e: React.MouseEvent) => {

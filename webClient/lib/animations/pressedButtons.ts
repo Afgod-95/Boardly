@@ -2,7 +2,7 @@ import { Transition } from "framer-motion"
 
 
 const transition: Transition = {
-    type: "spring", stiffness: 400, damping: 17
+    type: "spring", stiffness: 500, damping: 20
 }
 export const pressedButtons = {
     whileHover: 1.1,

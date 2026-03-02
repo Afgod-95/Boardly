@@ -31,7 +31,7 @@ const HowItWorksSection = () => (
       @import url('https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@300;400;500&display=swap');
     `}</style>
 
-    <section className="py-10 md:py-28 " id="how-it-works">
+    <section className="py-12 md:py-28 " id="how-it-works">
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Header — left-right split */}
@@ -40,10 +40,10 @@ const HowItWorksSection = () => (
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
-          className="grid lg:grid-cols-2 gap-12 items-end mb-24"
+          className="gap-5 md:gap-12 items-center mb-24"
         >
-          <div>
-            <div className="flex items-center gap-3 mb-5">
+          
+            <div className="flex items-center justify-center gap-3 mb-5">
               <div className="w-5 h-px bg-slate-400" />
               <span
                 className="uppercase text-slate-400"
@@ -53,7 +53,7 @@ const HowItWorksSection = () => (
               </span>
             </div>
             <h2
-              className="text-[clamp(2.4rem,4vw,3.5rem)] font-black text-slate-900 leading-[1.05] tracking-[-0.03em]"
+              className="text-center text-[clamp(2.4rem,4vw,3.5rem)] font-black text-slate-900 leading-[1.05] tracking-[-0.03em]"
               style={{ fontFamily: "'Cabinet Grotesk', sans-serif" }}
             >
               How Boardly{" "}
@@ -64,20 +64,20 @@ const HowItWorksSection = () => (
                 works
               </span>
             </h2>
-          </div>
           <p
-            className="text-[15px] text-slate-400 leading-[1.85] max-w-sm lg:ml-auto"
+            className="text-[15px] text-center mt-5 text-slate-400 leading-[1.85]  lg:ml-auto"
             style={{ fontFamily: "'Cabinet Grotesk', sans-serif" }}
           >
             Three simple steps from raw inspiration to a beautifully organized board.
           </p>
+
         </motion.div>
 
         {/* Timeline steps */}
         <div className="relative">
           {/* Horizontal connector line (desktop) */}
           <div
-            className="hidden md:block absolute top-[1.75rem] left-[calc(100%/6)] right-[calc(100%/6)] h-px z-0"
+            className="hidden md:block absolute top-7 left-[calc(100%/6)] right-[calc(100%/6)] h-px z-0"
             style={{ background: 'repeating-linear-gradient(90deg, #e2e8f0 0px, #e2e8f0 6px, transparent 6px, transparent 14px)' }}
           />
 
@@ -90,7 +90,7 @@ const HowItWorksSection = () => (
                 viewport={{ once: true }}
                 variants={fadeInUp}
                 transition={{ delay: i * 0.13 }}
-                className="flex flex-col gap-7"
+                className="flex flex-col gap-7 p-5 border rounded-2xl"
               >
                 {/* Icon circle on the timeline */}
                 <div className="flex items-center gap-4">

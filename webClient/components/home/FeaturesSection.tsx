@@ -37,7 +37,7 @@ const FeaturesSection = () => (
       @import url('https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@300;400;500&display=swap');
     `}</style>
 
-    <section className="py-10 md:py-2" id="features">
+    <section className="py-10 md:py-28" id="features">
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Header */}
@@ -48,7 +48,7 @@ const FeaturesSection = () => (
           variants={fadeInUp}
           className="mb-20"
         >
-          <div className="flex items-center gap-3 mb-5">
+          <div className="flex items-center justify-center gap-3 mb-5">
             <div className="w-5 h-px bg-neutral-400" />
             <span
               className="uppercase text-neutral-400"
@@ -58,7 +58,7 @@ const FeaturesSection = () => (
             </span>
           </div>
           <h2
-            className="text-[clamp(2.4rem,4vw,3.5rem)] font-black text-neutral-900 leading-[1.05] tracking-[-0.03em]"
+            className="text-center text-[clamp(2.4rem,4vw,3.5rem)] font-black  leading-[1.05] tracking-[-0.03em]"
             style={{ fontFamily: "'Cabinet Grotesk', sans-serif" }}
           >
             Everything you need to{" "}
@@ -84,10 +84,10 @@ const FeaturesSection = () => (
             <motion.div
               key={i}
               variants={fadeInUp}
-              className={`group rounded-3xl border p-10 flex flex-col justify-between gap-10 min-h-[300px] transition-all duration-300 hover:shadow-md ${
+              className={`group rounded-3xl border p-10 flex flex-col justify-between gap-10 min-h-75 transition-all duration-300 hover:shadow-2xl ${
                 i === 1
                   ? "bg-neutral-900 border-neutral-800"
-                  : "bg-white border-neutral-100 hover:border-neutral-200"
+                  : "bg-background hover:border-neutral-200"
               }`}
             >
               {/* Top row */}

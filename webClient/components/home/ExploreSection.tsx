@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { fadeInUp } from "@/utils/animations";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import CustomButton from "../shared/buttons/CustomButton";
 
 const images = [
   { src: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=500&fit=crop", label: "Interior" },
@@ -29,10 +30,10 @@ const ExploreSection = () => (
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeInUp}
-          className="flex flex-col lg:grid lg:grid-cols-2 gap-8 lg:gap-12 items-start lg:items-end mb-10 md:mb-16"
+          className="flex flex-col  gap-8 lg:gap-12 items-center mb-10 md:mb-16"
         >
           <div>
-            <div className="flex items-center gap-3 mb-4 md:mb-5">
+            <div className="flex items-center justify-center gap-3 mb-4 md:mb-5">
               <div className="w-5 h-px bg-slate-400" />
               <span
                 className="uppercase text-slate-400"
@@ -55,28 +56,26 @@ const ExploreSection = () => (
             </h2>
           </div>
 
-          <div className="lg:ml-auto space-y-5">
+          <div className="space-y-5">
             <p
-              className="text-[15px] text-slate-500 leading-[1.85] max-w-xs"
+              className="text-[15px] text-slate-500 leading-[1.85] max-w-sm text-center"
               style={{ fontFamily: "'Cabinet Grotesk', sans-serif" }}
             >
               Browse trending ideas even without signing up. No account needed to get inspired.
             </p>
-            <div className="flex flex-wrap gap-3">
-              <Button
-                className="group bg-slate-900 hover:bg-slate-700 text-white rounded-full h-11 md:h-12 px-6 md:px-7 text-[13px] font-semibold transition-all duration-200"
-                style={{ fontFamily: "'Cabinet Grotesk', sans-serif" }}
-              >
-                Browse Feed
-                <ArrowUpRight className="ml-1.5 w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </Button>
-              <Button
-                variant="outline"
+            <div className="flex flex-wrap justify-center gap-3">
+              <CustomButton
+                text="Browse Feed"
+                icon={<ArrowUpRight className="ml-2 w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />}
+                className="group bg-slate-900 hover:bg-slate-700 text-white rounded-full h-11 md:h-12 px-6 md:px-7 text-sm font-semibold tracking-wide uppercase transition-all duration-200"
+                style={{ letterSpacing: '0.08em' }}
+              />
+
+              <CustomButton
+                text="Sign up to save"
                 className="border border-slate-200 hover:border-slate-400 text-slate-600 hover:text-slate-900 rounded-full h-11 md:h-12 px-6 md:px-7 text-[13px] font-semibold bg-transparent transition-all duration-200"
-                style={{ fontFamily: "'Cabinet Grotesk', sans-serif" }}
-              >
-                Sign up to save
-              </Button>
+                style={{ letterSpacing: '0.08em' }}
+              />
             </div>
           </div>
         </motion.div>
@@ -153,9 +152,8 @@ const ExploreSection = () => (
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.08, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                 viewport={{ once: true }}
-                className={`group relative flex-1 rounded-3xl overflow-hidden shadow-[0_16px_40px_-8px_rgba(0,0,0,0.12)] ${
-                  i % 2 === 0 ? "h-72" : "h-52"
-                }`}
+                className={`group relative flex-1 rounded-3xl overflow-hidden shadow-[0_16px_40px_-8px_rgba(0,0,0,0.12)] ${i % 2 === 0 ? "h-72" : "h-52"
+                  }`}
               >
                 <img
                   src={img.src}

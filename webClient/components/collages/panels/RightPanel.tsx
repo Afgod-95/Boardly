@@ -24,8 +24,6 @@ const RightPanel = ({ onAddToCanvas, activeObject, fabricRef }: RightPanelProps)
   const [panelView, setPanelView] = useState<PanelView>({ type: 'tabs' })
   const { boards } = useSelector((state: RootState ) => state.boards)
 
-  // Inside RightPanel, above the tabs view return:
-  const isText = activeObject?.type === 'textbox' || activeObject?.type === 'text'
 
   const tabs = [
     { id: 1, name: "More Ideas", active: activeTab === 'ideas', onClick: () => setActiveTab('ideas') },
@@ -49,14 +47,11 @@ const RightPanel = ({ onAddToCanvas, activeObject, fabricRef }: RightPanelProps)
 
   // In the RightPanel return — show above tabs when text selected:
   return (
-    <div className='h-full flex flex-col'>
-      {isText && activeObject && (
-        <TextPropertiesPanel activeObject={activeObject} fabricRef={fabricRef} />
-      )}
-      <div className='p-6 space-y-4 flex-1 overflow-hidden flex flex-col'>
+    <div className='h-full flex flex-col overflow-y-hidden'>
+      <div className='p-3 md:p-6 space-y-4 flex-1 overflow-hidden flex flex-col'>
         <CollageSearchBar />
-        <TabNavigation tabs={tabs} />
-        <div className='overflow-y-scroll flex-1 px-1'>
+        <TabNavigation tabs={tabs} className='truncate' />
+        <div className='overflow-y-scroll flex-1 px-1 collage-scrollbar'>
           {activeTab === 'ideas' && <MoreIdeasTab onAddToCanvas={onAddToCanvas} />}
           {activeTab === 'boards' && (
             <YourBoardsTab onBoardClick={(id) => setPanelView({ type: 'board-detail', boardId: id })} />

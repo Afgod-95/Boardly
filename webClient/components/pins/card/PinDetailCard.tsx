@@ -33,7 +33,7 @@ const PinDetailCard = ({ pin, boards, onSave }: PinDetailCardProps) => {
   const mediaSrc = "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=800&q=80"
   return (
     <div className="relative border rounded-2xl w-full mx-auto space-y-5">
-      <div className="sticky top-20 bg-background rounded-t-2xl p-5 z-10 flex items-center md:gap-4 justify-between">
+      <div className="sticky top-15 bg-background rounded-t-2xl p-5 z-10 flex items-center md:gap-4 justify-between">
         <div className="flex items-center gap-3">
           {/* Share */}
           <Popover>

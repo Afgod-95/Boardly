@@ -11,6 +11,7 @@ import { setBoards } from "@/redux/boardSlice"
 import EditBoardModal from "@/components/boards/popovers/EditBoardModal"
 import CreateBoardModal from "../popovers/CreateBoardModal"
 import SmartPinsGrid from "@/components/shared/grid/SmartPinsGrid"
+import PageWrapper from "@/components/shared/wrapper/PageWrapper"
 
 const BoardsPageContent = () => {
     const { pins } = useSelector((state: RootState) => state.pins)
@@ -121,72 +122,75 @@ const BoardsPageContent = () => {
     }, [pins, dispatch, mockBoards])
 
     return (
-        <div className="pb-8 md:pb-8">
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 border-b pb-8">
-                {processedBoards.length > 0 ? (
-                    processedBoards.map((board) => (
-                        <BoardsCard
-                            key={board.id}
-                            board={board}
-                            previewPins={pins.filter((pin) =>
-                                board.pinIds.includes(pin.id as string | number)
-                            )}
-                            onBoardClick={() =>
-                                router.push(`/dashboard/boards/${board.id}`)
-                            }
-                            onEdit={(item) => handleEditBoardItem(item)}
-                        />
-                    ))
-                ) : (
-                    <div className="col-span-full text-center py-12 text-muted-foreground">
-                        <p className="text-lg mb-2">
-                            {activeFilter === "all" && "No boards created yet"}
-                            {activeFilter === "group" && "No saved boards yet"}
-                        </p>
-                        <p className="text-sm">
-                            {activeFilter === "all" &&
-                                "Start creating your own boards!"}
-                            {activeFilter === "group" &&
-                                "Start saving boards to see them here"}
-                        </p>
-                    </div>
-                )}
+        <PageWrapper>
+            <div className="pb-8 md:pb-8">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 border-b pb-8">
+                    {processedBoards.length > 0 ? (
+                        processedBoards.map((board) => (
+                            <BoardsCard
+                                key={board.id}
+                                board={board}
+                                previewPins={pins.filter((pin) =>
+                                    board.pinIds.includes(pin.id as string | number)
+                                )}
+                                onBoardClick={() =>
+                                    router.push(`/dashboard/boards/${board.id}`)
+                                }
+                                onEdit={(item) => handleEditBoardItem(item)}
+                            />
+                        ))
+                    ) : (
+                        <div className="col-span-full text-center py-12 text-muted-foreground">
+                            <p className="text-lg mb-2">
+                                {activeFilter === "all" && "No boards created yet"}
+                                {activeFilter === "group" && "No saved boards yet"}
+                            </p>
+                            <p className="text-sm">
+                                {activeFilter === "all" &&
+                                    "Start creating your own boards!"}
+                                {activeFilter === "group" &&
+                                    "Start saving boards to see them here"}
+                            </p>
+                        </div>
+                    )}
+
+                    {!activeFilter && (
+                        <div className="hidden md:block">
+                            <CreateBoardCard variant="create">
+                                <CreateBoardModal />
+                            </CreateBoardCard>
+                        </div>
+                    )}
+                </div>
 
                 {!activeFilter && (
-                    <div className="hidden md:block">
-                        <CreateBoardCard variant="create">
-                            <CreateBoardModal />
-                        </CreateBoardCard>
+                    <div className="space-y-4 mt-6">
+                        {/* unorganized pins */}
+                        <div className='flex items-center justify-between'>
+                            <h2 className='font-bold text-xl'>Unorganized Pins</h2>
+                            <button className='px-5 py-2 text-sm md:text-lg font-medium bg-accent rounded-full transition-colors cursor-pointer text-foreground hover:bg-muted'>
+                                Organize
+                            </button>
+                        </div>
+
+                        <SmartPinsGrid variant="board"
+                            items={pins}
+                            showMetadata={false}
+                        />
+
                     </div>
                 )}
-            </div>
 
-            {!activeFilter && (
-                <div className="space-y-4 mt-6">
-                    {/* unorganized pins */}
-                    <div className='flex items-center justify-between'>
-                        <h2 className='font-bold text-xl'>Unorganized Pins</h2>
-                        <button className='px-5 py-2 text-sm md:text-lg font-medium bg-accent rounded-full transition-colors cursor-pointer text-foreground hover:bg-muted'>
-                            Organize
-                        </button>
-                    </div>
-
-                    <SmartPinsGrid variant="board"
-                        items={pins}
-                        showMetadata={false}
+                {editingBoard && (
+                    <EditBoardModal
+                        isOpen={openBoardModal}
+                        board={editingBoard}
+                        onClose={handleCloseEditBoard}
                     />
+                )}
+            </div>
+        </PageWrapper>
 
-                </div>
-            )}
-
-            {editingBoard && (
-                <EditBoardModal
-                    isOpen={openBoardModal}
-                    board={editingBoard}
-                    onClose={handleCloseEditBoard}
-                />
-            )}
-        </div>
     )
 }
 

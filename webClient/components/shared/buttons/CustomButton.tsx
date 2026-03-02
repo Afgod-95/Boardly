@@ -6,10 +6,13 @@ import { motion } from 'framer-motion'
 import { pressedButtons } from '@/lib/animations/pressedButtons'
 
 interface CustomButtonProps {
-  icon: React.ReactNode       
+  icon?: React.ReactNode   
+  text?: string  
+  disabled?: boolean  
   onClick?: () => void         
   className?: string         
   size?: 'sm' | 'md' | 'lg'  
+  style?: React.CSSProperties
 }
 
 const sizeStyles = {
@@ -21,23 +24,33 @@ const sizeStyles = {
 const CustomButton = ({
   icon,
   onClick,
-  className,
+  disabled,
+  className = clsx(
+    'flex items-center justify-center cursor-pointer',
+    'hover:bg-muted rounded-2xl transition-colors',
+    sizeStyles
+  ),
+  style,
+  text,
   size = 'md'
 }: CustomButtonProps) => {
+
   return (
     <motion.button
+      disabled={!!disabled}
       onClick={onClick}
       className={clsx(
-        'flex items-center justify-center',
-        'cursor-pointer hover:bg-muted rounded-2xl transition-colors',
-        sizeStyles[size],
+        'flex items-center justify-center p-4',
+        'cursor-pointer rounded-2xl transition-colors',
+        [size],
         className
       )}
-      whileHover={{ scale: 1.1 }}
+      whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.9 }}
       transition={{ ...pressedButtons.transition }}
     >
-      {icon}
+      {icon} 
+      {text && <span style={style} className="text-xs font-medium ml-1">{text}</span>}
     </motion.button>
   )
 }

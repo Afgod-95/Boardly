@@ -8,8 +8,10 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { setSelectedPin } from "@/redux/pinSlice";
-import { containerVariants, itemVariants } from "@/utils/animations";
+import { itemVariants } from "@/utils/animations";
 import usePinHook from "@/components/pins/hooks/usePinHook";
+import { PinCardSkeleton } from "../card/PinCardSkeleton";
+import { useEffect, useRef } from "react";
 
 export type PinCardVariant = "feed" | "board" | "pin" | "detail" | "collage";
 
@@ -21,6 +23,11 @@ interface PinsGridProps {
   showStarIcon?: boolean;
   profileValue?: string;
   showPlusButton?: boolean;
+  isLoading?: boolean;
+  isFetchingNextPage?: boolean;
+  hasNextPage?: boolean;
+  skeletonCount?: number;
+  onLoadMore?: () => void;
   onAddToCanvasClick?: (item: PinItem) => void;
 
   /** Popover content components */
@@ -60,15 +67,39 @@ export default function PinsGrid({
   layout = "standard",
   profileValue,
   showMetadata,
+  isLoading,
+  isFetchingNextPage,
+  hasNextPage,
+  skeletonCount = 12,
+  onLoadMore,
   PopoverComponents,
   popoverComponents,
   ...props
-
 }: PinsGridProps) {
   const { hoveredItem, hoveredIndex } = usePinHook();
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
+  // ── Infinite scroll via IntersectionObserver ──────────────────────────────
+  useEffect(() => {
+    if (!onLoadMore || !hasNextPage) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isFetchingNextPage && !isLoading) {
+          onLoadMore();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+
+    const el = sentinelRef.current;
+    if (el) observer.observe(el);
+    return () => { if (el) observer.unobserve(el); };
+  }, [onLoadMore, hasNextPage, isFetchingNextPage, isLoading]);
+
+  // ── Popover destructuring ─────────────────────────────────────────────────
   const {
     ProfilePopoverContent,
     SavePopoverContent,
@@ -77,59 +108,70 @@ export default function PinsGrid({
     EditDialogContent,
   } = PopoverComponents || {};
 
-  const {
-    MoreOptionsPopoverContent,
-    FavoritesPopoverContent,
-  } = popoverComponents || {};
+  const { MoreOptionsPopoverContent, FavoritesPopoverContent } = popoverComponents || {};
 
   const showSaveButton = ["feed", "board", "pin", "detail"].includes(variant);
   const showEditButton = ["pin", "board"].includes(variant);
   const showProfileButton = variant === "feed" || variant === "board" || variant === "detail";
-
-  // Determine save mode based on variant
   const saveMode = variant === "board" ? "popover" : "instant";
+  const resolvedShowMetadata = variant === "feed" ? true : showMetadata;
 
+  // ── Column classes ────────────────────────────────────────────────────────
   const gridColumns = clsx(
     "gap-2 sm:gap-4 w-full",
-    variant === "feed" && (
-      "columns-2 sm:columns-3 md:columns-3 lg:columns-4 2xl:columns-7"
-    ),
+    variant === "feed" && "columns-2 sm:columns-3 md:columns-3 lg:columns-4 2xl:columns-7",
     variant === "board" &&
-    (layout === "standard"
-      ? "columns-2 sm:columns-3 md:columns-3 lg:columns-4 2xl:columns-7"
-      : "columns-2 sm:columns-4 md:columns-4 2xl:columns-7"),
+      (layout === "standard"
+        ? "columns-2 sm:columns-3 md:columns-3 lg:columns-4 2xl:columns-7"
+        : "columns-2 sm:columns-4 md:columns-4 2xl:columns-7"),
     variant === "pin" &&
-    (layout === "standard"
-      ? "columns-1 md:columns-3 lg:columns-5 xl:columns-4"
-      : "columns-2 md:columns-4 lg:columns- 2xl:columns-7"),
-
-    variant === 'detail' && "columns-2 md:columns-2 2xl:columns-3",
-    variant === 'collage' && "columns-2",
+      (layout === "standard"
+        ? "columns-1 md:columns-3 lg:columns-5 xl:columns-4"
+        : "columns-2 md:columns-4 lg:columns-6 2xl:columns-7"),
+    variant === "detail" && "columns-2 md:columns-2 2xl:columns-3",
+    variant === "collage" && "columns-2"
   );
 
+  // ── Initial load: show skeleton only, no motion wrapper ──────────────────
+  if (isLoading) {
+    return (
+      <div className="w-full">
+        <div className={gridColumns}>
+          {Array.from({ length: skeletonCount }, (_, i) => (
+            <div key={i} className="break-inside-avoid mb-2">
+              <PinCardSkeleton index={i} showMetadata={resolvedShowMetadata} />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // ── Main render ───────────────────────────────────────────────────────────
   return (
     <div className="w-full">
-      <motion.div
-        className={gridColumns}
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
+      <div className={gridColumns}>
         {items.map((item, index) => (
           <motion.div
             key={item.id}
             className="break-inside-avoid mb-2"
             variants={itemVariants}
+            initial="hidden"
+            animate="visible"
           >
             <PinCard
               {...props}
               showPlusButton={props.showPlusButton}
-              onAddToCanvasClick={props.onAddToCanvasClick ? () => props.onAddToCanvasClick?.(item) : undefined}
+              onAddToCanvasClick={
+                props.onAddToCanvasClick
+                  ? () => props.onAddToCanvasClick?.(item)
+                  : undefined
+              }
               item={item}
               profileValue={profileValue}
               layout={layout}
               saveMode={saveMode}
-              showMetadata={variant === "feed" ? true : showMetadata}
+              showMetadata={resolvedShowMetadata}
               isHovered={hoveredIndex === index}
               onMouseEnter={() => hoveredItem(index)}
               onMouseLeave={() => hoveredItem(null)}
@@ -140,35 +182,32 @@ export default function PinsGrid({
               showSaveButton={showSaveButton}
               showEditButton={showEditButton}
               showProfileButton={showProfileButton}
-
-              /* ================= PopoverS ================= */
+              /* ── Popovers ── */
               ProfilePopoverContent={
                 ProfilePopoverContent
-                  ? (props: any) => <ProfilePopoverContent item={item} onClose={props.onClose} />
+                  ? (p: any) => <ProfilePopoverContent item={item} onClose={p.onClose} />
                   : undefined
               }
               SavePopoverContent={
                 SavePopoverContent
-                  ? (props: any) => <SavePopoverContent item={item} onClose={props.onClose} />
+                  ? (p: any) => <SavePopoverContent item={item} onClose={p.onClose} />
                   : undefined
               }
               VisitPopoverContent={
                 VisitPopoverContent
-                  ? (props: any) => <VisitPopoverContent item={item} onClose={props.onClose} />
+                  ? (p: any) => <VisitPopoverContent item={item} onClose={p.onClose} />
                   : undefined
               }
               SharePopoverContent={
                 SharePopoverContent
-                  ? (props: any) => <SharePopoverContent item={item} onClose={props.onClose} />
+                  ? (p: any) => <SharePopoverContent item={item} onClose={p.onClose} />
                   : undefined
               }
               EditDialogContent={
                 EditDialogContent
-                  ? (props: any) => <EditDialogContent item={item} onClose={props.onClose} />
+                  ? (p: any) => <EditDialogContent item={item} onClose={p.onClose} />
                   : undefined
               }
-
-              /* ================= POPOVERS ================= */
               MoreOptionsPopoverContent={
                 MoreOptionsPopoverContent
                   ? () => <MoreOptionsPopoverContent item={item} />
@@ -182,7 +221,18 @@ export default function PinsGrid({
             />
           </motion.div>
         ))}
-      </motion.div>
+
+        {/* ── Fetch-next-page skeletons appended inline ── */}
+        {isFetchingNextPage &&
+          Array.from({ length: 6 }, (_, i) => (
+            <div key={`next-${i}`} className="break-inside-avoid mb-2">
+              <PinCardSkeleton index={i} showMetadata={resolvedShowMetadata} />
+            </div>
+          ))}
+      </div>
+
+      {/* ── Sentinel: triggers onLoadMore when scrolled into view ── */}
+      {hasNextPage && <div ref={sentinelRef} className="h-1 w-full" />}
     </div>
   );
 }

@@ -2,6 +2,7 @@
 import { ChevronLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import React from 'react'
+import CustomButton from '../buttons/CustomButton'
 
 interface HeaderStyleProps {
     headerRight?: React.ReactNode,
@@ -11,13 +12,13 @@ interface HeaderStyleProps {
 const MobileHeaderStyle = ({ headerRight, title, headerLeft }: HeaderStyleProps) => {
   const router = useRouter();
   return (
-    <div className='md:hidden bg-background flex items-center justify-between pt-4'>
+    <div className='sm:flex md:hidden sticky top-0 z-20 bg-background p-2 flex items-center justify-between'>
         {headerLeft || (
-          <div className = 'flex items-center justify-center'
+          <CustomButton 
+            icon = {<ChevronLeft />}
+            className='p-0'
             onClick={() => router.back()}
-          >
-            <ChevronLeft  size={24}/>
-          </div>
+          />
         )}
         <div className='text-xl font-bold'>{title}</div>
         {headerRight || <div />}

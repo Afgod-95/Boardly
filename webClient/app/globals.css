@@ -1,6 +1,16 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@utility animate-shimmer {
+  animation: shimmer 1.6s infinite;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -113,6 +123,16 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+.collage-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  
 }
 
 @layer base {

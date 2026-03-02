@@ -5,7 +5,7 @@ import ProfileHeader from "@/components/shared/headers/profile/ProfileHeader"
 import TabNavigation from "@/components/boards/tabs/TabNavigation"
 import { ActionButtons, CreateButton } from "@/components/shared/buttons"
 import { PinsPopoverFilter, BoardsPopoverFilter } from "@/components/boards/tabs/tabFilters"
-import { Settings2, Star, FolderOpen } from "lucide-react"
+import { Settings2, Star } from "lucide-react"
 import { usePathname, useSearchParams, useRouter } from "next/navigation"
 import PageWrapper from "@/components/shared/wrapper/PageWrapper"
 import { useDispatch, useSelector } from "react-redux"
@@ -13,8 +13,6 @@ import { RootState } from "@/redux/store"
 import { setPinsFilter, setBoardsFilter, setCollagesFilter, setBoardsSortBy } from "@/redux/boardFilterSlice"
 import { BoardsFilterView, PinsFilterView, CollagesFilterView, BoardsSortBy } from "@/types/board"
 import Profile from "./Profile"
-
-
 
 interface BoardsLayoutProps {
   children: React.ReactNode
@@ -33,10 +31,13 @@ const BoardsLayout = ({ children }: BoardsLayoutProps) => {
   const isBoardsTab = pathname === "/dashboard/boards"
   const isCollagesTab = pathname === "/dashboard/boards/collages"
 
+  // This detects if we are on /dashboard/boards/[id] or deeper
   const isDetailView =
-    (pathname.startsWith("/dashboard/boards/") && pathname !== "/dashboard/boards/pins" && pathname !== "/dashboard/boards/collages")
-    || pathname.startsWith("/dashboard/boards/pins/")
-    || pathname.startsWith("/dashboard/boards/collages/")
+    (pathname.startsWith("/dashboard/boards/") && 
+      pathname !== "/dashboard/boards/pins" && 
+      pathname !== "/dashboard/boards/collages") ||
+      pathname.startsWith("/dashboard/boards/pins/") ||
+      pathname.startsWith("/dashboard/boards/collages/")
 
   const tabs = [
     { id: 1, name: "Pins", href: "/dashboard/boards/pins" },
@@ -47,27 +48,25 @@ const BoardsLayout = ({ children }: BoardsLayoutProps) => {
   // Redux state
   const dispatch = useDispatch()
   const pinsFilter = useSelector((state: RootState) => state.boardFilter?.pins?.activeFilter)
-  const { activeFilter: boardsFilter, sortBy: boardsSortBy } = useSelector((state: RootState) => state.boardFilter?.boards || { activeFilter: null, sortBy: "A-Z" })
+  const { activeFilter: boardsFilter, sortBy: boardsSortBy } = useSelector(
+    (state: RootState) => state.boardFilter?.boards || { activeFilter: null, sortBy: "A-Z" }
+  )
   const collagesFilter = useSelector((state: RootState) => state.boardFilter?.collages?.activeFilter)
 
-  // Clear filters when switching tabs 
   useEffect(() => {
     if (isPinsTab) {
       dispatch(setBoardsFilter(null))
       dispatch(setCollagesFilter(null))
     }
-
     if (isBoardsTab) {
       dispatch(setPinsFilter(null))
       dispatch(setCollagesFilter(null))
     }
-
     if (isCollagesTab) {
       dispatch(setPinsFilter(null))
       dispatch(setBoardsFilter(null))
     }
-  }, [pathname, dispatch])
-
+  }, [pathname, dispatch, isPinsTab, isBoardsTab, isCollagesTab])
 
   // ---- Filter handlers
   const handlePinsFilterChange = (filterKey: string | null) => {
@@ -82,12 +81,11 @@ const BoardsLayout = ({ children }: BoardsLayoutProps) => {
     dispatch(setBoardsSortBy(value))
   }
 
-
   const handleCollagesFilterChange = (filterKey: string | null) => {
     dispatch(setCollagesFilter(filterKey as CollagesFilterView))
   }
 
-  // ---- Action buttons
+  // ---- Action buttons config
   const pinsActionButtons = [
     { id: 1, icon: Settings2, onClick: () => console.log("Settings clicked") },
     { id: 2, icon: Star, label: "Favorites", filterKey: "favorites" },
@@ -106,20 +104,27 @@ const BoardsLayout = ({ children }: BoardsLayoutProps) => {
 
   const handleLayoutChange = (newLayout: "compact" | "standard") => {
     const params = new URLSearchParams(searchParams.toString())
-    params.set("layout", newLayout)
+    params.set("compact", newLayout)
     router.replace(`${pathname}?${params.toString()}`)
   }
 
   return (
     <div className="space-y-4">
       <header className="sticky top-0 z-50 bg-background">
-        <div className="px-5">
-          <ProfileHeader />
-        </div>
+        
+        {/* MODIFICATION: ProfileHeader only shows if it's NOT a detail view AND it's not mobile (hidden sm:block) */}
+        {!isDetailView && (
+          <div className="px-5">
+            <ProfileHeader />
+          </div>
+        )}
+
         {!isDetailView && (
           <PageWrapper>
-            <div className='space-y-4 flex justify-center sm:justify-between md:justify-between  items-center'>
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold pb-4 hidden sm:block md:block">Your saved ideas</h2>
+            <div className='space-y-4 flex justify-center sm:justify-between items-center'>
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold pb-4 hidden sm:block">
+                Your saved ideas
+              </h2>
               <Profile />
             </div>
 
@@ -160,7 +165,6 @@ const BoardsLayout = ({ children }: BoardsLayoutProps) => {
                 </ActionButtons>
               )}
               <CreateButton />
-
             </div>
           </PageWrapper>
         )}

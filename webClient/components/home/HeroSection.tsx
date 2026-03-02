@@ -3,11 +3,16 @@
 import { motion } from "framer-motion";
 import { Button } from "../ui/button";
 import { fadeInUp } from "@/utils/animations";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Eye } from "lucide-react";
 import Link from "next/link";
+import CustomButton from "../shared/buttons/CustomButton";
+import { useRouter } from "next/navigation";
 
-const HeroSection = () => (
-  <section className="relative pt-10 md:pt-24 pb-32 px-6 overflow-hidden max-w-7xl mx-auto">
+const HeroSection = () => {
+
+  const router = useRouter();
+  return(
+    <section className="relative pt-12 md:pt-24 pb-32 px-6 overflow-hidden max-w-7xl mx-auto" id="home">
     {/* Subtle grain texture overlay */}
     <div 
       className="pointer-events-none absolute inset-0 opacity-[0.03]"
@@ -19,7 +24,7 @@ const HeroSection = () => (
     />
 
 
-    <div className="grid lg:grid-cols-2 gap-16 items-center">
+    <div className="grid lg:grid-cols-2 gap-16 items-center justify-center md:justify-start">
       {/* Left Text */}
       <motion.div
         initial="hidden"
@@ -29,7 +34,7 @@ const HeroSection = () => (
         className="space-y-10 max-w-xl"
       >
         {/* Eyebrow label */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center justify-center md:justify-start gap-3">
           <div className="w-6 h-px bg-slate-900" />
           <span 
             className="text-xs font-semibold tracking-[0.2em] uppercase text-slate-500"
@@ -40,43 +45,41 @@ const HeroSection = () => (
         </div>
 
         <h1 
-          className="text-[clamp(3rem,6vw,5.5rem)] font-black text-slate-900 leading-[1.05] tracking-[-0.03em]"
+          className="text-center md:text-start text-[clamp(3rem,6vw,5.5rem)] font-black text-slate-900 leading-[1.05] tracking-[-0.03em]"
           style={{ fontFamily: "'Playfair Display', 'Georgia', serif" }}
         >
-          Collect<br />
+          Collect
           Ideas.<br />
           <span className="italic font-normal text-slate-400">Organize</span><br />
           Inspiration.
         </h1>
 
         <p 
-          className="text-base text-slate-500 leading-[1.8] max-w-sm"
+          className="text-center md:text-start md:text-base text-slate-500 leading-[1.8] max-w-sm"
           style={{ fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.01em' }}
         >
-          A visual platform to discover, save, and organize ideas into boards — beautifully.
+          A visual platform to discover, save, and organize ideas into boards beautifully.
         </p>
 
         <div className="flex flex-wrap gap-3 pt-2">
-          <Link 
-            href={'/dashboard'}
-            className="items-center flex group bg-slate-900 hover:bg-slate-700 text-white rounded-full h-14 px-8 text-sm font-semibold tracking-wide uppercase transition-all duration-200"
+          <CustomButton
+            onClick={() => router.push('/auth/signup')}
+            text="Get Started Free"
+            icon={<ArrowUpRight className="ml-2 w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"/>}
+            className="group bg-slate-900 hover:bg-slate-700 text-white rounded-full h-14 px-8 text-sm font-semibold tracking-wide uppercase transition-all duration-200"
             style={{ letterSpacing: '0.08em' }}
-          >
-            Get Started Free
-            <ArrowUpRight className="ml-2 w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </Link>
-          <Button 
-            size="lg" 
-            variant="outline"
-            className="group border text-slate-700 hover:text-slate-900 rounded-full h-14 px-8 text-sm font-semibold tracking-wide uppercase bg-transparent transition-all duration-200"
+          />
+         
+          <CustomButton
+            text="View Demo"
+            icon={<Eye className="ml-2 w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"/>}
+            className="border items-center flex group rounded-full h-14 px-8 text-sm font-semibold tracking-wide uppercase transition-all duration-200"
             style={{ letterSpacing: '0.08em' }}
-          >
-            View Demo
-          </Button>
+          />
         </div>
 
         {/* Stats row */}
-        <div className="flex gap-8 pt-4 border-t ">
+        <div className="flex justify-center md:justify-start gap-8 pt-4 border-t ">
           {[["12k+", "Boards Created"], ["4.8", "Avg Rating"], ["Free", "To Start"]].map(([val, label]) => (
             <div key={label} className="space-y-1">
               <p 
@@ -150,6 +153,8 @@ const HeroSection = () => (
     {/* Bottom rule */}
     <div className="absolute bottom-0 left-6 right-6 h-px bg-slate-900/10" />
   </section>
-);
+  )
+  
+};
 
 export default HeroSection;
