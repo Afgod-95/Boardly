@@ -24,7 +24,7 @@ const HeroSection = () => {
     />
 
 
-    <div className="grid lg:grid-cols-2 gap-16 items-center justify-center md:justify-start">
+    <div className="grid md:grid-cols-2 gap-16 items-center justify-center md:justify-start">
       {/* Left Text */}
       <motion.div
         initial="hidden"
@@ -61,7 +61,7 @@ const HeroSection = () => {
           A visual platform to discover, save, and organize ideas into boards beautifully.
         </p>
 
-        <div className="flex flex-wrap gap-3 pt-2">
+        <div className="flex justify-center md:justify-start flex-wrap gap-3 pt-2">
           <CustomButton
             onClick={() => router.push('/auth/signup')}
             text="Get Started Free"
@@ -102,7 +102,7 @@ const HeroSection = () => {
         initial={{ opacity: 0, x: 50 }}
         whileInView={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        className="relative h-135 w-full hidden lg:grid grid-cols-3 grid-rows-3 gap-3"
+        className="relative h-135 w-full hidden md:grid grid-cols-3 grid-rows-3 gap-3"
       >
         {/* Large image — top left spanning 2×2 */}
         <div className="col-span-2 row-span-2 rounded-none overflow-hidden relative shadow-[0_32px_64px_-12px_rgba(0,0,0,0.18)]">

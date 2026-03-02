@@ -57,7 +57,7 @@ const Navbar = () => {
                 </div>
 
                 {/* Desktop Navigation */}
-                <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+                <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-slate-600">
                     {links.map((item) => (
                         <span
                             key={item}
@@ -68,11 +68,11 @@ const Navbar = () => {
                             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-violet-600 transition-all group-hover:w-full" />
                         </span>
                     ))}
-                    
+
                 </div>
-                <div className=" hidden md:flex items-center gap-5">
+                <div className=" hidden lg:flex items-center gap-5">
                     <Popover>
-                        <PopoverTrigger  asChild>
+                        <PopoverTrigger asChild>
                             <Button className="bg-transparent hover:bg-muted text-foreground border rounded-full px-7 h-11 font-bold hover:shadow-xl hover:shadow-background-100 transition-all hover:-translate-y-0.5 active:scale-95">
                                 Login
                             </Button>
@@ -92,13 +92,13 @@ const Navbar = () => {
                             <AuthForm type="signup" />
                         </PopoverContent>
                     </Popover>
-                        
-                    </div>
+
+                </div>
 
                 {/* Animated Hamburger Button */}
                 <button
                     onClick={() => setIsOpen(!isOpen)}
-                    className="md:hidden z-50 flex flex-col gap-1.5 p-2"
+                    className="lg:hidden z-50 flex flex-col gap-1.5 p-2"
                 >
                     <motion.div
                         animate={isOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
@@ -120,35 +120,39 @@ const Navbar = () => {
             {/* Mobile Sidebar/Menu */}
             <AnimatePresence>
                 {isOpen && (
-                    <motion.div
-                        initial={{ x: "100%" }}
-                        animate={{ x: 0 }}
-                        exit={{ x: "100%" }}
-                        transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className="fixed inset-y-0 right-0 w-full h-screen max-w-sm bg-background shadow-2xl md:hidden z-40 p-8 flex flex-col"
-                    >
-                        <div className="mt-16 flex flex-col gap-8">
-                            {links.map((item) => (
-                                <span
-                                    key={item}
-                                    onClick={() => triggerScroll(item)}
-                                    className="text-2xl font-bold text-slate-900"
-                                >
-                                    {item}
-                                </span>
-                            ))}
-                            <div className="h-px bg-slate-100 my-4" />
-                            <div className="flex flex-col gap-4">
-                                <Button variant="outline" 
-                                    className="rounded-2xl h-14 font-bold text-lg border-slate-200"
-                                    onClick={() => router.push('/auth/login')}
-                                >Log In</Button>
-                                <Button className="bg-violet-600 text-white rounded-2xl h-14 font-bold text-lg"
-                                    onClick={() => router.push('/auth/signup')}
-                                >Sign Up Free</Button>
+                    <>
+                        <motion.div
+                            initial={{ x: "100%" }}
+                            animate={{ x: 0 }}
+                            exit={{ x: "100%" }}
+                            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                            onClick={() => setIsOpen(false)}
+                            className="fixed inset-y-0 right-0 w-full h-screen max-w-sm bg-background shadow-2xl lg:hidden z-40 p-8 flex flex-col"
+                        >
+                            <div className="mt-16 flex flex-col gap-8">
+                                {links.map((item) => (
+                                    <span
+                                        key={item}
+                                        onClick={() => triggerScroll(item)}
+                                        className="text-2xl font-bold text-slate-900"
+                                    >
+                                        {item}
+                                    </span>
+                                ))}
+                                <div className="h-px bg-slate-100 my-4" />
+                                <div className="flex flex-col gap-4">
+                                    <Button variant="outline"
+                                        className="rounded-2xl h-14 font-bold text-lg border-slate-200"
+                                        onClick={() => router.push('/auth/login')}
+                                    >Log In</Button>
+                                    <Button className="bg-violet-600 text-white rounded-2xl h-14 font-bold text-lg"
+                                        onClick={() => router.push('/auth/signup')}
+                                    >Sign Up Free</Button>
+                                </div>
                             </div>
-                        </div>
-                    </motion.div>
+                        </motion.div>
+                    </>
+
                 )}
             </AnimatePresence>
         </motion.nav>
