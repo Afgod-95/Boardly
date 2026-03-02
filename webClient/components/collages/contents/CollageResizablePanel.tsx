@@ -265,7 +265,7 @@ const CollageResizablePanel = () => {
                         orientation="horizontal"
                         className="w-full h-full rounded-xl border"
                     >
-                        <ResizablePanel defaultSize="25%">
+                        <ResizablePanel defaultSize="20%">
                             {leftPanelContent}
                         </ResizablePanel>
 
@@ -277,7 +277,7 @@ const CollageResizablePanel = () => {
 
                         <ResizableHandle withHandle />
 
-                        <ResizablePanel defaultSize="25%">
+                        <ResizablePanel defaultSize="30%">
                             {rightPanelContent}
                         </ResizablePanel>
                     </ResizablePanelGroup>
@@ -292,7 +292,7 @@ const CollageResizablePanel = () => {
 
                         <motion.button
                             onClick={() => { setLeftOpen(true); setRightOpen(false) }}
-                            className="fixed left-0 top-1/2 -translate-y-1/2 z-30border border-l-0 rounded-r-xl shadow-lg p-2.5"
+                            className="fixed left-0 md:left-24 top-1/2 -translate-y-1/2 z-30 border border-l-0 rounded-r-xl shadow-lg p-2.5"
                             whileTap={{ scale: 0.92 }}
                         >
                             <PanelLeft size={20} className="text-gray-600" />
