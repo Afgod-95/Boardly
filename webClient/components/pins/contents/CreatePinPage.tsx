@@ -2,7 +2,6 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect, useCallback } from 'react'
 import Header from '@/components/shared/headers/Header'
-import PageWrapper from '@/components/shared/wrapper/PageWrapper'
 import { PinMediaUpload, PinFormFields, PinDraftsSidebar } from '@/components/pins/create'
 import { PinForm } from '@/types/pin'
 import clsx from 'clsx'
@@ -15,6 +14,7 @@ import CustomButton from '@/components/shared/buttons/CustomButton'
 import { ChevronLeft } from 'lucide-react'
 import { Router } from 'next/router'
 import { useRouter } from 'next/navigation'
+import { useMediaQuery } from 'react-responsive'
 
 const CreatePinPage = () => {
   const router = useRouter()
@@ -24,6 +24,8 @@ const CreatePinPage = () => {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [activeDraftId, setActiveDraftId] = useState<string | number | null>(null)
+
+  const isMobile = useMediaQuery({ maxWidth: '767px'})
 
   const [currentPin, setCurrentPin] = useState<PinForm>({
     title: '',
@@ -94,10 +96,10 @@ const CreatePinPage = () => {
   };
 
   return (
-    <PageWrapper>
-      <Header />
+    <>
+      {!isMobile && (<Header />)}
       <motion.div
-        className="flex flex-col lg:grid gap-8"
+        className="flex flex-col lg:grid gap-8 px-3 md:px-5"
         animate={{
           gridTemplateColumns: typeof window !== 'undefined' && window.innerWidth >= 1024
             ? (isCollapsed ? '1fr 72px' : '1fr 340px')
@@ -105,7 +107,7 @@ const CreatePinPage = () => {
         }}
         transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
       >
-        <div className="space-y-6 lg:space-y-8 px-4 sm:px-6 lg:px-0 relative">
+        <div className="space-y-6 lg:space-y-8 relative">
 
           {/* SKELETON SAVING OVERLAY */}
           <AnimatePresence>
@@ -125,7 +127,7 @@ const CreatePinPage = () => {
           </AnimatePresence>
 
           {/* Header */}
-          <div className="flex items-center justify-between sticky top-18 lg:top-22 bg-white/90 backdrop-blur-md z-10 py-4">
+          <div className="flex items-center justify-between sticky top-0 lg:top-22 bg-white/90 backdrop-blur-md z-10 py-4">
             <div className='flex items-center gap-4'>
               <div className='md:hidden block'>
                 <CustomButton icon = {<ChevronLeft />} 
@@ -135,7 +137,7 @@ const CreatePinPage = () => {
                   }} 
                 />
               </div>
-              <h2 className="text-xl lg:text-3xl font-black tracking-tighter text-slate-900 italic">
+              <h2 className="text-md lg:text-2xl font-black tracking-tighter text-slate-900 italic">
                 {activeDraftId ? 'Refining Draft' : 'New Inspiration'}
               </h2>
             </div>
@@ -143,8 +145,8 @@ const CreatePinPage = () => {
             <motion.button
               whileTap={{ scale: 0.92 }}
               className={cn(
-                "px-10 py-4 shadow-xl rounded-full text-white bg-violet-700",
-                "hover:bg-violet-600 font-black transition-all active:scale-95 text-sm"
+                " px-5 md:px-10 py-4 shadow-xl rounded-full text-white bg-violet-700",
+                "hover:bg-violet-600 font-medium transition-all active:scale-95 text-xs md:text-md"
               )}
             >
               Publish
@@ -152,7 +154,7 @@ const CreatePinPage = () => {
           </div>
 
           {/* Form Area */}
-          <div className="flex flex-col lg:flex-row gap-16 items-start justify-center pt-8">
+          <div className="flex px-4 flex-col lg:flex-row gap-16 items-start justify-center pt-8">
             <div className="w-full lg:w-auto lg:sticky lg:top-48">
               <PinMediaUpload
                 imageValue={currentPin.img}
@@ -181,7 +183,7 @@ const CreatePinPage = () => {
           />
         </div>
       </motion.div>
-    </PageWrapper>
+    </>
   )
 }
 

@@ -85,7 +85,9 @@ const AuthForm = ({ type }: { type: "login" | "signup" }) => {
             </div>
             <div className="relative">
               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-              <Input type="password" placeholder="Password" className="pl-11 rounded-2xl bg-slate-50 border-transparent focus:bg-white focus:border-violet-300 h-14 transition-all" />
+              <Input type="password" placeholder="Password" 
+                className="pl-11 rounded-2xl bg-slate-50 border-transparent focus:bg-white focus:border-violet-300 h-14 transition-all" 
+              />
             </div>
           </div>
         </div>
