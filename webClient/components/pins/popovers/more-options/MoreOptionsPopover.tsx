@@ -126,7 +126,7 @@ const MoreOptionsPopoverContent = ({ pin }: MoreOptionsPopoverContentProps) => {
                         </div>
                         <div className="flex flex-col items-start">
                             <span className="text-sm font-semibold text-destructive">Report Pin</span>
-                            <span className="text-[10px] text-muted-foreground leading-none mt-1">
+                            <span className="text-start text-[10px] text-muted-foreground leading-none mt-1">
                                 Against community guidelines
                             </span>
                         </div>

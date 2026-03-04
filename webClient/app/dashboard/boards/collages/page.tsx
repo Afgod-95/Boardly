@@ -1,13 +1,11 @@
-import PageWrapper from '@/components/shared/wrapper/PageWrapper'
+
 import React from 'react'
 
 const page = () => {
   return (
-    <PageWrapper>
-    
-        <h1 className="text-2xl font-bold">Collages</h1>
-      
-    </PageWrapper>
+    <div className="max-w-screen-6xl mx-auto py-5 px-3 sm:px-5">
+      <h1 className="text-2xl font-bold">Collages</h1>
+    </div>
   )
 }
 

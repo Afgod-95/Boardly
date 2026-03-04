@@ -2,10 +2,12 @@ import React, { useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { PinItem } from '@/types/pin'
 import { setSelectedPin, removePin, updatePin } from '@/redux/pinSlice'
-import { addPinToBoard, removePinFromBoard } from '@/redux/boardSlice'
+import { addPinToBoard, removePinFromBoard, createBoard } from '@/redux/boardSlice'
+import { BoardItem } from '@/types/board'
 import { AppDispatch, RootState } from '@/redux/store'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { toast } from 'sonner'
+
 
 const usePinHook = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -241,6 +243,21 @@ const usePinHook = () => {
     }
   }
 
+
+
+  //create board 
+  const handleCreateBoard = (title: string) => {
+    const newBoard: BoardItem = {
+      id: Date.now().toString(),
+      title,
+      pinIds: [],
+    }
+    dispatch(createBoard(newBoard))
+    toast.success(`Board "${title}" created!`)
+  }
+
+
+
   // ---------------------------
   // SAVE PIN (when changes are made)
   // ---------------------------
@@ -304,6 +321,7 @@ const usePinHook = () => {
     handlePinUpdate,
     handleSaveChanges,
     handleToggleFavorite,
+    handleCreateBoard,
   }
 }
 

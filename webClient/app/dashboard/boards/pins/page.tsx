@@ -1,9 +1,8 @@
-import PinsPageContent from '@/components/boards/contents/PinsPageContent'
-import React from 'react'
+import PinsPage from '@/components/boards/contents/PinsPage'
 
 const page = () => {
   return (
-    <PinsPageContent />
+    <PinsPage />
   )
 }
 

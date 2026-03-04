@@ -50,7 +50,7 @@ const ActionButtons = ({
         const isActive = button.filterKey === activeFilterKey
 
 
-        const buttonClasses = `cursor-pointer p-3 md:py-3 md:px-5 rounded-xl flex items-center gap-2 transition-all ${
+        const buttonClasses = `text-xs md:text-sm cursor-pointer p-3 md:py-3 md:px-5 rounded-xl flex items-center gap-2 transition-all ${
           isActive
             ? 'bg-foreground text-background shadow-md scale-95'
             : 'bg-muted text-foreground hover:bg-secondary'

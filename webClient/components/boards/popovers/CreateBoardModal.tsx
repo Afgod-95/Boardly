@@ -62,7 +62,7 @@ const CreateBoardModal = () => {
           <Textarea
             id="description"
             placeholder="What's this board about?"
-            className="min-h-[80px] rounded-xl border-muted-foreground/20 resize-none"
+            className="min-h-20 rounded-xl border-muted-foreground/20 resize-none"
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           />

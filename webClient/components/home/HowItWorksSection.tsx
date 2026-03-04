@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Upload, Layout, Compass } from "lucide-react";
-import { fadeInUp } from "@/utils/animations";
+import { fadeInUp } from "@/utils/animations/animations";
 
 const steps = [
   {
@@ -42,28 +42,28 @@ const HowItWorksSection = () => (
           variants={fadeInUp}
           className="gap-5 md:gap-12 items-center mb-24"
         >
-          
-            <div className="flex items-center justify-center gap-3 mb-5">
-              <div className="w-5 h-px bg-slate-400" />
-              <span
-                className="uppercase text-slate-400"
-                style={{ fontFamily: "'Geist Mono', monospace", fontSize: '10px', letterSpacing: '0.18em' }}
-              >
-                The process
-              </span>
-            </div>
-            <h2
-              className="text-center text-[clamp(2.4rem,4vw,3.5rem)] font-black text-slate-900 leading-[1.05] tracking-[-0.03em]"
-              style={{ fontFamily: "'Cabinet Grotesk', sans-serif" }}
+
+          <div className="flex items-center justify-center gap-3 mb-5">
+            <div className="w-5 h-px bg-slate-400" />
+            <span
+              className="uppercase text-slate-400"
+              style={{ fontFamily: "'Geist Mono', monospace", fontSize: '10px', letterSpacing: '0.18em' }}
             >
-              How Boardly{" "}
-              <span
-                className="font-normal italic text-slate-400"
-                style={{ fontFamily: "'Instrument Serif', serif" }}
-              >
-                works
-              </span>
-            </h2>
+              The process
+            </span>
+          </div>
+          <h2
+            className="text-center text-[clamp(2.4rem,4vw,3.5rem)] font-black text-slate-900 leading-[1.05] tracking-[-0.03em]"
+            style={{ fontFamily: "'Cabinet Grotesk', sans-serif" }}
+          >
+            How Boardly{" "}
+            <span
+              className="font-normal italic text-slate-400"
+              style={{ fontFamily: "'Instrument Serif', serif" }}
+            >
+              works
+            </span>
+          </h2>
           <p
             className="text-[15px] text-center mt-5 text-slate-400 leading-[1.85]  lg:ml-auto"
             style={{ fontFamily: "'Cabinet Grotesk', sans-serif" }}

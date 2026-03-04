@@ -1,0 +1,6 @@
+export { AppearanceTab } from "./AppearanceTab"
+export { AccountTab } from "./AccountTab"
+export { NotificationsTab } from "./NotificationsTab"
+export { BillingTab } from "./BillingTab"
+export { SecurityTab } from "./SecurityTab"
+export { ProfileTab } from "./ProfileTab"

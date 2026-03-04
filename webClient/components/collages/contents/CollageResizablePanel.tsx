@@ -11,14 +11,12 @@ import {
 } from "@/components/ui/resizable"
 import { MoreHorizontal, Undo, Redo, ChevronLeft, PanelLeft, PanelRight, X } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { pressedButtons } from "@/lib/animations/pressedButtons"
-import clsx from "clsx"
 import { CenterPanel, LeftPanel, RightPanel } from "../panels"
 import { Cutout } from '../types/cutout.types'
 import { PinItem } from '@/types/pin'
 import { useMediaQuery } from 'react-responsive'
 import Drawer from '../drawer/Drawer'
-import { ToolBtn } from '../toolbar'
+import { ToolBtn } from '../panels/center/toolbar'
 
 
 
@@ -225,31 +223,32 @@ const CollageResizablePanel = () => {
         <div className="flex flex-col h-screen overflow-hidden">
 
             {/* Header */}
-            <div className="flex items-center justify-between pr-4 md:px-4 py-2 shrink-0 z-10">
-                <div className="flex items-center gap-0 md:gap-2">
+            <div className="pl-3 sm:pl-0 flex items-center justify-between pr-4 md:px-4 py-2 shrink-0 z-10">
+                <div className="flex items-center gap-3">
                     <CustomButton onClick={() => router.back()} icon={<ChevronLeft size={20} />} />
                     <span className="text-sm sm:text-lg font-bold sm:truncate">Create Collage</span>
                 </div>
 
                 <div className="flex items-center gap-2 sm:gap-4">
                     <div className="flex items-center gap-1 sm:gap-2">
-                        <ToolBtn 
+                        <ToolBtn
                             label='Undo'
                             onClick={handleUndo} icon={<Undo size={18} />}
                         />
-                        <ToolBtn 
+                        <ToolBtn
                             label='Redo'
                             onClick={handleRedo} icon={<Redo size={18} />}
                         />
                     </div>
                     <div className="flex items-center gap-1 sm:gap-2">
                         <CustomButton
+                            className='border-0 hover:bg-muted'
                             onClick={() => console.log('more options')}
                             icon={<MoreHorizontal size={18} />}
                         />
-                        <CustomButton 
+                        <CustomButton
                             onClick={handleSave}
-                            className="px-4 text-white sm:px-6 py-2 rounded-full bg-violet-700 hover:bg-violet-800 cursor-pointer transition-colors"
+                            className="text-white sm:px-6 rounded-full bg-violet-700 hover:bg-violet-800 cursor-pointer transition-colors"
                             text='Next'
                         />
                     </div>
@@ -292,7 +291,7 @@ const CollageResizablePanel = () => {
 
                         <motion.button
                             onClick={() => { setLeftOpen(true); setRightOpen(false) }}
-                            className="fixed left-0 md:left-24 top-1/2 -translate-y-1/2 z-30 border border-l-0 rounded-r-xl shadow-lg p-2.5"
+                            className="fixed left-0 sm:left-24 top-1/2 -translate-y-1/2 z-30 border border-l-0 rounded-r-xl shadow-lg p-2.5"
                             whileTap={{ scale: 0.92 }}
                         >
                             <PanelLeft size={20} className="text-gray-600" />

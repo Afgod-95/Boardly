@@ -7,7 +7,6 @@ import { ActionButtons, CreateButton } from "@/components/shared/buttons"
 import { PinsPopoverFilter, BoardsPopoverFilter } from "@/components/boards/tabs/tabFilters"
 import { Settings2, Star } from "lucide-react"
 import { usePathname, useSearchParams, useRouter } from "next/navigation"
-import PageWrapper from "@/components/shared/wrapper/PageWrapper"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
 import { setPinsFilter, setBoardsFilter, setCollagesFilter, setBoardsSortBy } from "@/redux/boardFilterSlice"
@@ -110,17 +109,16 @@ const BoardsLayout = ({ children }: BoardsLayoutProps) => {
 
   return (
     <div className="space-y-4">
-      <header className="sticky top-0 z-50 bg-background">
-        
-        {/* MODIFICATION: ProfileHeader only shows if it's NOT a detail view AND it's not mobile (hidden sm:block) */}
+      <header className="sticky top-0 z-20 bg-background">
+      
         {!isDetailView && (
-          <div className="px-5">
+          <div className="">
             <ProfileHeader />
           </div>
         )}
 
         {!isDetailView && (
-          <PageWrapper>
+          <div className="max-w-screen-6xl mx-auto px-3 sm:px-5">
             <div className='space-y-4 flex justify-center sm:justify-between items-center'>
               <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold pb-4 hidden sm:block">
                 Your saved ideas
@@ -166,7 +164,7 @@ const BoardsLayout = ({ children }: BoardsLayoutProps) => {
               )}
               <CreateButton />
             </div>
-          </PageWrapper>
+          </div>
         )}
       </header>
 

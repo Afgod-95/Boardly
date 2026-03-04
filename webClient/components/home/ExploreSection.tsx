@@ -1,15 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { fadeInUp } from "@/utils/animations";
+import { fadeInUp } from "@/utils/animations/animations";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CustomButton from "../shared/buttons/CustomButton";
 
 const images = [
   { src: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=500&fit=crop", label: "Interior" },
-  { src: "https://images.unsplash.com/photo-1616486029423-aaa478965c96?w=500&fit=crop", label: "Minimal" },
-  { src: "https://images.unsplash.com/photo-1596462502278-27bfdd403348?w=500&fit=crop", label: "Beauty" },
+  { src: "https://images.unsplash.com/photo-1505968409348-bd000797c92e?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?w=500&fit=crop", label: "Minimal" },
+  { src: "https://images.unsplash.com/photo-1526779259212-939e64788e3c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZnJlZSUyMGltYWdlc3xlbnwwfHwwfHx8MA%3D%3D?w=500&fit=crop", label: "Beauty" },
   { src: "https://images.unsplash.com/photo-1618220179428-22790b461013?w=500&fit=crop", label: "Design" },
 ];
 

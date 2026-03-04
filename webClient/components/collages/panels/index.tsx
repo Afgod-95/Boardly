@@ -1,5 +1,6 @@
-export { default as RightPanel } from './RightPanel'
-export { default as LeftPanel } from './LeftPanel'
-export { default as CenterPanel } from './CenterPanel'
-export { default as TextPropertiesPanel } from './TextPropertiesPanel'
+export { default as RightPanel } from './right/RightPanel'
+export { default as LeftPanel } from './left/LeftPanel'
+export { default as CenterPanel } from './center/CenterPanel'
+export { default as TextPropertiesPanel } from './center/TextPropertiesPanel'
+
 

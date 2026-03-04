@@ -50,14 +50,14 @@ export function InviteCollaborators() {
             <DialogTrigger>
               <div className="flex items-center gap-2 cursor-pointer group outline-none">
                 <AvatarGroup className="grayscale group-hover:grayscale-0 transition-all">
-                  <Avatar className="border-2 border-background rounded-full  w-10 h-10 md:w-12 md:-12">
+                  <Avatar className="border-2 border-background rounded-full  w-10 h-10 md:w-12 md:h-12">
                     <AvatarImage
                       src="https://github.com/evilrabbit.png"
                       alt="@evilrabbit"
                     />
                     <AvatarFallback>ER</AvatarFallback>
                   </Avatar>
-                  <AvatarGroupCount className="bg-gray-100 text-gray-600 border-2 border-background w-10 h-10 rounded-full md:w-12 md:-12">
+                  <AvatarGroupCount className="bg-gray-100 text-gray-600 border-2 border-background rounded-full w-10 h-10 md:w-12 md:h-12">
                     <PlusIcon size={16} />
                   </AvatarGroupCount>
                 </AvatarGroup>
@@ -71,7 +71,7 @@ export function InviteCollaborators() {
         </Tooltip>
 
         <DialogScrollableContent dialogTitle="Invite collaborators">
-          <div className="flex flex-col gap-6 py-2">
+          <div className="flex flex-col gap-6 py-2 w-full">
 
             {/* 1. SEARCH SECTION */}
             <div className="relative">
@@ -99,7 +99,7 @@ export function InviteCollaborators() {
               </div>
               <button
                 onClick={handleCopyLink}
-                className="bg-gray-200 hover:bg-gray-300 text-sm font-bold py-2 px-4 rounded-full transition-colors active:scale-95"
+                className="bg-gray-200 hover:bg-gray-300 text-xs font-bold py-2 px-4 rounded-full transition-colors active:scale-95"
               >
                 {copied ? <Check size={18} className="text-green-600" /> : "Copy link"}
               </button>

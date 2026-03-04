@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Card } from '@/components/ui/card'
-import { Search, ChevronDown, Settings, LogOut, User, Repeat } from 'lucide-react'
+import { Search, ChevronDown, Settings, LogOut, User, Repeat, ChevronLeft } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -12,18 +12,35 @@ import {
 } from "@/components/ui/popover"
 import Searchbar from '@/components/shared/searchbar/Searchbar'
 import { Button } from '@/components/ui/button'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { useMediaQuery } from 'react-responsive'
 
 const ProfileHeader = () => {
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
+  const pathname = usePathname()
+  const isMobile = useMediaQuery({ maxWidth: 768 })
+
+  const showBackButton = (
+    pathname === '/dashboard/settings' && isMobile
+  )
+
+
 
   return (
-    <div className="max-w-screen-6xl mx-auto py-5">
+    <div className="max-w-screen-6xl mx-auto py-5 px-3 sm:px-5">
       <div className="flex items-center justify-between w-full gap-4">
-
-        {/* 1. SEARCH BAR - Motion enabled */}
-        <Searchbar />
+        <div className='flex-1 flex items-center gap-3'>
+          {showBackButton && (
+          <motion.div whileTap={{ scale: 0.9 }}
+            onClick={() => router.back()}
+          >
+            <ChevronLeft />
+          </motion.div>)}
+          {/* 1. SEARCH BAR - Motion enabled */}
+          <Searchbar />
+        </div>
+        
 
         {/* 2. PROFILE POPOVER */}
         <Popover onOpenChange={setIsOpen}>
@@ -57,7 +74,7 @@ const ProfileHeader = () => {
           >
             <div className="p-4">
               <p className="text-xs font-semibold text-gray-500 mb-3">Currently in</p>
-              <div className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-2xl transition-colors cursor-pointer">
+              <div className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-2xl transition-colors">
                 <Avatar className="h-14 w-14">
                   <AvatarImage src="https://github.com/shadcn.png" />
                   <AvatarFallback>GD</AvatarFallback>
@@ -70,10 +87,10 @@ const ProfileHeader = () => {
               </div>
             </div>
 
-            <div className="h-[1px] bg-gray-100 my-2 mx-2" />
+            <div className="h-px bg-gray-100 my-2 mx-2" />
 
             <div className="flex flex-col gap-1 p-1">
-              <ProfileMenuItem icon={<Settings size={18} />} label="Settings" />
+              {pathname != '/dashboard/settings' && <ProfileMenuItem icon={<User size={18} />} label="Settings" onClick={() => router.push('/dashboard/settings')} />}
               <ProfileMenuItem icon={<Repeat size={18} />} label="Switch account" />
               <ProfileMenuItem icon={<LogOut size={18} className="text-red-500" />} label="Log out" isRed 
                 onClick = {() => {
@@ -90,7 +107,7 @@ const ProfileHeader = () => {
 
 // Sub-component for Menu Items to keep things clean
 const ProfileMenuItem = ({onClick, icon, label, isRed = false }: { onClick?: () => void, icon: React.ReactNode, label: string, isRed?: boolean }) => (
-  <button onClick={onClick} className="flex items-center gap-3 w-full p-3 hover:bg-gray-50 rounded-xl transition-colors text-left group">
+  <button onClick={onClick} className="flex items-center gap-3 w-full p-3 hover:bg-gray-50 rounded-xl transition-colors cursor-pointer text-left group">
     <div className="text-gray-500 group-hover:text-gray-900 transition-colors">
       {icon}
     </div>

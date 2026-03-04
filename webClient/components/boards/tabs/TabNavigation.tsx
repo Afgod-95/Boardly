@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import clsx from "clsx"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useRef, useEffect } from "react"
 
 interface TabItem {
   id: number | string
@@ -19,51 +20,63 @@ interface TabNavigationProps {
   layoutid?: string
 }
 
-const TabNavigation = ({ tabs, className = "" , layoutid }: TabNavigationProps) => {
+const TabNavigation = ({ tabs, className = "", layoutid }: TabNavigationProps) => {
   const pathname = usePathname()
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const tabRefs = useRef<Record<string | number, HTMLElement | null>>({})
+
+  // Scroll the active tab into centre whenever it changes
+  useEffect(() => {
+    const activeTab = tabs.find(tab =>
+      tab.active !== undefined ? tab.active : pathname === tab.href
+    )
+    if (!activeTab) return
+
+    const el = tabRefs.current[activeTab.id]
+    const container = scrollRef.current
+    if (!el || !container) return
+
+    const target = el.offsetLeft - container.offsetWidth / 2 + el.offsetWidth / 2
+    container.scrollTo({ left: target, behavior: "smooth" })
+  }, [tabs, pathname])
 
   return (
     <div
+      ref={scrollRef}
       className={clsx(
-        "relative flex items-center gap-2 p-1 rounded-full w-fit",
+        "relative overflow-x-auto scrollbar-hide flex items-center gap-2 p-1 w-full",
         className
       )}
     >
       {tabs.map((tab) => {
-        // Use explicit active state if provided, otherwise check pathname
-        const isActive = tab.active !== undefined 
-          ? tab.active 
+        const isActive = tab.active !== undefined
+          ? tab.active
           : pathname === tab.href
 
-        // Render button if onClick is provided, otherwise render Link
-        const Component: any = tab.onClick ? 'button' : Link
+        const Component: any = tab.onClick ? "button" : Link
         const componentProps = tab.onClick
-          ? { onClick: tab.onClick, type: 'button' as const }
-          : { href: tab.href || '#' }
+          ? { onClick: tab.onClick, type: "button" as const }
+          : { href: tab.href || "#" }
 
         return (
           <Component
             key={tab.id}
+            ref={(el: HTMLElement | null) => { tabRefs.current[tab.id] = el }}
             {...componentProps}
             className={clsx(
-              "relative z-10 px-5 py-2 text-sm md:text-lg font-medium rounded-full transition-colors cursor-pointer",
+              "relative z-10 px-5 py-2 text-sm sm:text-sm rounded-full transition-colors cursor-pointer whitespace-nowrap",
               isActive
-                ? "text-background"
-                : "text-foreground hover:bg-accent"
+                ? "text-indigo-700"
+                : "text-slate-500 hover:text-slate-700 hover:bg-muted"
             )}
           >
             {isActive && (
               <motion.span
-               layoutId={layoutid || 'active-pill'}
-                className="absolute inset-0 bg-foreground rounded-full z-[-1]"
-                transition={{
-                  type: "spring",
-                  stiffness: 500,
-                  damping: 30,
-                }}
+                layoutId={layoutid || "active-pill"}
+                className="absolute inset-0 bg-indigo-100 rounded-full z-[-1]"
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
               />
             )}
-
             {tab.name}
           </Component>
         )

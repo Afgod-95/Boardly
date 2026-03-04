@@ -3,15 +3,15 @@
 import React from 'react'
 import clsx from 'clsx'
 import { motion } from 'framer-motion'
-import { pressedButtons } from '@/lib/animations/pressedButtons'
+import { pressedButtons } from '@/utils/animations/animations'
 
 interface CustomButtonProps {
-  icon?: React.ReactNode   
-  text?: string  
-  disabled?: boolean  
-  onClick?: () => void         
-  className?: string         
-  size?: 'sm' | 'md' | 'lg'  
+  icon?: React.ReactNode
+  text?: string
+  disabled?: boolean
+  onClick?: () => void
+  className?: string
+  size?: 'sm' | 'md' | 'lg'
   style?: React.CSSProperties
 }
 
@@ -40,7 +40,7 @@ const CustomButton = ({
       disabled={!!disabled}
       onClick={onClick}
       className={clsx(
-        'flex items-center justify-center p-4',
+        'flex items-center justify-center border p-4',
         'cursor-pointer rounded-2xl transition-colors',
         [size],
         className
@@ -49,8 +49,8 @@ const CustomButton = ({
       whileTap={{ scale: 0.9 }}
       transition={{ ...pressedButtons.transition }}
     >
-      {icon} 
-      {text && <span style={style} className="text-xs font-medium ml-1">{text}</span>}
+      {icon}
+      {text && <span style={style} className="text-sm md:text- font-medium ml-1">{text}</span>}
     </motion.button>
   )
 }

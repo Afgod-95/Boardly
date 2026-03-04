@@ -72,12 +72,16 @@ const AuthForm = ({ type }: { type: "login" | "signup" }) => {
             {isSignUp && (
               <div className="relative">
                 <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <Input placeholder="Username" className="pl-11 rounded-2xl bg-slate-50 border-transparent focus:bg-white focus:border-violet-300 h-14 transition-all" />
+                <Input placeholder="Username"
+                  className="pl-11 rounded-2xl bg-slate-50 border-transparent focus:bg-white focus:border-violet-300 h-14 transition-all" 
+                />
               </div>
             )}
             <div className="relative">
               <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-              <Input type="email" placeholder="Email" className="pl-11 rounded-2xl bg-slate-50 border-transparent focus:bg-white focus:border-violet-300 h-14 transition-all" />
+              <Input type="email" placeholder="Email" 
+                className="pl-11 rounded-2xl bg-slate-50 border-transparent focus:bg-white focus:border-violet-300 h-14 transition-all" 
+              />
             </div>
             <div className="relative">
               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />

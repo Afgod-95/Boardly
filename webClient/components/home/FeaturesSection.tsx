@@ -2,7 +2,7 @@
 
 import { Upload, Globe, Bookmark } from "lucide-react";
 import { motion } from "framer-motion";
-import { fadeInUp, staggerContainer } from "@/utils/animations";
+import { fadeInUp, staggerContainer } from "@/utils/animations/animations";
 
 const features = [
   {
@@ -84,19 +84,17 @@ const FeaturesSection = () => (
             <motion.div
               key={i}
               variants={fadeInUp}
-              className={`group rounded-3xl border p-10 flex flex-col justify-between gap-10 min-h-75 transition-all duration-300 hover:shadow-2xl ${
-                i === 1
-                  ? "bg-neutral-900 border-neutral-800"
-                  : "bg-background hover:border-neutral-200"
-              }`}
+              className={`group rounded-3xl border p-10 flex flex-col justify-between gap-10 min-h-75 transition-all duration-300 hover:shadow-2xl ${i === 1
+                ? "bg-neutral-900 border-neutral-800"
+                : "bg-background hover:border-neutral-200"
+                }`}
             >
               {/* Top row */}
               <div className="flex items-start justify-between">
-                <div className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-colors duration-300 ${
-                  i === 1
-                    ? "bg-white/10 text-white/70 group-hover:bg-white/15"
-                    : "bg-neutral-100 text-neutral-600 group-hover:bg-neutral-200"
-                }`}>
+                <div className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-colors duration-300 ${i === 1
+                  ? "bg-white/10 text-white/70 group-hover:bg-white/15"
+                  : "bg-neutral-100 text-neutral-600 group-hover:bg-neutral-200"
+                  }`}>
                   {f.icon}
                 </div>
                 <span

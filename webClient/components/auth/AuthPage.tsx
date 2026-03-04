@@ -117,13 +117,13 @@ export default function AuthPage({ mode = 'signup' }: Props) {
               className="space-y-1"
             >
               <h1
-                className="text-[clamp(2.8rem,4vw,4rem)] font-black text-neutral-900 leading-[1.0] tracking-[-0.04em]"
+                className="text-[clamp(2.8rem,4vw,4rem)] font-black text-neutral-900 leading-none tracking-[-0.04em]"
                 style={{ fontFamily: "'Cabinet Grotesk', sans-serif" }}
               >
                 Get your next
               </h1>
               <h1
-                className="text-[clamp(2.8rem,4vw,4rem)] font-normal italic text-neutral-400 leading-[1.0] tracking-[-0.02em]"
+                className="text-[clamp(2.8rem,4vw,4rem)] font-normal italic text-neutral-400 leading-none tracking-[-0.02em]"
                 style={{ fontFamily: "'Instrument Serif', serif" }}
               >
                 great idea.

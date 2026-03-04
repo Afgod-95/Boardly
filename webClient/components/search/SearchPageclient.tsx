@@ -85,10 +85,10 @@ const SearchPageClient = () => {
 
                     <Button
                         variant="outline"
-                        className="hidden md:flex items-center gap-2 rounded-full h-12 px-6 border-gray-200 hover:bg-gray-50 transition-all active:scale-95"
+                        className="flex items-center gap-2 rounded-full h-12 px-6 border-gray-200 hover:bg-gray-50 transition-all active:scale-95"
                     >
                         <SlidersHorizontal size={18} />
-                        <span className="font-bold">Filters</span>
+                        <span className="font-bold hidden md:block">Filters</span>
                     </Button>
                 </div>
             </div>

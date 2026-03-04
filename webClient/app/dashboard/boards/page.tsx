@@ -1,11 +1,11 @@
 
 
-import BoardsPageContent from "@/components/boards/contents/BoardsPageContent.tsx";
+import BoardsPage from "@/components/boards/contents/BoardsPage.tsx";
 
 const page = () => {
   return (
     
-   <BoardsPageContent />
+   <BoardsPage />
      
   );
 };

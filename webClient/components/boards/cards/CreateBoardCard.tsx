@@ -5,7 +5,7 @@ import Image from "next/image"
 import { Plus } from "lucide-react"
 import { PinItem } from "@/types/pin"
 import { motion } from "framer-motion"
-import { itemVariants } from '@/utils/animations'
+import { itemVariants } from '@/utils/animations/animations'
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { DialogScrollableContent } from "@/components/shared/dialogs/DialogsScrollableContent"
 import CreateBoardModal from "../popovers/CreateBoardModal"
