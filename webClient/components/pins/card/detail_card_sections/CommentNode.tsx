@@ -98,7 +98,12 @@ export const CommentNode = ({ comment, depth, onLike, onDelete, onEdit, onReply 
                             <textarea
                                 value={editText}
                                 onChange={e => setEditText(e.target.value)}
-                                onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submitEdit() } if (e.key === "Escape") setEditing(false) }}
+                                onKeyDown={e => { 
+                                    if (e.key === "Enter" && !e.shiftKey) { 
+                                        e.preventDefault(); 
+                                        submitEdit() 
+                                    } if (e.key === "Escape") setEditing(false) 
+                                }}
                                 autoFocus
                                 rows={2}
                                 className="w-full resize-none rounded-xl border bg-muted/50 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-violet-500 transition-all"
@@ -108,7 +113,9 @@ export const CommentNode = ({ comment, depth, onLike, onDelete, onEdit, onReply 
                                     className="px-3 py-1 rounded-lg bg-violet-600 text-white text-xs font-medium hover:bg-violet-700 transition-colors">
                                     Save
                                 </button>
-                                <button onClick={() => { setEditing(false); setEditText(comment.body) }}
+                                <button onClick={() => { 
+                                    setEditing(false); 
+                                    setEditText(comment.body) }}
                                     className="px-3 py-1 rounded-lg text-xs font-medium text-muted-foreground hover:bg-accent transition-colors">
                                     Cancel
                                 </button>

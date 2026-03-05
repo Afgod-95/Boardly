@@ -62,7 +62,7 @@ const PinsFeed = () => {
         <>
 
             <>
-                <div className="w-full pb-24">
+                <div className="w-full pt-5 pb-24">
                     <SmartPinsGrid variant="feed"
                         isLoading={isLoading}
                         items={pins}

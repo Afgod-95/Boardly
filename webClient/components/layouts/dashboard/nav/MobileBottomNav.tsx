@@ -14,9 +14,6 @@ import { NotificationPanel } from "@/components/notification/panel/NotificationP
 import { DashboardLink } from "./dashboard_link_types"
 import { MOBILE_IDS, NAV_LINKS } from "./shared_constants"
 
-
-// ─── Mobile Bottom Navigator ──────────────────────────────────────────────────
-
 interface MobileBottomNavProps {
     isNotifOpen: boolean
     onToggleNotif: () => void
@@ -33,8 +30,11 @@ export const MobileBottomNav = ({ isNotifOpen, onToggleNotif, NOTIF_UNREAD_COUNT
     const mobileLinks = MOBILE_IDS.map(id => NAV_LINKS.find(l => l.id === id)!)
 
     const showBottomBar = [
-        "/dashboard", "/dashboard/search", "/dashboard/boards",
+        "/dashboard",
+        "/dashboard/search",
+        "/dashboard/boards",
         "/dashboard/collages",
+        "/dashboard/profile",   // ← profile pages show the bottom nav
     ].some(route => {
         if (route === "/dashboard") return pathname === "/dashboard"
         return pathname.startsWith(route)
@@ -64,7 +64,7 @@ export const MobileBottomNav = ({ isNotifOpen, onToggleNotif, NOTIF_UNREAD_COUNT
                 : pathname.startsWith(link.href)
             : link.id === 4 && isNotifOpen
 
-        const Icon = isActive ? link.activeIcon! : link.icon
+        const Icon = isActive && link.activeIcon ? link.activeIcon : link.icon
 
         const pill = (
             <motion.span
@@ -149,4 +149,3 @@ export const MobileBottomNav = ({ isNotifOpen, onToggleNotif, NOTIF_UNREAD_COUNT
         </>
     )
 }
-

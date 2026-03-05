@@ -157,7 +157,7 @@ const PinDetailCard = ({ pin, boards, onSave }: PinDetailCardProps) => {
         {/* ── Author ── */}
         {pin.author?.profileUrl ? (
           <Link
-            href={`/dashboard/users/${pin.author.profileUrl}`}
+            href={`/dashboard/profile/${pin.author.profileUrl}`}
             className="items-center flex gap-2 px-5 hover:opacity-80 transition-opacity cursor-pointer group"
           >
             <Avatar className="w-10 h-10 ring-2 ring-transparent group-hover:ring-violet-500 transition-all">

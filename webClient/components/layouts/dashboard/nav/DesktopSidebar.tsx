@@ -38,7 +38,7 @@ export const DesktopSidebar = ({ isNotifOpen, onToggleNotif, NOTIF_UNREAD_COUNT 
     //   - the user is on the notifications page
     const notifIsActive = isNotifOpen || isOnNotifPage
 
-    const activeId = isCreateOpen ? 5 : notifIsActive ? 4 : routeActiveId
+    const activeId = isCreateOpen ? 4 : notifIsActive ? 3 : routeActiveId
 
     const topLinks = DESKTOP_TOP_IDS.map(id => NAV_LINKS.find(l => l.id === id)!)
     const bottomLinks = DESKTOP_BOTTOM_IDS.map(id => NAV_LINKS.find(l => l.id === id)!)
@@ -68,7 +68,7 @@ export const DesktopSidebar = ({ isNotifOpen, onToggleNotif, NOTIF_UNREAD_COUNT 
         )
 
         // ── Notifications ──
-        if (id === 4) {
+        if (id === 3) {
             return (
                 <Tooltip key={id}>
                     <TooltipTrigger asChild>
@@ -98,7 +98,7 @@ export const DesktopSidebar = ({ isNotifOpen, onToggleNotif, NOTIF_UNREAD_COUNT 
         }
 
         // ── Create popover ──
-        if (id === 5) {
+        if (id === 4) {
             return (
                 <Popover
                     key={id}

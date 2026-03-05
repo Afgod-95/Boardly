@@ -50,7 +50,7 @@ const BottomSheet = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={closeOnBackdropClick ? onClose : undefined}
-            className="block md:hidden fixed inset-0 bg-black/5 z-60 backdrop-blur-xs "
+            className="block md:hidden h-screen fixed inset-0 bg-black/5 z-80 backdrop-blur-xs "
           />
 
           {/* Bottom Sheet */}
@@ -67,7 +67,7 @@ const BottomSheet = ({
             dragConstraints={{ top: 0, bottom: 0 }}
             dragElastic={{ top: 0, bottom: 0.5 }}
             onDragEnd={handleDragEnd}
-            className="block md:hidden fixed bottom-0 left-0 right-0 bg-background rounded-t-3xl shadow-2xl z-70"
+            className="block md:hidden fixed bottom-0 left-0 right-0 bg-background rounded-t-3xl shadow-2xl z-90"
             style={{ maxHeight }}
           >
             {/* Drag Handle */}

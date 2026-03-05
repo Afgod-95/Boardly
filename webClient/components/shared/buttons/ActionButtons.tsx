@@ -44,7 +44,7 @@ const ActionButtons = ({
   }
 
   return (
-    <div className={`flex items-center md:gap-4 gap-3 my-5 ${className}`}>
+    <div className={`flex items-center md:gap-4 gap-3 mt-3 pb-4 ${className}`}>
       {buttons.map((button) => {
         const Icon = button.icon
         const isActive = button.filterKey === activeFilterKey
