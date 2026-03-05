@@ -28,7 +28,7 @@ const Drawer: React.FC<DrawerProps> = ({ open, onClose, side, children }) => (
                     key="drawer"
                     className={clsx(
                         'fixed top-0 bottom-0 z-50 max-w-lg shadow-2xl bg-background overflow-y-hidden',
-                        side === 'left' ? 'left-0' : 'right-0'
+                        side === 'left' ? 'left-0' : 'right-0 w-80'
                     )}
                     initial={{ x: side === 'left' ? '-100%' : '100%' }}
                     animate={{ x: 0 }}

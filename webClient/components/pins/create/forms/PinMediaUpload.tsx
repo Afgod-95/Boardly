@@ -95,7 +95,7 @@ const PinMediaUpload = ({
               height={1000}
               className="object-cover transition-transform duration-700 group-hover:scale-105"
               priority
-              // 2. CRITICAL: unoptimized allows blob URLs to render correctly
+             
               unoptimized
             />
           ) : mediaType === 'video' && videoValue ? (

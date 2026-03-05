@@ -7,7 +7,7 @@ import { PinItem } from '@/types/pin'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/redux/store'
 import fabric from 'fabric'
-import TextPropertiesPanel from '../center/TextPropertiesPanel'
+import TextPropertiesPanel from '../center/toolbar/TextPropertiesPanel'
 
 type PanelView =
   | { type: 'tabs' }

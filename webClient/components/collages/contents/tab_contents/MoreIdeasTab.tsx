@@ -9,6 +9,7 @@ const MoreIdeasTab = ({ onAddToCanvas }: { onAddToCanvas: (pin: PinItem) => void
       items={pins}
       variant='collage'
       showPlusButton={true}
+      onClick={(pin) => onAddToCanvas(pin)}
       onAddToCanvasClick={(pin) => onAddToCanvas(pin)}
     />
   )

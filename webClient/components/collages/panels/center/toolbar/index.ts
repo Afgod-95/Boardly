@@ -1,4 +1,6 @@
 export { default as FillPicker } from "./FillPicker"
 export { default as ToolBtn } from "./ToolBtn"
-export { Divider } from "./Divider"
+export { Divider, VSeparator } from "./Separator"
 export { default as TextToolbar } from "./TextToolbar"
+export { default as MobileBottomBar } from "./MobileBottomBar"
+export { default as DesktopSidebar } from "./DesktopSidebar"
