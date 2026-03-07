@@ -1,6 +1,6 @@
 
 
-import BoardsPage from "@/components/boards/contents/BoardsPage.tsx";
+import BoardsPage from "@/components/boards/contents/BoardsPage";
 
 const page = () => {
   return (
