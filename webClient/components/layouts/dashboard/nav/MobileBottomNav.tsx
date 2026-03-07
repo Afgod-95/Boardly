@@ -81,13 +81,13 @@ export const MobileBottomNav = ({ isNotifOpen, onToggleNotif, NOTIF_UNREAD_COUNT
         )
 
         // Notifications
-        if (link.id === 4) {
+        if (link.id === 3) {
             return (
                 <button key={link.id} onClick={onToggleNotif} className="relative flex items-center justify-center h-12 w-12">
                     {isActive && pill}
                     {iconEl}
                     {NOTIF_UNREAD_COUNT > 0 && !isActive && (
-                        <span className="absolute top-1.5 right-1.5 z-20 min-w-[15px] h-[15px] px-1 rounded-full bg-violet-600 text-white text-[8px] font-bold flex items-center justify-center leading-none">
+                        <span className="absolute top-1.5 right-1.5 z-20 min-w-3.75 h-3.75 px-1 rounded-full bg-violet-600 text-white text-[8px] font-bold flex items-center justify-center leading-none">
                             {NOTIF_UNREAD_COUNT > 9 ? "9+" : NOTIF_UNREAD_COUNT}
                         </span>
                     )}
@@ -144,7 +144,7 @@ export const MobileBottomNav = ({ isNotifOpen, onToggleNotif, NOTIF_UNREAD_COUNT
             </BottomSheet>
 
             <Dialog open={openBoardDialog} onOpenChange={setOpenBoardDialog}>
-                <CreateBoardModal />
+                <CreateBoardModal onClose={() => setOpenBoardDialog(false)} />
             </Dialog>
         </>
     )

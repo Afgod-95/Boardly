@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Upload, Layout, Compass } from "lucide-react";
 import { fadeInUp } from "@/utils/animations/animations";
+import SectionWrapper from "./shared/SectionWrapper";
 
 const steps = [
   {
@@ -31,8 +32,7 @@ const HowItWorksSection = () => (
       @import url('https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@300;400;500&display=swap');
     `}</style>
 
-    <section className="py-12 md:py-28 " id="how-it-works">
-      <div className="max-w-7xl mx-auto px-6">
+    <SectionWrapper id="how-it-works">
 
         {/* Header — left-right split */}
         <motion.div
@@ -124,9 +124,7 @@ const HowItWorksSection = () => (
             ))}
           </div>
         </div>
-
-      </div>
-    </section>
+    </SectionWrapper>
   </>
 );
 

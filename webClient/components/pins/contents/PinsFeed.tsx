@@ -1,52 +1,42 @@
 "use client"
+
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
-import { setPins, setSelectedPin, setLoading, resetPinState } from "@/redux/pinSlice";
+import { setPins, setLoading } from "@/redux/pinSlice";
 import { PinItem } from "@/types/pin";
 import SmartPinsGrid from "@/components/shared/grid/SmartPinsGrid";
-
-//import usePinsHook from "@/hooks/usePinsHook";
 
 const PinsFeed = () => {
     const dispatch = useDispatch<AppDispatch>();
     const { pins, isLoading } = useSelector((state: RootState) => state.pins);
-    const { boards } = useSelector((state: RootState) => state.boards);
-
-    //get profile value 
-    const profileValue = pins.map((pin) => boards.find((b) => b.id === pin?.boardId)?.title);
 
     const fetchPins = async () => {
-             try {
-                 dispatch(setLoading(true));
-                 const res = await fetch("/api/pins", {
-                     next: { revalidate: 60 },
-                     cache: 'force-cache'
-                 }); 
- 
-                 if (!res.ok) throw new Error("Failed to fetch pins");
- 
-                 const data: PinItem[] = await res.json();
-                 dispatch(setPins(data));
-             } catch (error) {
-                 console.error("Error fetching pins:", error);
-             }
+        try {
+            dispatch(setLoading(true));
+            const res = await fetch("/api/pins", {
+                next: { revalidate: 60 },
+                cache: 'force-cache'
+            });
 
-             finally {
-                    dispatch(setLoading(false));
-             }
-         };
-   
-     useEffect(() => {
-        
-         fetchPins();
-         
-     }, [dispatch]);
- 
+            if (!res.ok) throw new Error("Failed to fetch pins");
 
+            const data: PinItem[] = await res.json();
+            dispatch(setPins(data));
+        } catch (error) {
+            console.error("Error fetching pins:", error);
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
 
-    console.log("Pins in feed:", JSON.stringify(pins, null, 2));
+    useEffect(() => {
+        // Only fetch if we have no pins yet — avoids re-fetching on every mount
+        // and wiping any isSaved/boardId state the user has set this session
+        if (pins.length === 0) {
+            fetchPins();
+        }
+    }, []);  // empty deps — run once on mount only
 
     if (pins.length === 0 && !isLoading) {
         return (
@@ -54,25 +44,18 @@ const PinsFeed = () => {
                 <h2 className="text-2xl font-semibold mb-4">No Pins Found</h2>
                 <p className="text-gray-500">Try creating a new pin or check back later.</p>
             </div>
-        )
+        );
     }
 
-
     return (
-        <>
-
-            <>
-                <div className="w-full pt-5 pb-24">
-                    <SmartPinsGrid variant="feed"
-                        isLoading={isLoading}
-                        items={pins}
-                        profileValue={profileValue?.[0]}
-                        showMetadata={true}
-                    />
-                </div>
-            </>
-
-        </>
+        <div className="w-full pt-5 pb-24">
+            <SmartPinsGrid
+                variant="feed"
+                isLoading={isLoading}
+                items={pins}
+                showMetadata={true}
+            />
+        </div>
     );
 };
 

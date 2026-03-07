@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation"
 import { INITIAL_PROFILE } from "@/components/settings/constants/setting.constants"
 import CustomButton from "../shared/buttons/CustomButton"
 import SmartPinsGrid from "../shared/grid/SmartPinsGrid"
-import usePinHook from "../pins/hooks/usePinHook"
+import usePinHook from "../hooks/usePinHook"
 
 // ── Animations ────────────────────────────────────────────────────────────────
 const stagger: Variants = {
@@ -77,7 +77,7 @@ export default function ProfilePage({ username }: { username: string }) {
             <div className="relative h-40 sm:h-56 lg:h-64 w-full overflow-hidden bg-neutral-100">
                 {coverPhoto
                     ? <img src={coverPhoto} alt="Cover" className="w-full h-full object-cover" />
-                    : <div className="w-full h-full bg-gradient-to-br from-neutral-100 to-neutral-200" />
+                    : <div className="w-full h-full bg-linear-to-br from-neutral-100 to-neutral-200" />
                 }
             </div>
 

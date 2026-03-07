@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react'
 import PinsGrid, { PinCardVariant } from '../../pins/grid/PinsGrid'
-import usePinHook from "@/components/pins/hooks/usePinHook"
+import usePinHook from "@/components/hooks/usePinHook"
 import { SaveToBoard, SharePin, EditPin, MoreOptionsContent } from "@/components/pins/popovers"
 import { CreateBoardDialog } from "@/components/shared/dialogs/CreateBoardDialog"
 import { PinItem } from '@/types/pin'
@@ -9,13 +9,13 @@ import { PinItem } from '@/types/pin'
 interface SmartPinsGridProps {
     items: PinItem[]
     isLoading?: boolean
+    isOrganized?: boolean
     isFetchingNextPage?: boolean
     hasNextPage?: boolean
     onLoadMore?: () => void
     onClick?: (pin: PinItem) => void
     variant: PinCardVariant
     layout?: "standard" | "compact"
-    profileValue?: string
     showMetadata?: boolean
     showStarIcon?: boolean
     showStarButton?: boolean
@@ -27,7 +27,6 @@ const SmartPinsGrid = ({
     items,
     variant,
     layout,
-    profileValue,
     showMetadata,
     isLoading,
     isFetchingNextPage,
@@ -40,9 +39,9 @@ const SmartPinsGrid = ({
         boards,
         handleSharePin,
         handleSavePinToBoard,
-        handleVisitSite,
         handleDeletePin,
         handleSaveChanges,
+        getBoardTitleForPin,
         handleCreateBoard, // add this to usePinHook if not already there
     } = usePinHook()
 
@@ -53,11 +52,12 @@ const SmartPinsGrid = ({
         <>
             <PinsGrid
                 {...restOfProps}
+               
                 onClick={onClick}
                 items={items}
                 variant={variant}
                 layout={layout}
-                profileValue={profileValue}
+                profileValue={getBoardTitleForPin}
                 showMetadata={showMetadata}
                 isLoading={isLoading}
                 isFetchingNextPage={isFetchingNextPage}
@@ -73,15 +73,7 @@ const SmartPinsGrid = ({
                             onCreateBoardOpenChange={setIsCreateBoardOpen}
                         />
                     ),
-                    SavePopoverContent: ({ item }) => (
-                        <SaveToBoard
-                            pin={item}
-                            boards={boards}
-                            onSave={(boardId) => handleSavePinToBoard(item, boardId)}
-                            isCreateBoardOpen={isCreateBoardOpen}
-                            onCreateBoardOpenChange={setIsCreateBoardOpen}
-                        />
-                    ),
+                   
                     SharePopoverContent: ({ item }) => (
                         <SharePin
                             pin={item}
@@ -96,11 +88,6 @@ const SmartPinsGrid = ({
                             onChange={() => { }}
                         />
                     ),
-                    VisitPopoverContent: ({ item, onClose }) => {
-                        handleVisitSite(item)
-                        onClose()
-                        return null
-                    },
                 }}
                 popoverComponents={{
                     MoreOptionsPopoverContent: ({ item }) => (

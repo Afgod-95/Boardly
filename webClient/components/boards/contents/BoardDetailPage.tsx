@@ -3,7 +3,7 @@
 import { useParams, useRouter } from "next/navigation"
 import { useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
-import { ChevronLeft, Mail } from "lucide-react"
+import { ChevronLeft, Mail, ImagePlus, Sparkles } from "lucide-react"
 import { FaWhatsapp, FaFacebook } from "react-icons/fa"
 import { BsTwitterX } from "react-icons/bs"
 import { toast } from "sonner"
@@ -30,10 +30,6 @@ export default function BoardDetailPage() {
 
   const board = boards.find((b) => b.id === id)
 
-  // ── Scroll listener ───────────────────────────────────────────────────────
-  // Empty dep array: register once on mount, clean up on unmount.
-  // Never put state values in the dep array of a scroll handler —
-  // it re-registers the listener on every state change and leaks listeners.
   useEffect(() => {
     const handleScroll = () => setShowBoardTitle(window.scrollY > 0)
     window.addEventListener("scroll", handleScroll, { passive: true })
@@ -53,33 +49,6 @@ export default function BoardDetailPage() {
     navigator.clipboard.writeText(text)
     toast.success("Link copied to clipboard!")
   }
-
-  const socialLinks = [
-    {
-      name: "WhatsApp",
-      icon: FaWhatsapp,
-      color: "bg-[#25D366]",
-      href: `https://wa.me/?text=${encodeURIComponent(shareTitle + " " + shareUrl)}`,
-    },
-    {
-      name: "Facebook",
-      icon: FaFacebook,
-      color: "bg-[#1877F2]",
-      href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
-    },
-    {
-      name: "X",
-      icon: BsTwitterX,
-      color: "bg-[#1DA1F2]",
-      href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTitle)}&url=${encodeURIComponent(shareUrl)}`,
-    },
-    {
-      name: "Email",
-      icon: Mail,
-      color: "bg-gray-500",
-      href: `mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(shareUrl)}`,
-    },
-  ]
 
   const animatedTitle = (
     <AnimatePresence initial={false}>
@@ -110,8 +79,8 @@ export default function BoardDetailPage() {
         }
       />
 
-      {/* Desktop */}
       <div className="px-3 md:px-5">
+        {/* Board header — always visible */}
         <div className="flex flex-row items-center justify-between py-8 gap-6">
           <div className="flex items-start gap-4">
             <div className="hidden md:block">
@@ -134,7 +103,9 @@ export default function BoardDetailPage() {
         </div>
 
         <div className="space-y-4 mb-10">
-          <InviteCollaborators />
+          <InviteCollaborators
+            board={board}
+          />
           <MoreActions
             layoutValue={layoutValue}
             setLayoutValue={() =>
@@ -143,16 +114,52 @@ export default function BoardDetailPage() {
           />
         </div>
 
-        <SmartPinsGrid
-          items={boardPins}
-          variant="pin"
-          layout={layoutValue}
-          showMetadata={true}
-          showStarIcon={true}
-          profileValue={
-            board.title.length > 10 ? board.title.slice(0, 8) + "..." : board.title
-          }
-        />
+        {/* ── Empty state: this board has no pins yet ── */}
+        {boardPins.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="flex flex-col items-center justify-center text-center px-6 py-20 rounded-3xl bg-gradient-to-b from-muted/40 to-transparent"
+          >
+            {/* Icon */}
+            <div className="relative mb-6">
+              <div className="w-20 h-20 rounded-3xl bg-muted flex items-center justify-center shadow-inner">
+                <ImagePlus size={30} className="text-muted-foreground/50" strokeWidth={1.5} />
+              </div>
+              <motion.div
+                animate={{ y: [0, -4, 0] }}
+                transition={{ repeat: Infinity, duration: 2.4, ease: "easeInOut" }}
+                className="absolute -top-2 -right-2 w-8 h-8 rounded-xl bg-background shadow-md flex items-center justify-center border border-border"
+              >
+                <Sparkles size={14} className="text-amber-400" />
+              </motion.div>
+            </div>
+
+            <h3 className="text-xl font-bold text-foreground mb-2">
+              This board is empty
+            </h3>
+            <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
+              Save pins to <span className="font-semibold text-foreground">{board.title}</span> and they'll show up here. Start exploring to find ideas worth keeping.
+            </p>
+
+            <motion.button
+              whileTap={{ scale: 0.97 }}
+              onClick={() => router.push("/dashboard")}
+              className="mt-6 px-6 py-2.5 rounded-full bg-foreground text-background text-sm font-semibold hover:opacity-80 transition-opacity"
+            >
+              Find pins to add
+            </motion.button>
+          </motion.div>
+        ) : (
+          <SmartPinsGrid
+            items={boardPins}
+            variant="pin"
+            layout={layoutValue}
+            showMetadata={true}
+            showStarIcon={true}
+          />
+        )}
       </div>
     </>
   )

@@ -28,8 +28,8 @@ export const DesktopSidebar = ({ isNotifOpen, onToggleNotif, NOTIF_UNREAD_COUNT 
     const routeActiveId = (() => {
         if (pathname === "/dashboard") return 0
         if (pathname.startsWith("/dashboard/boards")) return 1
-        if (pathname.startsWith("/dashboard/create")) return 5
-        if (pathname.startsWith("/dashboard/settings")) return 6
+        if (pathname.startsWith("/dashboard/create")) return 4
+        if (pathname.startsWith("/dashboard/settings")) return 5
         return null
     })()
 
@@ -134,7 +134,7 @@ export const DesktopSidebar = ({ isNotifOpen, onToggleNotif, NOTIF_UNREAD_COUNT 
                                                         <p className="text-sm text-muted-foreground">{item.description}</p>
                                                     </div>
                                                 </DialogTrigger>
-                                                <CreateBoardModal />
+                                                <CreateBoardModal onClose={() => setIsCreateOpen(false)} />
                                             </Dialog>
                                         ) : (
                                             <Link href={item.href as string} onClick={() => setIsCreateOpen(false)}

@@ -5,14 +5,10 @@ import { useDispatch } from 'react-redux';
 import { updatePinSaveStatus } from '@/redux/pinSlice';
 import { cn } from '@/lib/utils';
 
-type SaveMode = 'instant' | 'popover'
-type DialogType = "profile" | "save" | "visit" | "share" | "edit" | null;
 
 interface SaveButtonProps {
     pinId: string | number,
     isSaved: boolean,
-    saveMode?: SaveMode;
-    setOpenPopover?: (dialog: DialogType) => void;
 }
 
 interface Particle {
@@ -20,7 +16,7 @@ interface Particle {
 }
 
 
-const SaveButton = ({ pinId, isSaved, saveMode, setOpenPopover }: SaveButtonProps) => {
+const SaveButton = ({ pinId, isSaved }: SaveButtonProps) => {
     const dispatch = useDispatch();
     const [particles, setParticles] = useState<Particle[]>([]);
 
@@ -38,12 +34,7 @@ const SaveButton = ({ pinId, isSaved, saveMode, setOpenPopover }: SaveButtonProp
 
     const handleSaveClick = (e: React.MouseEvent) => {
         e.stopPropagation();
-
-        if (saveMode === "instant") {
-            triggerSave();
-        } else {
-            setOpenPopover?.("save");
-        }
+        triggerSave()
     };
     return (
         <div className="relative">
@@ -52,15 +43,13 @@ const SaveButton = ({ pinId, isSaved, saveMode, setOpenPopover }: SaveButtonProp
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className={cn(
-                    "rounded-full px-4 py-2 font-semibold",
-                    saveMode === 'instant' ? (isSaved
+                    "rounded-full px-3 py-2 font-semibold",
+                    isSaved
                         ? "bg-black text-white"
-                        : "bg-violet-700 text-white hover:bg-violet-800")
                         : "bg-violet-700 text-white hover:bg-violet-800"
-
                 )}
             >
-                {saveMode === "instant" ? (isSaved ? "Saved" : "Save") : "Save"}
+                {isSaved === true ? "Saved" : "Save"}
             </motion.button>
 
             {/* PARTICLES */}

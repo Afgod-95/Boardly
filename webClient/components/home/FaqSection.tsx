@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus } from "lucide-react";
+import SectionWrapper from "./shared/SectionWrapper";
 
 const faqs = [
   {
@@ -40,10 +41,8 @@ const FAQSection = () => {
         @import url('https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@300;400;500&display=swap');
       `}</style>
 
-      <section className="py-10 md:py-28" id="faqs">
-        <div className="max-w-7xl mx-auto px-6">
-
-          <div className="w-full grid lg:grid-cols-[1fr_1.6fr] gap-20 items-center md:items-start justify-start">
+      <SectionWrapper id="faqs">
+              <div className="w-full grid lg:grid-cols-[1fr_1.6fr] gap-20 items-center md:items-start justify-start">
 
             {/* Left — sticky header */}
             <div className="lg:sticky lg:top-24 space-y-6">
@@ -155,8 +154,7 @@ const FAQSection = () => {
             </div>
 
           </div>
-        </div>
-      </section>
+      </SectionWrapper>
     </>
   );
 };

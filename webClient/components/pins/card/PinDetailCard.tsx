@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { ChevronDown, MoreHorizontal, Upload } from "lucide-react"
+import { ChevronDown, MoreHorizontal, Share2, Upload } from "lucide-react"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { motion } from "framer-motion"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -11,10 +11,10 @@ import Link from "next/link"
 import { MoreOptionsContent, SaveToBoard, SharePin } from "../popovers"
 import { CreateBoardDialog } from "@/components/shared/dialogs/CreateBoardDialog"
 import { BoardItem } from "@/types/board"
-import SaveButton from "../button/SaveButton"
+import SaveButton from "./overlay/button/SaveButton"
 import { toast } from "sonner"
 import { CommentSection } from "./detail_card_sections/CommentSection"
-import usePinHook from "../hooks/usePinHook"
+import usePinHook from "../../hooks/usePinHook"
 
 interface PinDetailCardProps {
   pin: PinItem
@@ -43,7 +43,7 @@ const PinDetailCard = ({ pin, boards, onSave }: PinDetailCardProps) => {
               <PopoverTrigger asChild>
                 <motion.div whileTap={{ scale: 0.92 }}
                   className="bg-accent hover:bg-muted p-3 rounded-xl cursor-pointer">
-                  <Upload size={20} />
+                  <Share2 size={20} />
                 </motion.div>
               </PopoverTrigger>
               <PopoverContent side="bottom" align="start" className="w-sm rounded-2xl shadow-lg" sideOffset={8} forceMount>

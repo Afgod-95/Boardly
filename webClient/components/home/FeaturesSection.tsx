@@ -3,6 +3,7 @@
 import { Upload, Globe, Bookmark } from "lucide-react";
 import { motion } from "framer-motion";
 import { fadeInUp, staggerContainer } from "@/utils/animations/animations";
+import SectionWrapper from "./shared/SectionWrapper";
 
 const features = [
   {
@@ -37,8 +38,7 @@ const FeaturesSection = () => (
       @import url('https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@300;400;500&display=swap');
     `}</style>
 
-    <section className="py-10 md:py-28" id="features">
-      <div className="max-w-7xl mx-auto px-6">
+  <SectionWrapper id="features">
 
         {/* Header */}
         <motion.div
@@ -58,7 +58,7 @@ const FeaturesSection = () => (
             </span>
           </div>
           <h2
-            className="text-center text-[clamp(2.4rem,4vw,3.5rem)] font-black  leading-[1.05] tracking-[-0.03em]"
+            className="text-center max-w-2xl text-[clamp(2.4rem,4vw,3.5rem)] font-black  leading-[1.05] tracking-[-0.03em]"
             style={{ fontFamily: "'Cabinet Grotesk', sans-serif" }}
           >
             Everything you need to{" "}
@@ -140,8 +140,7 @@ const FeaturesSection = () => (
           ))}
         </motion.div>
 
-      </div>
-    </section>
+     </SectionWrapper>
   </>
 );
 

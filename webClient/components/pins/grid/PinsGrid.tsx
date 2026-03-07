@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { setSelectedPin } from "@/redux/pinSlice";
 import { itemVariants } from "@/utils/animations/animations";
-import usePinHook from "@/components/pins/hooks/usePinHook";
+import usePinHook from "@/components/hooks/usePinHook";
 import { PinCardSkeleton } from "../card/PinCardSkeleton";
 import { useEffect, useRef } from "react";
 
@@ -17,11 +17,12 @@ export type PinCardVariant = "feed" | "board" | "pin" | "detail" | "collage";
 
 interface PinsGridProps {
   items?: PinItem[];
+  isSaved?: boolean
   layout?: "standard" | "compact";
   variant: PinCardVariant;
   showMetadata?: boolean;
   showStarIcon?: boolean;
-  profileValue?: string;
+  profileValue?: (pin: PinItem) => string | undefined;
   showPlusButton?: boolean;
   isLoading?: boolean;
   isFetchingNextPage?: boolean;
@@ -31,17 +32,12 @@ interface PinsGridProps {
   onAddToCanvasClick?: (item: PinItem) => void;
   onClick?: (item: PinItem) => void;
 
+  // is organized 
+  isOrganized?: boolean
+
   /** Popover content components */
   PopoverComponents?: {
     ProfilePopoverContent?: React.ComponentType<{
-      item: PinItem;
-      onClose: () => void;
-    }>;
-    SavePopoverContent?: React.ComponentType<{
-      item: PinItem;
-      onClose: () => void;
-    }>;
-    VisitPopoverContent?: React.ComponentType<{
       item: PinItem;
       onClose: () => void;
     }>;
@@ -103,8 +99,6 @@ export default function PinsGrid({
   // ── Popover destructuring ─────────────────────────────────────────────────
   const {
     ProfilePopoverContent,
-    SavePopoverContent,
-    VisitPopoverContent,
     SharePopoverContent,
     EditDialogContent,
   } = PopoverComponents || {};
@@ -114,7 +108,6 @@ export default function PinsGrid({
   const showSaveButton = ["feed", "board", "pin", "detail"].includes(variant);
   const showEditButton = ["pin", "board"].includes(variant);
   const showProfileButton = variant === "feed" || variant === "board" || variant === "detail";
-  const saveMode = variant === "board" ? "popover" : "instant";
   const resolvedShowMetadata = variant === "feed" ? true : showMetadata;
 
   // ── Column classes ────────────────────────────────────────────────────────
@@ -135,7 +128,7 @@ export default function PinsGrid({
     // ── feed ─────────────────────────────────────────────────────────────────
     // Public explore / home feed — full viewport width, most generous scaling.
     variant === "feed" &&
-    "px-2 sm:px-5 columns-2 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-6 2xl:columns-7",
+    "px-2 sm:px-5 columns-2 md:columns-3 lg:columns-4 xl:columns-6 2xl:columns-7 3xl:columns-8",
 
     // ── board ─────────────────────────────────────────────────────────────────
     // Curated pin collection — matches feed density but with a tighter max.
@@ -201,7 +194,6 @@ export default function PinsGrid({
               item={item}
               profileValue={profileValue}
               layout={layout}
-              saveMode={saveMode}
               showMetadata={resolvedShowMetadata}
               isHovered={hoveredIndex === index}
               onMouseEnter={() => hoveredItem(index)}
@@ -216,16 +208,6 @@ export default function PinsGrid({
               ProfilePopoverContent={
                 ProfilePopoverContent
                   ? (p: any) => <ProfilePopoverContent item={item} onClose={p.onClose} />
-                  : undefined
-              }
-              SavePopoverContent={
-                SavePopoverContent
-                  ? (p: any) => <SavePopoverContent item={item} onClose={p.onClose} />
-                  : undefined
-              }
-              VisitPopoverContent={
-                VisitPopoverContent
-                  ? (p: any) => <VisitPopoverContent item={item} onClose={p.onClose} />
                   : undefined
               }
               SharePopoverContent={

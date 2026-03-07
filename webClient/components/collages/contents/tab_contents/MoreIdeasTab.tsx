@@ -1,4 +1,4 @@
-import usePinHook from '@/components/pins/hooks/usePinHook'
+import usePinHook from '@/components/hooks/usePinHook'
 import SmartPinsGrid from '@/components/shared/grid/SmartPinsGrid'
 import { PinItem } from '@/types/pin'
 

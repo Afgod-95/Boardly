@@ -7,9 +7,12 @@ import { BoardItem } from '@/types/board'
 import { AppDispatch, RootState } from '@/redux/store'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { toast } from 'sonner'
+import { usePinToast } from './usePinToast'
+
 
 
 const usePinHook = () => {
+  const showPinToast = usePinToast((show) => show.show)
   const dispatch = useDispatch<AppDispatch>()
 
   const [editPopover, setEditPopover] = useState<boolean>(false)
@@ -21,8 +24,6 @@ const usePinHook = () => {
     setHoveredIndex(index)
   }
 
-
-  // Event handlers
   const handleClick = (
     e: React.MouseEvent,
     handler: ((item: PinItem, index: number) => void) | undefined,
@@ -42,23 +43,12 @@ const usePinHook = () => {
   const layoutParam = searchParams.get("layout") as "compact" | "standard" | null
   const pinsLayout = layoutParam ?? "compact"
 
-  //show only saved pins to user 
   const savedPins = pins.filter(pin => pin.isSaved)
 
-  // Filter pins based on active filter
   const filteredPins = useMemo(() => {
-    if(!activeFilter) {
-      return savedPins
-    }
-    if (activeFilter === 'favorites') {
-      console.log(pins.length, pins.filter(pin => pin.isFavourite).length)
-      return savedPins.filter(pin => pin.isFavourite)
-    }
-    if (activeFilter === 'created') {
-      console.log(pins.length, pins.filter(pin => pin.createdByUser).length)
-      return savedPins.filter(pin => pin.createdByUser)
-    }
-
+    if (!activeFilter) return savedPins
+    if (activeFilter === 'favorites') return savedPins.filter(pin => pin.isFavourite)
+    if (activeFilter === 'created') return savedPins.filter(pin => pin.createdByUser)
     return savedPins
   }, [savedPins, activeFilter])
 
@@ -97,30 +87,15 @@ const usePinHook = () => {
           await navigator.clipboard.writeText(pinUrl)
           toast.success('Link copied to clipboard!')
           break
-
         case 'facebook':
-          window.open(
-            `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pinUrl)}`,
-            '_blank',
-            'width=600,height=400'
-          )
+          window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pinUrl)}`, '_blank', 'width=600,height=400')
           break
-
         case 'twitter':
-          window.open(
-            `https://twitter.com/intent/tweet?url=${encodeURIComponent(pinUrl)}&text=${encodeURIComponent(shareText)}`,
-            '_blank',
-            'width=600,height=400'
-          )
+          window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(pinUrl)}&text=${encodeURIComponent(shareText)}`, '_blank', 'width=600,height=400')
           break
-
         case 'whatsapp':
-          window.open(
-            `https://wa.me/?text=${encodeURIComponent(`${shareText} ${pinUrl}`)}`,
-            '_blank'
-          )
+          window.open(`https://wa.me/?text=${encodeURIComponent(`${shareText} ${pinUrl}`)}`, '_blank')
           break
-
         case 'email':
           window.location.href = `mailto:?subject=${encodeURIComponent(shareText)}&body=${encodeURIComponent(pinUrl)}`
           break
@@ -143,29 +118,41 @@ const usePinHook = () => {
     setSavePopover(false)
   }
 
-  const handleSavePinToBoard = (pin: PinItem, boardId: string) => {
-    try {
-      // Remove from old board if exists
-      if (pin.boardId) {
-        dispatch(removePinFromBoard({ boardId: pin?.boardId as string, pinId: pin.id as string }))
-      }
+  /**
+   * FIX: When saving a pin to a board, we must update BOTH slices:
+   *  1. boardSlice  → add pinId to board.pinIds
+   *  2. pinSlice    → set pin.boardId so the pin knows which board it belongs to
+   *
+   * Previously only boardSlice was updated, so pin.boardId stayed undefined
+   * and the pin kept appearing as "unorganized".
+   */
+  // Replace handleSavePinToBoard with:
+const handleSavePinToBoard = (pin: PinItem, boardId: string | number) => {
+  const boardIdStr = String(boardId)
+  const pinIdStr   = String(pin.id)
 
-      // Add to new board (unless it's "profile" which means no board)
-      if (boardId !== 'profile') {
-        dispatch(addPinToBoard({ boardId: boardId as string | number, pinId: pin.id! as string | number }))
-        toast.success('Pin saved to board!')
-      } else {
-        // Save to profile (no board)
-        dispatch(updatePin(pin))
-        toast.success('Pin saved to profile!')
-      }
-
-      handleCloseSavePopover()
-    } catch (error) {
-      toast.error('Failed to save pin')
-      console.error('Save error:', error)
+  try {
+    if (pin.boardId !== undefined && pin.boardId !== null) {
+      dispatch(removePinFromBoard({ boardId: String(pin.boardId), pinId: pinIdStr }))
     }
+
+    if (boardIdStr !== 'profile') {
+      dispatch(addPinToBoard({ boardId: boardIdStr, pinId: pinIdStr }))
+      dispatch(updatePin({ ...pin, boardId: boardIdStr }))
+
+      const boardName = boards.find(b => String(b.id) === boardIdStr)?.title ?? "board"
+      showPinToast({ pinId: pin.id, pinImg: pin.img, pinTitle: pin.title, boardName })
+    } else {
+      dispatch(updatePin({ ...pin, boardId: undefined }))
+      showPinToast({ pinId: pin.id, pinImg: pin.img, pinTitle: pin.title, boardName: "your profile" })
+    }
+
+    handleCloseSavePopover()
+  } catch (error) {
+    toast.error('Failed to save pin')
+    console.error('Save error:', error)
   }
+}
 
   // ---------------------------
   // VISIT SITE
@@ -183,18 +170,14 @@ const usePinHook = () => {
   // ---------------------------
   const handleDeletePin = (pin: PinItem) => {
     try {
-      // Remove from board if exists
       if (pin.boardId) {
         dispatch(removePinFromBoard({ boardId: pin.boardId as string, pinId: pin.id! as string }))
       }
 
-      // Delete the pin
       dispatch(removePin(pin.id!))
-
       toast.success('Pin deleted successfully')
       handleCloseEditPopover()
 
-      // Navigate away if on pin detail page
       if (window.location.pathname.includes(`/pins/${pin.id}`)) {
         router.push('/dashboard')
       }
@@ -214,28 +197,16 @@ const usePinHook = () => {
     if (!existingPin) return
 
     try {
-      // Handle board change
       if (pin.boardId !== undefined && pin.boardId !== existingPin.boardId) {
-        // Remove from old board
         if (existingPin.boardId) {
-          dispatch(removePinFromBoard({
-            boardId: existingPin.boardId as string,
-            pinId: existingPin.id! as string
-          }))
+          dispatch(removePinFromBoard({ boardId: existingPin.boardId as string, pinId: existingPin.id! as string }))
         }
-
-        // Add to new board (unless it's "profile")
         if (pin.boardId && pin.boardId !== 'profile') {
-          dispatch(addPinToBoard({
-            boardId: pin.boardId as string,
-            pinId: existingPin.id! as string
-          }))
+          dispatch(addPinToBoard({ boardId: pin.boardId as string, pinId: existingPin.id! as string | number }))
         }
       }
 
-      // Update the pin
       dispatch(updatePin({ ...existingPin, ...pin, id: existingPin.id as string }))
-
       toast.success('Pin updated successfully')
     } catch (error) {
       toast.error('Failed to update pin')
@@ -243,27 +214,36 @@ const usePinHook = () => {
     }
   }
 
+  // ---------------------------
+  // PROFILE VALUE
+  // FIX: was mapping all pins into an array of board titles (mostly undefined).
+  // Now returns a lookup fn: getProfileValue(pin) → board title or undefined
+  // ---------------------------
+  const getBoardTitleForPin = (pin: PinItem): string | undefined => {
+    if (!pin.boardId) return undefined
+    return boards.find((b) => b.id === pin.boardId)?.title
+  }
 
-
-  //create board 
+  // ---------------------------
+  // CREATE BOARD
+  // ---------------------------
   const handleCreateBoard = (title: string) => {
     const newBoard: BoardItem = {
       id: Date.now().toString(),
       title,
+      createdAt: Date.now().toString(),
+      updatedAt: Date.now().toString(),
       pinIds: [],
     }
     dispatch(createBoard(newBoard))
     toast.success(`Board "${title}" created!`)
   }
 
-
-
   // ---------------------------
-  // SAVE PIN (when changes are made)
+  // SAVE CHANGES
   // ---------------------------
   const handleSaveChanges = () => {
     if (!selectedPin) return
-
     toast.success('Changes saved!')
     handleCloseEditPopover()
   }
@@ -282,30 +262,26 @@ const usePinHook = () => {
     sharePopover,
     savePopover,
 
+    // FIX: replaced profileValue array with a per-pin lookup function
+    getBoardTitleForPin,
 
-    //hovering state
     hoveredIndex,
     hoveredItem,
 
-    // navigation & layout
     router,
     searchParams,
     pinsLayout,
 
-    // filter
     activeFilter,
 
-    // redux states
     filteredPins,
     selectedPin,
     pins,
     boards,
     dispatch,
 
-    // event handlers
     handleClick,
 
-    // popover actions
     handleOpenEditPopover,
     handleCloseEditPopover,
     handleOpenSharePopover,
@@ -313,7 +289,6 @@ const usePinHook = () => {
     handleOpenSavePopover,
     handleCloseSavePopover,
 
-    // pin actions
     handleSharePin,
     handleSavePinToBoard,
     handleVisitSite,

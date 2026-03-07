@@ -13,6 +13,7 @@ import { setPinsFilter, setBoardsFilter, setCollagesFilter, setBoardsSortBy } fr
 import { BoardsFilterView, PinsFilterView, CollagesFilterView, BoardsSortBy } from "@/types/board"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { INITIAL_PROFILE } from "@/components/settings/constants/setting.constants"
+import CustomButton from "@/components/shared/buttons/CustomButton"
 
 // ── TODO: replace with real user from auth ────────────────────────────────────
 const CURRENT_USER = {
@@ -128,8 +129,6 @@ const BoardsLayout = ({ children }: BoardsLayoutProps) => {
               {/* Stats */}
               <div className="flex items-center justify-center sm:justify-end gap-6 shrink-0">
                 {[
-                  { label: "Pins", value: stats.pins },
-                  { label: "Boards", value: stats.boards },
                   { label: "Followers", value: formatCount(stats.followers) },
                   { label: "Following", value: formatCount(stats.following) },
                 ].map(({ label, value }) => (
@@ -138,6 +137,16 @@ const BoardsLayout = ({ children }: BoardsLayoutProps) => {
                     <p className="text-[10px] text-neutral-400 mt-0.5">{label}</p>
                   </div>
                 ))}
+                <CustomButton text="Share Profile" 
+                  className="py-3"
+                  onClick={() => {
+                    window.navigator.share({
+                      title: "Boardly Profile",
+                      text: `Check out ${fullName}'s profile on Boardly!`,
+                      url: `/dashboard/profile/${fullName}`,
+                    })
+                  }}
+                />
               </div>
             </div>
 

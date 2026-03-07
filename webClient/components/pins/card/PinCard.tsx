@@ -4,7 +4,7 @@ import { PinItem } from "@/types/pin";
 import Image from "next/image";
 import { Ellipsis, Star, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import PinOverlay from "./PinOverlay";
+import PinOverlay from "./overlay/PinOverlay";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -17,7 +17,7 @@ import { PinCardSkeleton } from "./PinCardSkeleton";
 // We can define a type for just the popover content props to keep it clean
 interface PinCardProps extends React.HTMLAttributes<HTMLDivElement> {
   item: PinItem;
-  profileValue?: string;
+  profileValue?: (pin: PinItem) => string | undefined;
   layout?: any;
   saveMode?: "popover" | "instant";
   isHovered?: boolean;
@@ -40,13 +40,16 @@ interface PinCardProps extends React.HTMLAttributes<HTMLDivElement> {
   EditDialogContent?: React.ComponentType<any>;
   MoreOptionsPopoverContent?: React.ComponentType<any>;
   FavoritesPopoverContent?: React.ComponentType<any>;
+
+  //is organized 
+  isOrganized?: boolean
 }
 
 
 
 export default function PinCard({
   item,
-  profileValue = "Profile",
+  profileValue,
   isHovered,
   onMouseEnter,
   onMouseLeave,

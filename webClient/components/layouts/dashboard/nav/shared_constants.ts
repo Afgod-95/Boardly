@@ -31,7 +31,7 @@ import { useMediaQuery } from "react-responsive"
 const CURRENT_USERNAME = "godwin"
 // ─────────────────────────────────────────────────────────────────────────────
 
-const isMobile = window.innerWidth <= 768
+const isMobile = window.innerWidth < 768
 
 export const NAV_LINKS: DashboardLink[] = [
     { 
@@ -76,7 +76,7 @@ export const NAV_LINKS: DashboardLink[] = [
     },
 ]
 
-export const DESKTOP_TOP_IDS = [0, 1, 3, 5]
+export const DESKTOP_TOP_IDS = [0, 1, 4, 3]
 export const DESKTOP_BOTTOM_IDS = [5]
 export const MOBILE_IDS = [0, 1, 2, 3]
 

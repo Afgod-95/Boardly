@@ -1,5 +1,5 @@
 "use client"
-import usePinHook from "../../pins/hooks/usePinHook"
+import usePinHook from "../../hooks/usePinHook"
 import SmartPinsGrid from "@/components/shared/grid/SmartPinsGrid"
 
 const PinsPage = () => {

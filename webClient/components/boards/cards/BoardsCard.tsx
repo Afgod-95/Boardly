@@ -3,12 +3,15 @@ import Image from 'next/image'
 import { BoardsCardProps } from '../types/boardItem'
 import { motion } from 'framer-motion'
 import { Pencil } from 'lucide-react'
+import { formatTime } from '@/helpers/formatTime'
+import { timeAgoShort } from '@/helpers/timeAgo'
 
 
 
-const BoardsCard = ({ variant='board', board, previewPins, onBoardClick, onEdit }: BoardsCardProps) => {
-    const pinCount = board.pinIds.length // Use total pins from board, not just preview
+const BoardsCard = ({ variant = 'board', board, previewPins, onBoardClick, onEdit }: BoardsCardProps) => {
+    const pinCount = board.pinIds.length 
     const displayPins = previewPins.slice(0, 5)
+    const coverImage = board.coverPinId
 
 
     const [isHovered, setIsHovered] = useState<boolean>(false);
@@ -23,6 +26,28 @@ const BoardsCard = ({ variant='board', board, previewPins, onBoardClick, onEdit 
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >
+                {coverImage && (
+                    <div className="flex gap-0.5 bg-muted h-full">
+                        <div className="relative flex-2 overflow-hidden group/image">
+                            <Image
+                                src={displayPins[0].img}
+                                alt={displayPins[0].title}
+                                fill
+                                className="object-cover"
+                            />
+                        </div>
+                    </div>
+                )}
+                {displayPins.length === 0 && (
+                    <div className="flex gap-0.5 bg-muted h-full">
+                        <div className="relative bg-gray-300 flex-2 overflow-hidden group/image"/>
+                        <div className="flex-1 flex flex-col gap-0.5">
+                            <div className="relative flex-1 bg-gray-300 overflow-hidden group/image " />
+                            <div className="relative flex-1 bg-gray-300 overflow-hidden group/image" />
+                        </div>
+                    </div>
+                )}
+
                 {/* 1 IMAGE */}
                 {displayPins.length === 1 && (
                     <div className="flex gap-0.5 h-full">
@@ -37,8 +62,8 @@ const BoardsCard = ({ variant='board', board, previewPins, onBoardClick, onEdit 
                         </div>
 
                         <div className="flex-1 flex flex-col gap-0.5">
-                            <div className="flex-1 bg-neutral-300" />
-                            <div className="flex-1 bg-neutral-400" />
+                            <div className="flex-1 bg-gray-300" />
+                            <div className="flex-1 bg-gray-300" />
                         </div>
                     </div>
                 )}
@@ -66,7 +91,7 @@ const BoardsCard = ({ variant='board', board, previewPins, onBoardClick, onEdit 
 
                             </div>
 
-                            <div className="relative flex-1 bg-accent overflow-hidden group/image" />
+                            <div className="relative flex-1 bg-gray-300 overflow-hidden group/image" />
                         </div>
                     </div>
                 )}
@@ -171,7 +196,7 @@ const BoardsCard = ({ variant='board', board, previewPins, onBoardClick, onEdit 
                             whileHover={{ scale: 1.05, backgroundColor: "rgba(255, 255, 255, 1)" }}
                             whileTap={{ scale: 0.95 }}
                             className="bg-white/90 p-2.5 rounded-xl transition-colors absolute right-2 bottom-2"
-                            onClick={(e: React.MouseEvent) => { 
+                            onClick={(e: React.MouseEvent) => {
                                 e.stopPropagation()
                                 onEdit?.(board)
                             }}
@@ -188,9 +213,13 @@ const BoardsCard = ({ variant='board', board, previewPins, onBoardClick, onEdit 
                 <h3 className="font-semibold text-base line-clamp-1">
                     {board.title}
                 </h3>
-                <p className="text-sm text-muted-foreground mt-0.5">
-                    {pinCount} {pinCount === 1 ? 'pin' : 'pins'}
-                </p>
+                <div className='flex items-center gap-4'>
+                    <p className="text-sm text-muted-foreground mt-0.5">
+                        {pinCount} {pinCount === 1 ? 'pin' : 'pins'}
+                    </p>
+                    <p className='text-md'>{timeAgoShort(board?.createdAt || new Date())}</p>
+                </div>
+
             </div>
         </div>
     )

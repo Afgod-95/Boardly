@@ -5,6 +5,7 @@ import { fadeInUp } from "@/utils/animations/animations";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CustomButton from "../shared/buttons/CustomButton";
+import SectionWrapper from "./shared/SectionWrapper";
 
 const images = [
   { src: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=500&fit=crop", label: "Interior" },
@@ -21,9 +22,7 @@ const ExploreSection = () => (
       @import url('https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@300;400;500&display=swap');
     `}</style>
 
-    <section className="py-10 md:py-28 overflow-hidden" id="explore">
-      <div className="max-w-7xl mx-auto px-4 md:px-6">
-
+    <SectionWrapper id="explore">
         {/* Header */}
         <motion.div
           initial="hidden"
@@ -198,8 +197,7 @@ const ExploreSection = () => (
           </span>
         </motion.div>
 
-      </div>
-    </section>
+      </SectionWrapper>
   </>
 );
 

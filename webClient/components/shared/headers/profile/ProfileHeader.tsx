@@ -25,13 +25,14 @@ const CURRENT_USER = {
 }
 // ─────────────────────────────────────────────────────────────────────────────
 
-const ProfileHeader = () => {
+const ProfileHeader = ({ showSearchbar = true } : { showSearchbar?: boolean}) => {
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
   const isMobile = useMediaQuery({ maxWidth: 768 })
 
   const showBackButton = pathname === '/dashboard/settings' && isMobile
+
 
   const profileUrl = `/dashboard/profile/${CURRENT_USER.username}`
 
@@ -50,14 +51,16 @@ const ProfileHeader = () => {
       <div className="flex items-center justify-between w-full gap-4">
 
         {/* Search bar */}
-        <div className="flex-1 flex items-center gap-3">
-          {showBackButton && (
-            <motion.div whileTap={{ scale: 0.9 }} onClick={() => router.back()} className="cursor-pointer">
-              <ChevronLeft />
-            </motion.div>
-          )}
-          <Searchbar />
-        </div>
+        {showSearchbar && (
+          <div className="flex-1 flex items-center gap-3">
+            {showBackButton && (
+              <motion.div whileTap={{ scale: 0.9 }} onClick={() => router.back()} className="cursor-pointer">
+                <ChevronLeft />
+              </motion.div>
+            )}
+            <Searchbar />
+          </div>
+        )}
 
         {/* Profile popover */}
         <Popover onOpenChange={setIsOpen}>

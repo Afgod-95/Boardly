@@ -29,6 +29,8 @@ const BoardsPopoverFilter = ({
         {value === "A-Z" && <Check className="w-4 h-4" />}
       </DropdownMenuCheckboxItem>
 
+  
+
       {/* Custom */}
       <DropdownMenuCheckboxItem
         checked={value === "CUSTOM"}

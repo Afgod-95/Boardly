@@ -7,6 +7,7 @@ interface BoardsLayoutWrapperProps {
     children: React.ReactNode
 }
 
+
 const BoardsLayoutClient = ({ children }: BoardsLayoutWrapperProps) => {
     return (
         <>

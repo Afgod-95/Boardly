@@ -3,7 +3,7 @@ export interface BoardItem {
   title: string
   description?: string
   coverPinId?: string   // for preview image
-  createdAt?: string
+  createdAt?: Date | string
   updatedAt?: string
   // relationships
   pinIds: (string | number)[]
