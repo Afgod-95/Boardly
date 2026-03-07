@@ -61,7 +61,7 @@ const CreateButton = () => {
                   <span className='text-xl font-medium'>Board</span>
                 </div>
               </DialogTrigger>
-              <CreateBoardModal />
+              <CreateBoardModal onClose={() => setOpenBoardDialog(false)}/>
             </Dialog>
 
             {/** Link to collage */}
@@ -95,7 +95,7 @@ const CreateButton = () => {
 
       {/* Dialog outside of BottomSheet */}
       <Dialog open={openBoardDialog} onOpenChange={setOpenBoardDialog}>
-        <CreateBoardModal />
+        <CreateBoardModal onClose={() => setOpenBoardDialog(false)}/>
       </Dialog>
 
     </>
